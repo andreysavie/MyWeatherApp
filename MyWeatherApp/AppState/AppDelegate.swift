@@ -17,7 +17,9 @@ var window: UIWindow?
         
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        window?.rootViewController = ViewController()
+//        window?.rootViewController = LaunchSettingsViewController()
+        window?.rootViewController = WeatherViewController()
+
         window?.makeKeyAndVisible()
         
         return true
