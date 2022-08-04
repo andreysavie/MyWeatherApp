@@ -91,7 +91,8 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         }
         
         detailsButton.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(8)
             make.centerX.equalToSuperview()
         }
     }
