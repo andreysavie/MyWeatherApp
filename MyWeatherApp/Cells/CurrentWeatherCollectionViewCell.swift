@@ -8,6 +8,15 @@
 import UIKit
 import SnapKit
 
+extension UIView {
+    func setShadow(_ view: UIView) {
+        view.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
+        view.layer.shadowRadius = 10.0
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.25
+    }
+}
+
 class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CurrentWeatherCollectionViewCell"
@@ -20,21 +29,46 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     //    private var isLiked: Bool?
     
     
-    private lazy var cityNameLabel = getLabel(text: "Москва", font: Fonts.cityFont)
-    private lazy var tempLabel = getLabel(text: "21°", font: Fonts.tempLargeFont)
-    private lazy var weatherConditionLabel = getLabel(text: "Облачно", font: Fonts.weatherConditionFont)
-    private lazy var lowAndHeightTempLabel = getLabel(text: "Мин. 15°, макс: 29°", font: Fonts.cityLowHeightTempFont)
+    private lazy var cityNameLabel = getLabel(
+        text: "Москва",
+        font: Fonts.cityFont,
+        color: Colors.darkTextColor
+    )
+    
+    private lazy var tempLabel = getLabel(
+        text: "21°",
+        font: Fonts.tempLargeFont,
+        color: Colors.darkTextColor
+    )
+    
+    private lazy var weatherConditionLabel = getLabel(
+        text: "Облачно",
+        font: Fonts.weatherConditionFont,
+        color: Colors.darkTextColor
+    )
+    
+    private lazy var lowAndHeightTempLabel = getLabel(
+        text: "Мин. 15°, макс: 29°",
+        font: Fonts.cityLowHeightTempFont,
+        color: Colors.darkTextColor
+    )
+
+    private lazy var hourlyForecastView: HourlyForecastView = {
+        let view = HourlyForecastView()
+        return view
+    }()
     
     private lazy var detailsButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Подробный прогноз", for: .normal)
+        button.setTitle("Подробный прогноз 􀆊", for: .normal)
         button.titleLabel?.font = Fonts.detailsButtonFont
-        button.titleLabel?.textColor = .white
+        button.setTitleColor(Colors.darkTextColor, for: .normal)
         button.backgroundColor = .clear // ??
         button.layer.cornerRadius = 16 // ??
         button.addTarget(self, action: #selector(detailsButtonPressed), for: .touchUpInside)
         return button
     }()
+    
     
     
     // MARK: INITS ============================================================================
@@ -58,13 +92,17 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     
     private func setupLayout() {
         
-        contentView.backgroundColor = .white.withAlphaComponent(0.25)
+        contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 16
+        
+        setShadow(contentView)
+        
         contentView.addSubviews(
             cityNameLabel,
             tempLabel,
             weatherConditionLabel,
             lowAndHeightTempLabel,
+            hourlyForecastView,
             detailsButton
         )
         
@@ -90,11 +128,20 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
             make.centerX.equalToSuperview()
         }
         
-        detailsButton.snp.makeConstraints { make in
+        hourlyForecastView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(8)
-            make.centerX.equalToSuperview()
+            make.top.equalTo(lowAndHeightTempLabel.snp.bottom).offset(16)
+//            make.centerX.equalToSuperview()
+            make.height.equalTo(130)
         }
+        
+        detailsButton.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(16)
+//            make.top.equalTo(hourlyForecastView.snp.bottom).offset(16)
+        }
+                
     }
     
     

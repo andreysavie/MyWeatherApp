@@ -29,13 +29,8 @@ public enum ForecastIcons {
     case bolt
     case rainBolt
     case wind
-    
 }
 
-public enum Opacity {
-    case full
-    case half
-}
 
 public struct Fonts {
     
@@ -96,7 +91,7 @@ public struct Attributes {
     
     static let settingsSemgentedControlAttributes = [
         NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold),
-        NSAttributedString.Key.foregroundColor: UIColor.white
+        NSAttributedString.Key.foregroundColor: Colors.darkTextColor
     ]
 //    static let flightPropsLabelAttributes = [
 //        NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .bold),
@@ -121,7 +116,7 @@ public struct WeatherColor {
 
 public extension UIView {
     
-    func getAppIcon (_ icon: AppIcons, _ size: CGFloat, _ opacity: Opacity) -> UIImageView {
+    func getAppIcon (_ icon: AppIcons, _ size: CGFloat) -> UIImageView {
         let imageView = UIImageView()
         let name: String
         
@@ -141,25 +136,20 @@ public extension UIView {
         case .air:
             name = "humidity"
         }
-        
-        switch opacity {
-        case .full:
-            imageView.layer.opacity = 1
-        case .half:
-            imageView.layer.opacity = 0.3
-        }
-        
-        imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))?.withTintColor(.white, renderingMode: .alwaysOriginal)
+                
+        imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))?.withTintColor(Colors.mediumTextColor, renderingMode: .alwaysOriginal)
         return imageView
     }
     
     func getWeatherIcon (_ icon: ForecastIcons) -> UIImageView {
         let imageView = UIImageView()
         let name: String
+        var color: UIColor = Colors.blueColor
         
         switch icon {
         case .sun:
             name = "sun.max"
+            color = Colors.yellowColor
         case .cloud:
             name = "cloud.fill"
         case .partlyCloud:
@@ -180,24 +170,24 @@ public extension UIView {
             name = "wind"
         }
         
-        imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(color, renderingMode: .alwaysOriginal)
         return imageView
     }
     
-    func getLabel (text: String, font: UIFont) -> UILabel {
+    func getLabel (text: String, font: UIFont, color: UIColor ) -> UILabel {
         let label = UILabel()
         label.numberOfLines = 0
         label.text = text
         label.font = font
-        label.textColor = .white
+        label.textColor = color
         return label
     }
     
     func getSemgentedControl(_ items: [String]) -> UISegmentedControl {
         let control = UISegmentedControl(items: items)
         control.selectedSegmentIndex = 0
-        control.tintColor = .clear
-        control.selectedSegmentTintColor = .white.withAlphaComponent(0.5)
+        control.tintColor = Colors.segmentedControlBackColor
+        control.selectedSegmentTintColor = .white
         control.setTitleTextAttributes(Attributes.settingsSemgentedControlAttributes, for: .normal)
         return control
     }
@@ -222,4 +212,15 @@ public extension UIViewController {
         gradient.locations = [0, 1]
         return gradient
     }
+}
+
+public struct Colors {
+    static let darkTextColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 1)
+    static let mediumTextColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
+    static var lightTextColor = UIColor(red: 180/255, green: 180/255, blue: 180/255, alpha: 1)
+    
+    static let blueColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
+    static let yellowColor = UIColor(red: 248/255, green: 215/255, blue: 74/255, alpha: 1)
+    
+    static let segmentedControlBackColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
 }

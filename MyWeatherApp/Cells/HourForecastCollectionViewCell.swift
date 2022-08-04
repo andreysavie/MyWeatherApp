@@ -12,9 +12,17 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "HourForecastCollectionViewCell"
     
-    private lazy var hourTitleLabel = getLabel(text: "12pm", font: Fonts.hourlyTimeFont)
+    private lazy var hourTitleLabel = getLabel(
+        text: "12pm",
+        font: Fonts.hourlyTimeFont,
+        color: Colors.darkTextColor
+    )
     private lazy var weatherIcon = getWeatherIcon(.heavyRain)
-    private lazy var hourlyTempLabel = getLabel(text: "21°", font: Fonts.hourlyTempFont)
+    private lazy var hourlyTempLabel = getLabel(
+        text: "21°",
+        font: Fonts.hourlyTempFont,
+        color: Colors.darkTextColor
+    )
 
     override init(frame: CGRect) {
         super.init(frame: .zero)

@@ -15,12 +15,35 @@ class LaunchSettingsView: UIView {
     private let timeFormats = ["12", "24"]
     private let onOff = ["Вкл", "Выкл"]
 
-    private lazy var title = getLabel(text: "Настройки", font: Fonts.settingsTitleFont)
+    private lazy var title = getLabel(
+        text: "Настройки",
+        font: Fonts.settingsTitleFont,
+        color: Colors.darkTextColor
+    )
     
-    private lazy var tempLabel = getLabel(text: "Температура", font: Fonts.settingsLabelFont)
-    private lazy var windspeedLabel = getLabel(text: "Скорость ветра", font: Fonts.settingsLabelFont)
-    private lazy var timeFormatLabel = getLabel(text: "Формат времени", font: Fonts.settingsLabelFont)
-    private lazy var NotifiesLabel = getLabel(text: "Уведомления", font: Fonts.settingsLabelFont)
+    private lazy var tempLabel = getLabel(
+        text: "Температура",
+        font: Fonts.settingsLabelFont,
+        color: Colors.darkTextColor
+    )
+    
+    private lazy var windspeedLabel = getLabel(
+        text: "Скорость ветра",
+        font: Fonts.settingsLabelFont,
+        color: Colors.darkTextColor
+    )
+    
+    private lazy var timeFormatLabel = getLabel(
+        text: "Формат времени",
+        font: Fonts.settingsLabelFont,
+        color: Colors.darkTextColor
+    )
+    
+    private lazy var NotifiesLabel = getLabel(
+        text: "Уведомления",
+        font: Fonts.settingsLabelFont,
+        color: Colors.darkTextColor
+    )
 
     private lazy var tempSemgentedControl = getSemgentedControl(temps)
     private lazy var windSemgentedControl = getSemgentedControl(speeds)
@@ -65,7 +88,7 @@ class LaunchSettingsView: UIView {
         let button = UIButton()
         button.setTitle("Установить", for: .normal)
         button.titleLabel?.font = Fonts.settingsLabelFont
-        button.tintColor = .white
+        button.tintColor = Colors.darkTextColor
         return button
     }()
     
@@ -82,9 +105,9 @@ class LaunchSettingsView: UIView {
     
     func layout() {
         
-        backgroundColor = .white.withAlphaComponent(0.25)
+        backgroundColor = .white
         layer.cornerRadius = 16
-        clipsToBounds = true
+        setShadow(self)
         
         addSubviews(title, labelsStackView, segmentedControlsStackView, setButton)
         

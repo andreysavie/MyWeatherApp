@@ -29,7 +29,6 @@ class WeatherViewController: UIViewController {
         return layout
     }()
     
-    private lazy var gradient = getGradient(start: CGPoint(x: 0.5, y: 0), end: CGPoint(x: 0.5, y: 1))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +39,8 @@ class WeatherViewController: UIViewController {
         )
 
         collectionView.register(
-            HourlyForecastCollectionViewCell.self,
-            forCellWithReuseIdentifier: HourlyForecastCollectionViewCell.identifier
+            DailyForecastCollectionViewCell.self,
+            forCellWithReuseIdentifier: DailyForecastCollectionViewCell.identifier
         )
         
         collectionView.dataSource = self
@@ -51,8 +50,7 @@ class WeatherViewController: UIViewController {
     }
     
     private func setupLayout() {
-        gradient.frame = view.bounds
-        view.layer.addSublayer(gradient)
+        view.backgroundColor = .white
         view.addSubview(collectionView)
         
         collectionView.snp.makeConstraints { make in
@@ -61,32 +59,33 @@ class WeatherViewController: UIViewController {
     }
     
     
-    
-    
-    
-    
 }
 
 
 extension WeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        switch indexPath.section {
+        switch indexPath.row {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CurrentWeatherCollectionViewCell.identifier, for: indexPath) as? CurrentWeatherCollectionViewCell else { return UICollectionViewCell() }
+            
+            cell.detailsButtonAction = { [weak self] in
+                let viewController = LaunchSettingsViewController()
+                self?.navigationController?.pushViewController(viewController, animated: true)
+            }
             return cell
             
         default:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyForecastCollectionViewCell.identifier, for: indexPath) as? HourlyForecastCollectionViewCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyForecastCollectionViewCell.identifier, for: indexPath) as? DailyForecastCollectionViewCell else { return UICollectionViewCell() }
             return cell
         }
     }
@@ -105,9 +104,9 @@ extension WeatherViewController: UICollectionViewDelegateFlowLayout {
         var height: CGFloat = 0
         switch indexPath.section {
         case 0:
-            height = 300
+            height = 450
         case 1:
-            height = 300
+            height = 275
         default:
             break
         }
