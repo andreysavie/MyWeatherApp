@@ -21,7 +21,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.backgroundColor = .clear
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedSectionHeaderHeight = 40
         return tableView

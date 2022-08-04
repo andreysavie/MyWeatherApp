@@ -1,15 +1,17 @@
 //
-//  WeatherViewController.swift
+//  DetailsWeatherViewController.swift
 //  MyWeatherApp
 //
-//  Created by Андрей Рыбалкин on 01.08.2022.
+//  Created by Андрей Рыбалкин on 04.08.2022.
 //
 
 import UIKit
 import SnapKit
 
-class WeatherViewController: UIViewController {
+class DetailsWeatherViewController: UIViewController {
     
+    private let itemsPerRow: CGFloat = 2
+
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -18,13 +20,13 @@ class WeatherViewController: UIViewController {
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-//        layout.minimumLineSpacing = 16
+        layout.minimumInteritemSpacing = 8
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(
             top: 8,
-            left: 0,
+            left: 16,
             bottom: 8,
-            right: 0)
+            right: 16)
         return layout
     }()
     
@@ -33,13 +35,13 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         
         collectionView.register(
-            CurrentWeatherCollectionViewCell.self,
-            forCellWithReuseIdentifier: CurrentWeatherCollectionViewCell.identifier
+            DetailsForecastCollectionViewCell.self,
+            forCellWithReuseIdentifier: DetailsForecastCollectionViewCell.identifier
         )
 
         collectionView.register(
-            DailyForecastCollectionViewCell.self,
-            forCellWithReuseIdentifier: DailyForecastCollectionViewCell.identifier
+            DetailsBlockCollectionViewCell.self,
+            forCellWithReuseIdentifier: DetailsBlockCollectionViewCell.identifier
         )
         
         collectionView.dataSource = self
@@ -61,30 +63,30 @@ class WeatherViewController: UIViewController {
 }
 
 
-extension WeatherViewController: UICollectionViewDataSource {
+extension DetailsWeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        switch section {
+        case 0:
+            return 1
+        default:
+            return 10
+        }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        switch indexPath.row {
+        switch indexPath.section {
         case 0:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CurrentWeatherCollectionViewCell.identifier, for: indexPath) as? CurrentWeatherCollectionViewCell else { return UICollectionViewCell() }
-            
-            cell.detailsButtonAction = { [weak self] in
-                let viewController = DetailsWeatherViewController()
-                self?.navigationController?.pushViewController(viewController, animated: true)
-            }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsForecastCollectionViewCell.identifier, for: indexPath) as? DetailsForecastCollectionViewCell else { return UICollectionViewCell() }
             return cell
             
         default:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyForecastCollectionViewCell.identifier, for: indexPath) as? DailyForecastCollectionViewCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsBlockCollectionViewCell.identifier, for: indexPath) as? DetailsBlockCollectionViewCell else { return UICollectionViewCell() }
             return cell
         }
     }
@@ -92,24 +94,34 @@ extension WeatherViewController: UICollectionViewDataSource {
     
 }
 
-extension WeatherViewController: UICollectionViewDelegate {
+extension DetailsWeatherViewController: UICollectionViewDelegate {
     
 }
 
-extension WeatherViewController: UICollectionViewDelegateFlowLayout {
+extension DetailsWeatherViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         var height: CGFloat = 0
+        var width: CGFloat = 0
         
+        let paddingWidth: CGFloat = 8
+        let availableWidth = UIScreen.main.bounds.width - 32 - paddingWidth
+        let widthPerItem = (availableWidth / itemsPerRow)
+
+
         switch indexPath.section {
         case 0:
-            height = 450
+            height = 180
+            width = collectionView.frame.width - 32
         case 1:
-            height = 275
+            height = widthPerItem
+            width = widthPerItem
         default:
             break
         }
-        return CGSize(width: floor(collectionView.frame.width - 32), height: height)
+        return CGSize(width: floor(width), height: height)
     }
+
+
 }

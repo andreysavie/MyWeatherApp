@@ -55,7 +55,10 @@ public struct Fonts {
     static let tenDayLabelFont = UIFont.systemFont(ofSize: 22, weight: .medium)
     
     // details controller: city block
-    static let sunTimeLabelFont = UIFont.systemFont(ofSize: 17, weight: .regular)
+    static let detailsCityFont = UIFont.systemFont(ofSize: 37, weight: .regular)
+    static let detailsWeatherFont = UIFont.systemFont(ofSize: 24, weight: .regular)
+    static let detailsSunTimeFont = UIFont.systemFont(ofSize: 17, weight: .regular)
+
     
     // details controller: details block
     static let detailsBlockTitleFont = UIFont.systemFont(ofSize: 15, weight: .medium)
@@ -119,12 +122,15 @@ public extension UIView {
     func getAppIcon (_ icon: AppIcons, _ size: CGFloat) -> UIImageView {
         let imageView = UIImageView()
         let name: String
+        var color = Colors.mediumTextColor
         
         switch icon {
         case .sunRise:
             name = "sunrise"
+            color = Colors.yellowColor
         case .sunSet:
             name = "sunset"
+            color = Colors.yellowColor
         case .sun:
             name = "sun.max"
         case .wind:
@@ -137,7 +143,7 @@ public extension UIView {
             name = "humidity"
         }
                 
-        imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))?.withTintColor(Colors.mediumTextColor, renderingMode: .alwaysOriginal)
+        imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))?.withTintColor(color, renderingMode: .alwaysOriginal)
         return imageView
     }
     
