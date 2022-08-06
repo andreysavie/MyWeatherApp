@@ -10,9 +10,47 @@ import SnapKit
 
 class WeatherViewController: UIViewController {
     
+    private lazy var searchCityBarButtonItem: UIBarButtonItem = {
+        let image = UIImage(
+            systemName: "location",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
+            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
+            )
+        let button = UIButton()
+        button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
+        return UIBarButtonItem(customView: button)
+    }()
+    
+    private lazy var settingsBarButtonItem: UIBarButtonItem = {
+        let image = UIImage(
+            systemName: "gearshape",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
+            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
+            )
+        let button = UIButton()
+        button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
+        return UIBarButtonItem(customView: button)
+    }()
+    
+    @objc
+    private func searchButtonPressed() {
+        let viewController = SearchCityViewController()
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc
+    private func settingsButtonPressed() {
+        let controller = UINavigationController(rootViewController: SettingsViewController())
+        present(controller, animated: true)
+
+    }
+    
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
+        collectionView.isScrollEnabled = false
         return collectionView
     }()
     
@@ -51,6 +89,9 @@ class WeatherViewController: UIViewController {
     private func setupLayout() {
         view.backgroundColor = .white
         view.addSubview(collectionView)
+        self.navigationItem.rightBarButtonItem = searchCityBarButtonItem
+        self.navigationItem.leftBarButtonItem = settingsBarButtonItem
+
         
         collectionView.snp.makeConstraints { make in
             make.leading.top.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -64,16 +105,16 @@ class WeatherViewController: UIViewController {
 extension WeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return 1
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        switch indexPath.row {
+        switch indexPath.section {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CurrentWeatherCollectionViewCell.identifier, for: indexPath) as? CurrentWeatherCollectionViewCell else { return UICollectionViewCell() }
             
@@ -83,9 +124,11 @@ extension WeatherViewController: UICollectionViewDataSource {
             }
             return cell
             
-        default:
+        case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyForecastCollectionViewCell.identifier, for: indexPath) as? DailyForecastCollectionViewCell else { return UICollectionViewCell() }
             return cell
+        default:
+            return UICollectionViewCell()
         }
     }
     
@@ -104,9 +147,9 @@ extension WeatherViewController: UICollectionViewDelegateFlowLayout {
         
         switch indexPath.section {
         case 0:
-            height = 450
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.6
         case 1:
-            height = 275
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.35
         default:
             break
         }

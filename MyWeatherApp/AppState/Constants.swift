@@ -31,6 +31,13 @@ public enum ForecastIcons {
     case wind
 }
 
+public enum Settings {
+    case onOff
+    case time
+    case temp
+    case speed
+}
+
 
 public struct Fonts {
     
@@ -189,7 +196,21 @@ public extension UIView {
         return label
     }
     
-    func getSemgentedControl(_ items: [String]) -> UISegmentedControl {
+    func getSemgentedControl(_ setting: Settings) -> UISegmentedControl {
+        
+        var items: [String]
+        
+        switch setting {
+        case .onOff:
+            items = ["On", "Off"]
+        case .time:
+            items = ["12", "24"]
+        case .temp:
+            items = ["C", "F"]
+        case .speed:
+            items = ["Mi", "Km"]
+        }
+        
         let control = UISegmentedControl(items: items)
         control.selectedSegmentIndex = 0
         control.tintColor = Colors.segmentedControlBackColor
@@ -229,4 +250,6 @@ public struct Colors {
     static let yellowColor = UIColor(red: 248/255, green: 215/255, blue: 74/255, alpha: 1)
     
     static let segmentedControlBackColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
+    
+    static let settingsBackgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
 }
