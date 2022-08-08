@@ -36,8 +36,8 @@ class WeatherViewController: UIViewController {
     
     @objc
     private func searchButtonPressed() {
-        let viewController = SearchCityViewController()
-        self.navigationController?.pushViewController(viewController, animated: true)
+        let controller = SearchCityViewController()
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     @objc

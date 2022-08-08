@@ -12,19 +12,23 @@ class DailyCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "DailyForecastCollectionViewCell"
     
-//    private lazy var titleLabel = getLabel(
-//        text: "􀉉 ПРОГНОЗ НА 10 ДНЕЙ",
-//        font: Fonts.tenDayTitleFont,
-//        color: Colors.mainTextColor
-//    )
+    private lazy var titleLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "Прогноз на 10 дней".uppercased(),
+            font: Fonts.tenDayTitleFont,
+            textColor: Colors.mediumTextColor
+        )
+        return label
+    }()
     
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.backgroundColor = .clear
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        tableView.sectionHeaderHeight = UITableView.automaticDimension
-        tableView.estimatedSectionHeaderHeight = 50
-        return tableView
+        let table = UITableView(frame: .zero, style: .insetGrouped)
+        table.backgroundColor = .clear
+        table.separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        table.sectionHeaderHeight = UITableView.automaticDimension
+        table.estimatedSectionHeaderHeight = 50
+        table.showsVerticalScrollIndicator = false
+        return table
     }()
     
     override init(frame: CGRect) {
@@ -45,14 +49,26 @@ class DailyCollectionViewCell: UICollectionViewCell {
     
     func setupLayout() {
         
-        setShadow(contentView)
+        getShadow(contentView)
+        let calendarIcon = getAppIcon(.calendar, 15)
         
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 16
-        contentView.addSubview(tableView)
+        contentView.addSubviews(calendarIcon, titleLabel, tableView)
         
+        calendarIcon.snp.makeConstraints { make in
+            make.leading.top.equalToSuperview().inset(16)
+        }
+
+        
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(calendarIcon.snp.trailing).offset(4)
+            make.top.trailing.equalToSuperview().inset(16)
+        }
+
         tableView.snp.makeConstraints { make in
-            make.leading.top.trailing.bottom.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
 
@@ -67,11 +83,6 @@ extension DailyCollectionViewCell: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DailyTableViewCell.identifier, for: indexPath) as? DailyTableViewCell else { return UITableViewCell() }
         return cell
     }
-
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "􀉉 ПРОГНОЗ НА 10 ДНЕЙ"
-    }
-    
 
 }
 

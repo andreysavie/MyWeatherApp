@@ -8,26 +8,13 @@
 import UIKit
 import SnapKit
 
-extension UIView {
-    func setShadow(_ view: UIView) {
-        view.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
-        view.layer.shadowRadius = 10.0
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.25
-    }
-}
-
 class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CurrentWeatherCollectionViewCell"
     
     var detailsButtonAction: (()->())?
     
-    // MARK: PROPERTIES ============================================================================
-    
-    //    private var flight: Flight?
-    //    private var isLiked: Bool?
-    
+    // MARK: PROPERTIES
     
     private lazy var cityNameLabel = getLabel(
         text: "Москва",
@@ -57,24 +44,32 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         let view = HourlyForecastView()
         return view
     }()
+        
+    private lazy var separateView: SeparateLineView = {
+        let line = SeparateLineView(frame: .zero)
+        return line
+    }()
     
-    private lazy var detailsButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Подробный прогноз 􀆊", for: .normal)
-        button.titleLabel?.font = Fonts.detailsButtonFont
-        button.setTitleColor(Colors.darkTextColor, for: .normal)
-        button.backgroundColor = .clear // ??
-        button.layer.cornerRadius = 16 // ??
-        button.addTarget(self, action: #selector(detailsButtonPressed), for: .touchUpInside)
+    private lazy var detailsButton: CustomButton = {
+        let button = CustomButton(
+            title: "Подробный прогноз  ",
+            font: Fonts.detailsButtonFont)
+        button.setImage(UIImage(systemName: "chevron.right", withConfiguration: UIImage.SymbolConfiguration(pointSize: 21))?.withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal), for: .normal)
+        button.semanticContentAttribute = .forceRightToLeft
         return button
     }()
     
     
     
-    // MARK: INITS ============================================================================
+    // MARK: INITS
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
+        
+        detailsButton.tapAction = { [weak self] in
+            self?.detailsButtonPressed()
+        }
+        
         setupLayout()
     }
     
@@ -82,7 +77,7 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: METHODS ===================================================================================
+    // MARK: METHODS
     
     
     func setConfigureOfCell() {
@@ -95,7 +90,7 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 16
         
-        setShadow(contentView)
+        getShadow(contentView)
         
         contentView.addSubviews(
             cityNameLabel,
@@ -103,10 +98,11 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
             weatherConditionLabel,
             lowAndHeightTempLabel,
             hourlyForecastView,
-            detailsButton
+            detailsButton,
+            separateView
         )
         
-        cityNameLabel.textAlignment = .center // move to facade!
+        cityNameLabel.textAlignment = .center
         
         cityNameLabel.snp.makeConstraints { make in
             make.leading.top.trailing.equalToSuperview().inset(16)
@@ -131,23 +127,20 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         hourlyForecastView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(lowAndHeightTempLabel.snp.bottom).offset(16)
-//            make.centerX.equalToSuperview()
             make.height.equalTo(130)
         }
         
+        separateView.makeConstraints(atBottom: self.snp.bottom)
+        
         detailsButton.snp.makeConstraints { make in
-//            make.leading.trailing.equalToSuperview()
+            make.centerY.equalTo(self.snp.bottom).inset(25)
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(16)
-//            make.top.equalTo(hourlyForecastView.snp.bottom).offset(16)
         }
-                
     }
     
     
     // MARK: Objc METHODS ==============================================================================
     
-    @objc
     func detailsButtonPressed() {
         detailsButtonAction?()
     }

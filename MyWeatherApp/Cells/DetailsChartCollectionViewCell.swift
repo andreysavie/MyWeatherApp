@@ -1,16 +1,15 @@
 //
-//  DetailsForecastCollectionViewCell.swift
+//  DetailsChartCollectionViewCell.swift
 //  MyWeatherApp
 //
-//  Created by Андрей Рыбалкин on 04.08.2022.
+//  Created by Андрей Рыбалкин on 09.08.2022.
 //
 
 import UIKit
-import SnapKit
 
-class DetailsForecastCollectionViewCell: UICollectionViewCell {
+class DetailsChartCollectionViewCell: UICollectionViewCell {
     
-    static let identifier = "DetailsForecastCollectionViewCell"
+    static let identifier = "DetailsChartCollectionViewCell"
     
     
     // MARK: PROPERTIES ============================================================================
@@ -126,5 +125,4 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     
     
 }
-
 

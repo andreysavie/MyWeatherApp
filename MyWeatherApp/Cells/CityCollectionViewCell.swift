@@ -72,7 +72,7 @@ class CityCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .systemBlue
         contentView.layer.cornerRadius = 16
         
-        setShadow(contentView)
+        getShadow(contentView)
         
         contentView.addSubviews(
             cityNameLabel,

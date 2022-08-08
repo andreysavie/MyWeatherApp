@@ -10,36 +10,57 @@ import SnapKit
 
 class LaunchSettingsView: UIView {
     
-    private lazy var titleLabel = getLabel(
-        text: "Настройки",
-        font: Fonts.settingsTitleFont,
-        color: Colors.darkTextColor
-    )
+//    private lazy var titleLabel = getLabel(
+//        text: "Настройки",
+//        font: Fonts.settingsTitleFont,
+//        color: Colors.darkTextColor
+//    )
     
-    private lazy var tempLabel = getLabel(
-        text: "Температура",
-        font: Fonts.settingsLabelFont,
-        color: Colors.darkTextColor
-    )
+    private lazy var titleLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "Настройки",
+            font: Fonts.settingsTitleFont,
+            textColor: Colors.darkTextColor
+        )
+        return label
+    }()
     
-    private lazy var windspeedLabel = getLabel(
-        text: "Скорость ветра",
-        font: Fonts.settingsLabelFont,
-        color: Colors.darkTextColor
-    )
+    private lazy var tempLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "Температура",
+            font: Fonts.settingsLabelFont,
+            textColor: Colors.darkTextColor
+        )
+        return label
+    }()
     
-    private lazy var timeFormatLabel = getLabel(
-        text: "Формат времени",
-        font: Fonts.settingsLabelFont,
-        color: Colors.darkTextColor
-    )
+    private lazy var windspeedLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "Скорость ветра",
+            font: Fonts.settingsLabelFont,
+            textColor: Colors.darkTextColor
+        )
+        return label
+    }()
     
-    private lazy var NotifiesLabel = getLabel(
-        text: "Уведомления",
-        font: Fonts.settingsLabelFont,
-        color: Colors.darkTextColor
-    )
-
+    private lazy var timeFormatLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "Формат времени",
+            font: Fonts.settingsLabelFont,
+            textColor: Colors.darkTextColor
+        )
+        return label
+    }()
+    
+    private lazy var notifiesLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "Уведомления",
+            font: Fonts.settingsLabelFont,
+            textColor: Colors.darkTextColor
+        )
+        return label
+    }()
+    
     private lazy var tempSemgentedControl = getSegmentedControl(.temp)
     private lazy var windSemgentedControl = getSegmentedControl(.speed)
     private lazy var timeSemgentedControl = getSegmentedControl(.time)
@@ -50,7 +71,7 @@ class LaunchSettingsView: UIView {
             tempLabel,
             windspeedLabel,
             timeFormatLabel,
-            NotifiesLabel
+            notifiesLabel
         ])
         stackView.layoutMargins = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -79,12 +100,9 @@ class LaunchSettingsView: UIView {
         return line
     }()
 
-    private lazy var setButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Установить", for: .normal)
-        button.titleLabel?.font = Fonts.settingsLabelFont
-        button.setTitleColor(Colors.darkTextColor, for: .normal)
-        button.setTitleColor(Colors.mediumTextColor, for: .highlighted)
+    
+    private lazy var setButton: CustomButton = {
+        let button = CustomButton(title: "Установить", font: Fonts.settingsLabelFont)
         return button
     }()
     
@@ -103,7 +121,7 @@ class LaunchSettingsView: UIView {
         
         backgroundColor = .white
         layer.cornerRadius = 16
-        setShadow(self)
+        getShadow(self)
         
         addSubviews(
             titleLabel,

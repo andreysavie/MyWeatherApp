@@ -14,13 +14,15 @@ class OnboardingViewController: UIViewController {
        let view = OnboardingView()
         return view
     }()
+
     
-    private lazy var declineButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("НЕТ, Я БУДУ ДОБАВЛЯТЬ ЛОКАЦИИ", for: .normal)
-        button.titleLabel?.font = Fonts.onboardDeclineFont
-        button.setTitleColor(Colors.mediumTextColor, for: .normal)
-        button.setTitleColor(Colors.lightTextColor, for: .highlighted)
+    private lazy var declineButton: CustomButton = {
+        let button = CustomButton(
+            normalColor: Colors.mediumTextColor,
+            highlightedColor: Colors.lightTextColor,
+            title: "Нет, я буду добавлять локации".uppercased(),
+            font: Fonts.onboardDeclineFont
+        )
         return button
     }()
     
@@ -34,6 +36,14 @@ class OnboardingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
+        
+        declineButton.tapAction = { [weak self] in
+            self?.buttonPressed()
+        }
+    }
+    
+    func buttonPressed() {
+        print ("pressed!!!")
     }
     
     func layout() {

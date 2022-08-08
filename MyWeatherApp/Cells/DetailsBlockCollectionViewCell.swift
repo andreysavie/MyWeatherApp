@@ -65,7 +65,7 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 16
         
-        setShadow(contentView)
+        getShadow(contentView)
         
         contentView.addSubviews(
             titleLabel,

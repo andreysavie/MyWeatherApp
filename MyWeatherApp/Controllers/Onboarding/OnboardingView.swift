@@ -39,26 +39,28 @@ class OnboardingView: UIView {
         return line
     }()
     
-    private lazy var confimButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("ИСПОЛЬЗОВАТЬ МЕСТОПОЛОЖЕНИЕ  УСТРОЙСТВА", for: .normal)
-        button.titleLabel?.font = Fonts.onboardConfimFont
-        button.setTitleColor(.black, for: .normal)
-        button.setTitleColor(Colors.lightTextColor, for: .highlighted)
-        button.addTarget(self, action: #selector(buttonTarget), for: .touchUpInside)
+    
+    private lazy var confimButton: CustomButton = {
+        let button = CustomButton(
+            title: "Использовать местоположение устройства".uppercased(),
+            font: Fonts.onboardConfimFont
+        )
         return button
     }()
-    
-    @objc func buttonTarget() {
-        print ("is tapped!!!")
-    }
-
-    
     
     init() {
         super.init(frame: .zero)
         layout()
+        
+        confimButton.tapAction = { [weak self] in
+            self?.buttonPressed()
+        }
     }
+    
+    func buttonPressed() {
+        print ("pressed!!!")
+    }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -70,7 +72,7 @@ class OnboardingView: UIView {
         backgroundColor = .white
         layer.cornerRadius = 16
         
-        setShadow(self)
+        getShadow(self)
         
         addSubviews(imageView,
                     titleLabel,

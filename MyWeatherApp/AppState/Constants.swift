@@ -16,6 +16,7 @@ public enum AppIcons {
     case temp
     case drop
     case air
+    case calendar
 }
 
 public enum ForecastIcons {
@@ -46,7 +47,7 @@ public struct Fonts {
     // onboarding view
     static let onboardTitleFont = UIFont.systemFont(ofSize: 16, weight: .semibold)
     static let onboardDescriptionFont = UIFont.systemFont(ofSize: 14, weight: .regular)
-    static let onboardConfimFont = UIFont.systemFont(ofSize: 12, weight: .medium)
+    static let onboardConfimFont = UIFont.systemFont(ofSize: 12, weight: .semibold)
     static let onboardDeclineFont = UIFont.systemFont(ofSize: 16, weight: .medium)
 
     
@@ -135,6 +136,13 @@ public struct WeatherColor {
 
 public extension UIView {
     
+    func getShadow (_ view: UIView) {
+        view.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
+        view.layer.shadowRadius = 10.0
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.25
+    }
+    
     func getAppIcon (_ icon: AppIcons, _ size: CGFloat) -> UIImageView {
         let imageView = UIImageView()
         let name: String
@@ -157,6 +165,9 @@ public extension UIView {
             name = "drop.fill"
         case .air:
             name = "humidity"
+        case .calendar:
+            name = "calendar"
+
         }
                 
         imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))?.withTintColor(color, renderingMode: .alwaysOriginal)
