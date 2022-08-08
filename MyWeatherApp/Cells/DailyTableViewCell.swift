@@ -42,7 +42,7 @@ class DailyTableViewCell: UITableViewCell {
         ])
         stackView.axis = .horizontal
         stackView.spacing = 8
-        stackView.alignment = .center
+        stackView.alignment = .trailing
         stackView.distribution = .equalSpacing
         return stackView
     }()
@@ -72,6 +72,11 @@ class DailyTableViewCell: UITableViewCell {
             dayOfWeekLabel,
             weatherStackView
         )
+        
+        contentView.snp.makeConstraints { make in
+            make.height.equalTo(55)
+            make.width.equalToSuperview()
+        }
                 
         dayOfWeekLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)

@@ -45,10 +45,10 @@ class LaunchSettingsView: UIView {
         color: Colors.darkTextColor
     )
 
-    private lazy var tempSemgentedControl = getSemgentedControl(temps)
-    private lazy var windSemgentedControl = getSemgentedControl(speeds)
-    private lazy var timeSemgentedControl = getSemgentedControl(timeFormats)
-    private lazy var notifSemgentedControl = getSemgentedControl(onOff)
+    private lazy var tempSemgentedControl = getSegmentedControl(.temp)
+    private lazy var windSemgentedControl = getSegmentedControl(.speed)
+    private lazy var timeSemgentedControl = getSegmentedControl(.time)
+    private lazy var notifSemgentedControl = getSegmentedControl(.notifications)
     
     private lazy var labelsStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
@@ -66,16 +66,16 @@ class LaunchSettingsView: UIView {
     
     private lazy var segmentedControlsStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
-            tempSemgentedControl,
-            windSemgentedControl,
-            timeSemgentedControl,
-            notifSemgentedControl
+            tempSemgentedControl!,
+            windSemgentedControl!,
+            timeSemgentedControl!,
+            notifSemgentedControl!
         ])
         
         stackView.axis = .vertical
-        stackView.spacing = 35
+        stackView.spacing = 8
         stackView.alignment = .trailing
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .equalCentering
         return stackView
     }()
     

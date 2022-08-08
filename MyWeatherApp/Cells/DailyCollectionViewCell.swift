@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class DailyForecastCollectionViewCell: UICollectionViewCell {
+class DailyCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "DailyForecastCollectionViewCell"
     
@@ -23,7 +23,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         tableView.backgroundColor = .clear
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         tableView.sectionHeaderHeight = UITableView.automaticDimension
-        tableView.estimatedSectionHeaderHeight = 40
+        tableView.estimatedSectionHeaderHeight = 50
         return tableView
     }()
     
@@ -58,7 +58,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
 
 }
 
-extension DailyForecastCollectionViewCell: UITableViewDataSource {
+extension DailyCollectionViewCell: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }

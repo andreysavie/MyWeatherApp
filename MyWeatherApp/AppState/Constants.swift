@@ -31,17 +31,26 @@ public enum ForecastIcons {
     case wind
 }
 
-public enum Settings {
-    case onOff
-    case time
-    case temp
-    case speed
+public enum Settings: String {
+    case notifications = "Уведомления"
+    case time = "Формат времени"
+    case date = "Формат даты"
+    case temp = "Температура"
+    case speed = "Скорость ветра"
+    case visibility = "Блок видимости"
 }
 
 
 public struct Fonts {
     
-    // launch settings controller block
+    // onboarding view
+    static let onboardTitleFont = UIFont.systemFont(ofSize: 16, weight: .semibold)
+    static let onboardDescriptionFont = UIFont.systemFont(ofSize: 14, weight: .regular)
+    static let onboardConfimFont = UIFont.systemFont(ofSize: 12, weight: .medium)
+    static let onboardDeclineFont = UIFont.systemFont(ofSize: 16, weight: .medium)
+
+    
+    // launch settings controller view
     static let settingsLabelFont = UIFont.systemFont(ofSize: 17, weight: .regular)
     static let settingsTitleFont = UIFont.systemFont(ofSize: 37, weight: .regular)
     
@@ -187,33 +196,41 @@ public extension UIView {
         return imageView
     }
     
-    func getLabel (text: String, font: UIFont, color: UIColor ) -> UILabel {
+    func getLabel (text: String, font: UIFont, color: UIColor) -> UILabel {
         let label = UILabel()
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.text = text
         label.font = font
         label.textColor = color
         return label
     }
     
-    func getSemgentedControl(_ setting: Settings) -> UISegmentedControl {
+    func getSegmentedControl(_ setting: Settings?) -> UISegmentedControl? {
         
         var items: [String]
         
         switch setting {
-        case .onOff:
+        case .notifications:
             items = ["On", "Off"]
         case .time:
             items = ["12", "24"]
+        case .date:
+            return nil
         case .temp:
             items = ["C", "F"]
         case .speed:
             items = ["Mi", "Km"]
+        case .visibility:
+            items = ["Mi", "Km"]
+        case .none:
+            return nil
         }
+
         
         let control = UISegmentedControl(items: items)
+        control.frame = CGRect(x: 0, y: 0, width: 80, height: 32)
         control.selectedSegmentIndex = 0
-        control.tintColor = Colors.segmentedControlBackColor
+        control.backgroundColor = Colors.segmentedControlBackColor
         control.selectedSegmentTintColor = .white
         control.setTitleTextAttributes(Attributes.settingsSemgentedControlAttributes, for: .normal)
         return control

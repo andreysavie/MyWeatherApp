@@ -29,7 +29,7 @@ class SeparateLineView: UIView {
             }
             
             make.height.equalTo(0.7)
-            make.bottom.equalTo(bottom).offset(50)
+            make.bottom.equalTo(bottom).offset(-50)
         }
     }
 }

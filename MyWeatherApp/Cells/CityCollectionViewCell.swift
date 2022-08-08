@@ -93,7 +93,7 @@ class CityCollectionViewCell: UICollectionViewCell {
         
         cityTimeLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)
-            make.top.equalTo(cityNameLabel.snp.bottom).offset(8)
+            make.top.equalTo(cityNameLabel.snp.bottom).offset(4)
             make.trailing.equalTo(contentView.snp.centerX)
         }
         

@@ -19,7 +19,8 @@ var window: UIWindow?
         
 //        window?.rootViewController = LaunchSettingsViewController()
         
-        let viewController = WeatherViewController()
+//        let viewController = WeatherViewController()
+        let viewController = OnboardingViewController()
         let navigationController = UINavigationController(rootViewController: viewController)
         
         window?.rootViewController = navigationController

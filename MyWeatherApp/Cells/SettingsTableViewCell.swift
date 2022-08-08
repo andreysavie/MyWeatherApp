@@ -12,44 +12,50 @@ class SettingsTableViewCell: UITableViewCell {
     
     static let identifier = "SettingsTableViewCell"
     
-    private let setting: Settings
+    private var setting: Settings?
 
     private lazy var title: UILabel = {
         let label = UILabel()
         label.font = Fonts.settingsLabelFont
         label.textColor = Colors.darkTextColor
+        label.text = setting?.rawValue ?? "none"
         return label
     }()
     
-    private lazy var segmentedControl = getSemgentedControl(setting)
+    private lazy var dateFormatButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("дд/мм/гггг", for: .normal)
+        button.setTitleColor(Colors.mediumTextColor, for: .normal)
+        button.titleLabel?.font = Fonts.settingsLabelFont
+        return button
+    }()
     
-    init(setting: Settings) {
+    private lazy var segmentedControl = getSegmentedControl(setting)
+    
+    func configure(_ setting: Settings) {
         self.setting = setting
-        super.init(frame: .zero)
         setupLayout()
+        self.setNeedsDisplay()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+
     
     func setupLayout() {
         
-        contentView.addSubviews(title, segmentedControl)
+        let settingElement = segmentedControl ?? dateFormatButton
         
+        contentView.addSubview(title)
+        contentView.addSubview(settingElement)
+
         title.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)
-            make.trailing.equalTo(segmentedControl.snp.leading).offset(-16)
+            make.trailing.equalTo(segmentedControl?.snp.leading ?? contentView.snp.centerX).offset(-16)
             make.centerY.equalToSuperview()
         }
         
-        segmentedControl.snp.makeConstraints { make in
+        settingElement.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
-            make.width.equalTo(80)
             make.centerY.equalToSuperview()
         }
-        
-        
     }
-
 }

@@ -42,7 +42,7 @@ class WeatherViewController: UIViewController {
     
     @objc
     private func settingsButtonPressed() {
-        let controller = UINavigationController(rootViewController: SettingsViewController())
+        let controller = UINavigationController(rootViewController: SettingsViewController(style: .insetGrouped))
         present(controller, animated: true)
 
     }
@@ -76,8 +76,8 @@ class WeatherViewController: UIViewController {
         )
 
         collectionView.register(
-            DailyForecastCollectionViewCell.self,
-            forCellWithReuseIdentifier: DailyForecastCollectionViewCell.identifier
+            DailyCollectionViewCell.self,
+            forCellWithReuseIdentifier: DailyCollectionViewCell.identifier
         )
         
         collectionView.dataSource = self
@@ -94,7 +94,7 @@ class WeatherViewController: UIViewController {
 
         
         collectionView.snp.makeConstraints { make in
-            make.leading.top.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.leading.top.trailing.bottom.equalToSuperview()
         }
     }
     
@@ -125,7 +125,7 @@ extension WeatherViewController: UICollectionViewDataSource {
             return cell
             
         case 1:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyForecastCollectionViewCell.identifier, for: indexPath) as? DailyForecastCollectionViewCell else { return UICollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyCollectionViewCell.identifier, for: indexPath) as? DailyCollectionViewCell else { return UICollectionViewCell() }
             return cell
         default:
             return UICollectionViewCell()
