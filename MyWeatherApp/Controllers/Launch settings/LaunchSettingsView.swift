@@ -10,12 +10,7 @@ import SnapKit
 
 class LaunchSettingsView: UIView {
     
-    private let temps = ["C", "F"]
-    private let speeds = ["Mi", "Km"]
-    private let timeFormats = ["12", "24"]
-    private let onOff = ["Вкл", "Выкл"]
-
-    private lazy var title = getLabel(
+    private lazy var titleLabel = getLabel(
         text: "Настройки",
         font: Fonts.settingsTitleFont,
         color: Colors.darkTextColor
@@ -57,10 +52,11 @@ class LaunchSettingsView: UIView {
             timeFormatLabel,
             NotifiesLabel
         ])
+        stackView.layoutMargins = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+        stackView.isLayoutMarginsRelativeArrangement = true
         stackView.axis = .vertical
-        stackView.spacing = 35
         stackView.alignment = .leading
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .equalCentering
         return stackView
     }()
     
@@ -73,7 +69,6 @@ class LaunchSettingsView: UIView {
         ])
         
         stackView.axis = .vertical
-        stackView.spacing = 8
         stackView.alignment = .trailing
         stackView.distribution = .equalCentering
         return stackView
@@ -88,7 +83,8 @@ class LaunchSettingsView: UIView {
         let button = UIButton()
         button.setTitle("Установить", for: .normal)
         button.titleLabel?.font = Fonts.settingsLabelFont
-        button.tintColor = Colors.darkTextColor
+        button.setTitleColor(Colors.darkTextColor, for: .normal)
+        button.setTitleColor(Colors.mediumTextColor, for: .highlighted)
         return button
     }()
     
@@ -109,32 +105,36 @@ class LaunchSettingsView: UIView {
         layer.cornerRadius = 16
         setShadow(self)
         
-        addSubviews(title, labelsStackView, segmentedControlsStackView, setButton)
+        addSubviews(
+            titleLabel,
+            labelsStackView,
+            segmentedControlsStackView,
+            setButton,
+            separateView
+        )
         
-        
-        title.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().inset(16)
-            make.height.equalTo(50)
         }
         
         labelsStackView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)
-            make.top.equalTo(title.snp.bottom).offset(16)
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.bottom.equalTo(self.snp.bottom).offset(-70)
             make.trailing.equalTo(self.snp.centerX)
         }
         
         segmentedControlsStackView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
-            make.top.equalTo(title.snp.bottom).offset(16)
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.bottom.equalTo(self.snp.bottom).offset(-70)
             make.leading.equalTo(self.snp.centerX)
         }
         
-//        separateView.makeConstraints(atBottom: self.snp.bottom)
-        
+        separateView.makeConstraints(atBottom: self.snp.bottom)
+
         setButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(16)
+            make.centerY.equalTo(self.snp.bottom).inset(25)
             make.centerX.equalToSuperview()
         }
         

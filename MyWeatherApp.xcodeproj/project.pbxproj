@@ -150,7 +150,6 @@
 				D59DF90A2898605300374D63 /* WeatherToolBar.swift */,
 				D59DF91F289AFAA000374D63 /* HourlyForecastView.swift */,
 				D59DF9172899C92900374D63 /* SeparateLineView.swift */,
-				D59DF9132899C01000374D63 /* LaunchSettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -169,11 +168,11 @@
 			children = (
 				D59DF90828985EAA00374D63 /* WeatherViewController.swift */,
 				D59DF8F428985B6500374D63 /* ViewController.swift */,
-				D59DF90F2899B1AF00374D63 /* LaunchSettingsViewController.swift */,
 				D59DF92D289C574200374D63 /* DetailsWeatherViewController.swift */,
 				D59DF933289C683000374D63 /* SearchCityViewController.swift */,
 				D592B094289E8EA700BE85D2 /* SettingsViewController.swift */,
 				D5E8A4CA28A1946900A5A38F /* Onboarding */,
+				D5E8A4CD28A19FE500A5A38F /* Launch settings */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -185,6 +184,15 @@
 				D5E8A4CB28A194B800A5A38F /* OnboardingView.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		D5E8A4CD28A19FE500A5A38F /* Launch settings */ = {
+			isa = PBXGroup;
+			children = (
+				D59DF90F2899B1AF00374D63 /* LaunchSettingsViewController.swift */,
+				D59DF9132899C01000374D63 /* LaunchSettingsView.swift */,
+			);
+			path = "Launch settings";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

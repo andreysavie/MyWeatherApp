@@ -15,34 +15,32 @@ class LaunchSettingsViewController: UIViewController {
         return view
     }()
     
-    private lazy var gradient = getGradient(start: CGPoint(x: 0.5, y: 0), end: CGPoint(x: 0.5, y: 1))
+    private lazy var backgroundImageView: UIImageView = {
+       let view = UIImageView()
+        view.image = UIImage(named: "background_image")
+        view.contentMode = .scaleAspectFill
+        return view
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        gradient.frame = view.bounds
-        view.layer.addSublayer(gradient)
-        view.addSubview(settingsView)
         layout()
     }
     
     func layout() {
+        
+        view.addSubviews(backgroundImageView, settingsView)
+        
+        backgroundImageView.snp.makeConstraints { make in
+            make.center.height.equalToSuperview()
+        }
+
         settingsView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(380)
         }
     }
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
