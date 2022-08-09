@@ -98,11 +98,6 @@ public struct Labels {
 
 }
 
-public struct GradientColors {
-    
-    static let foneFirstColor = UIColor(red: 80/255, green: 135/255, blue: 255/255, alpha: 1)
-    static let foneLastColor = UIColor(red: 42/255, green: 48/255, blue: 64/255, alpha: 1)
-}
 
 public struct Attributes {
     
@@ -113,25 +108,10 @@ public struct Attributes {
         NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold),
         NSAttributedString.Key.foregroundColor: Colors.darkTextColor
     ]
-//    static let flightPropsLabelAttributes = [
-//        NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .bold),
-//        NSAttributedString.Key.foregroundColor: UIColor.white
-//    ]
-//    static let airportNameLabelAttributes = [
-//        NSAttributedString.Key.font: UIFont.systemFont(ofSize: 24, weight: .bold),
-//        NSAttributedString.Key.foregroundColor: UIColor.white
-//    ]
-//    static let cityLabelAttributes = [
-//        NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .medium),
-//        NSAttributedString.Key.foregroundColor: UIColor.white
-//    ]
 
 }
 
 public struct WeatherColor {
-  static let mainTextColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-  static let subTextColor = #colorLiteral(red: 0.5449205637, green: 0.5544300675, blue: 0.6000839472, alpha: 1)
-  static let separateLineColor = #colorLiteral(red: 0.5449205637, green: 0.5544300675, blue: 0.6000839472, alpha: 1)
 }
 
 public extension UIView {
@@ -252,22 +232,22 @@ public extension UIView {
     }
 }
 
-public extension UIViewController {
-    
-    func getGradient(start: CGPoint, end: CGPoint) -> CAGradientLayer {
-        let gradient = CAGradientLayer()
-        gradient.type = .axial
-        gradient.colors = [
-            GradientColors.foneFirstColor.cgColor,
-            GradientColors.foneLastColor.cgColor
-        ]
-        gradient.startPoint = start
-        gradient.endPoint = end
-
-        gradient.locations = [0, 1]
-        return gradient
-    }
-}
+//public extension UIViewController {
+//    
+//    func getGradient(start: CGPoint, end: CGPoint) -> CAGradientLayer {
+//        let gradient = CAGradientLayer()
+//        gradient.type = .axial
+//        gradient.colors = [
+//            GradientColors.foneFirstColor.cgColor,
+//            GradientColors.foneLastColor.cgColor
+//        ]
+//        gradient.startPoint = start
+//        gradient.endPoint = end
+//
+//        gradient.locations = [0, 1]
+//        return gradient
+//    }
+//}
 
 public struct Colors {
     static let darkTextColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 1)
@@ -280,4 +260,10 @@ public struct Colors {
     static let segmentedControlBackColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
     
     static let settingsBackgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+    
+    static let separateLineColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
+    
+    static let navigationBarColor = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
+
+
 }

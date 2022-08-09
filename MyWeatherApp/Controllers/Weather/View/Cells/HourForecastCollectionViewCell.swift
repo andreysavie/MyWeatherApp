@@ -53,7 +53,7 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
 
     }
     
-    func configure() {
+    func setConfigureOfCell() {
     }
-    
+
 }

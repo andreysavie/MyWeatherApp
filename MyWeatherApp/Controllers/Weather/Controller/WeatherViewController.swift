@@ -10,42 +10,35 @@ import SnapKit
 
 class WeatherViewController: UIViewController {
     
-    private lazy var searchCityBarButtonItem: UIBarButtonItem = {
-        let image = UIImage(
-            systemName: "location",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
-            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
-            )
-        let button = UIButton()
-        button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
-        return UIBarButtonItem(customView: button)
-    }()
+    // MARK: PROPERTIES
     
-    private lazy var settingsBarButtonItem: UIBarButtonItem = {
-        let image = UIImage(
-            systemName: "gearshape",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
-            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
-            )
-        let button = UIButton()
-        button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
-        return UIBarButtonItem(customView: button)
-    }()
+    let city: String
+    var index: Int
+//    
+//    private lazy var searchCityBarButtonItem: UIBarButtonItem = {
+//        let image = UIImage(
+//            systemName: "location",
+//            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
+//            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
+//            )
+//        let button = UIButton()
+//        button.setImage(image, for: .normal)
+//        button.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
+//        return UIBarButtonItem(customView: button)
+//    }()
+//    
+//    private lazy var settingsBarButtonItem: UIBarButtonItem = {
+//        let image = UIImage(
+//            systemName: "gearshape",
+//            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
+//            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
+//            )
+//        let button = UIButton()
+//        button.setImage(image, for: .normal)
+//        button.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
+//        return UIBarButtonItem(customView: button)
+//    }()
     
-    @objc
-    private func searchButtonPressed() {
-        let controller = SearchCityViewController()
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    @objc
-    private func settingsButtonPressed() {
-        let controller = UINavigationController(rootViewController: SettingsViewController(style: .insetGrouped))
-        present(controller, animated: true)
-
-    }
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -56,7 +49,7 @@ class WeatherViewController: UIViewController {
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-//        layout.minimumLineSpacing = 16
+        //        layout.minimumLineSpacing = 16
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(
             top: 8,
@@ -66,15 +59,28 @@ class WeatherViewController: UIViewController {
         return layout
     }()
     
-
+    // MARK: INITS
+    
+    init (city: String, index: Int) {
+        self.city = city
+        self.index = index
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = city
         
         collectionView.register(
             CurrentWeatherCollectionViewCell.self,
             forCellWithReuseIdentifier: CurrentWeatherCollectionViewCell.identifier
         )
-
+        
         collectionView.register(
             DailyCollectionViewCell.self,
             forCellWithReuseIdentifier: DailyCollectionViewCell.identifier
@@ -86,12 +92,12 @@ class WeatherViewController: UIViewController {
         setupLayout()
     }
     
+    // MARK: LAYOUT
+
     private func setupLayout() {
+        
         view.backgroundColor = .white
         view.addSubview(collectionView)
-        self.navigationItem.rightBarButtonItem = searchCityBarButtonItem
-        self.navigationItem.leftBarButtonItem = settingsBarButtonItem
-
         
         collectionView.snp.makeConstraints { make in
             make.leading.top.trailing.bottom.equalToSuperview()
@@ -99,7 +105,24 @@ class WeatherViewController: UIViewController {
     }
     
     
+    
+//    // MARK: OBJC METHODS
+//    
+//    @objc
+//    private func searchButtonPressed() {
+//        let controller = SearchCityViewController()
+//        self.navigationController?.pushViewController(controller, animated: true)
+//    }
+//    
+//    @objc
+//    private func settingsButtonPressed() {
+//        let controller = UINavigationController(rootViewController: SettingsViewController(style: .insetGrouped))
+//        present(controller, animated: true)
+//        
+//    }
 }
+
+// MARK: EXTENSIONS
 
 
 extension WeatherViewController: UICollectionViewDataSource {
@@ -147,9 +170,9 @@ extension WeatherViewController: UICollectionViewDelegateFlowLayout {
         
         switch indexPath.section {
         case 0:
-            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.6
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.55
         case 1:
-            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.35
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.40
         default:
             break
         }

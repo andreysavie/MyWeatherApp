@@ -62,9 +62,9 @@ class DailyTableViewCell: UITableViewCell {
     
     // MARK: METHODS ============================================================================
 
-//    func configureOfCell(flight: Flight) {
-//        self.flightDate.text = convertDate(longDate: flight.startDate, format: "E, dd MMMM")
-//    }
+    func setConfigureOfCell() {
+    }
+
     
     private func setupLayout() {
         contentView.backgroundColor = .clear

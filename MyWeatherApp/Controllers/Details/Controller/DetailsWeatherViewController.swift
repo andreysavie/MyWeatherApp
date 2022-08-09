@@ -38,11 +38,17 @@ class DetailsWeatherViewController: UIViewController {
             DetailsForecastCollectionViewCell.self,
             forCellWithReuseIdentifier: DetailsForecastCollectionViewCell.identifier
         )
+        
+        collectionView.register(
+            DetailsChartCollectionViewCell.self,
+            forCellWithReuseIdentifier: DetailsChartCollectionViewCell.identifier
+        )
 
         collectionView.register(
             DetailsBlockCollectionViewCell.self,
             forCellWithReuseIdentifier: DetailsBlockCollectionViewCell.identifier
         )
+        
         
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -69,25 +75,38 @@ extension DetailsWeatherViewController: UICollectionViewDataSource {
         switch section {
         case 0:
             return 1
-        default:
+        case 1:
+            return 1
+        case 2:
             return 10
+        default:
+            return 0
         }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         switch indexPath.section {
+            
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsForecastCollectionViewCell.identifier, for: indexPath) as? DetailsForecastCollectionViewCell else { return UICollectionViewCell() }
             return cell
             
-        default:
+        case 1:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsChartCollectionViewCell.identifier, for: indexPath) as? DetailsChartCollectionViewCell else { return UICollectionViewCell() }
+            return cell
+            
+        case 2:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsBlockCollectionViewCell.identifier, for: indexPath) as? DetailsBlockCollectionViewCell else { return UICollectionViewCell() }
             return cell
+            
+        default:
+            return UICollectionViewCell()
+
         }
     }
     
@@ -115,6 +134,9 @@ extension DetailsWeatherViewController: UICollectionViewDelegateFlowLayout {
             height = 180
             width = collectionView.frame.width - 32
         case 1:
+            height = 260
+            width = collectionView.frame.width - 32
+        case 2:
             height = widthPerItem
             width = widthPerItem
         default:

@@ -85,15 +85,3 @@ extension DailyCollectionViewCell: UITableViewDataSource {
     }
 
 }
-
-//extension DailyForecastCollectionViewCell: UITableViewDelegate {
-//
-//    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
-//    {
-//        let header = view as! UITableViewHeaderFooterView
-//        header.textLabel?.font = Fonts.tenDayTitleFont
-//        header.textLabel?.textColor = Colors.darkTextColor
-//    }
-//}
-
-

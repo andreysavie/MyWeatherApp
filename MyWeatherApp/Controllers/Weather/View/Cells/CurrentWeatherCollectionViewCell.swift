@@ -16,12 +16,6 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     
     // MARK: PROPERTIES
     
-    private lazy var cityNameLabel = getLabel(
-        text: "Москва",
-        font: Fonts.cityFont,
-        color: Colors.darkTextColor
-    )
-    
     private lazy var tempLabel = getLabel(
         text: "21°",
         font: Fonts.tempLargeFont,
@@ -39,6 +33,16 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         font: Fonts.cityLowHeightTempFont,
         color: Colors.darkTextColor
     )
+    
+    private lazy var todayLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "Понедельник, 8 августа, 13:58",
+            font: Fonts.cityLowHeightTempFont,
+            textColor: Colors.darkTextColor
+        )
+        label.textAlignment = .center
+        return label
+    }()
 
     private lazy var hourlyForecastView: HourlyForecastView = {
         let view = HourlyForecastView()
@@ -93,25 +97,18 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         getShadow(contentView)
         
         contentView.addSubviews(
-            cityNameLabel,
             tempLabel,
             weatherConditionLabel,
             lowAndHeightTempLabel,
+            todayLabel,
             hourlyForecastView,
             detailsButton,
             separateView
         )
         
-        cityNameLabel.textAlignment = .center
-        
-        cityNameLabel.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(16)
-            make.centerX.equalToSuperview()
-        }
         
         tempLabel.snp.makeConstraints { make in
-            make.top.equalTo(cityNameLabel.snp.bottom)
-            make.centerX.equalToSuperview()
+            make.top.centerX.equalToSuperview()
         }
         
         weatherConditionLabel.snp.makeConstraints { make in
@@ -120,13 +117,18 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         }
         
         lowAndHeightTempLabel.snp.makeConstraints { make in
-            make.top.equalTo(weatherConditionLabel.snp.bottom)
+            make.top.equalTo(weatherConditionLabel.snp.bottom).offset(8)
             make.centerX.equalToSuperview()
+        }
+        
+        todayLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(lowAndHeightTempLabel.snp.bottom).offset(8)
         }
         
         hourlyForecastView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(lowAndHeightTempLabel.snp.bottom).offset(16)
+            make.top.equalTo(todayLabel.snp.bottom).offset(16)
             make.height.equalTo(130)
         }
         

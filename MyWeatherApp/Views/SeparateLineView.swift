@@ -10,10 +10,9 @@ import SnapKit
 
 class SeparateLineView: UIView {
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = WeatherColor.separateLineColor
+        backgroundColor = Colors.separateLineColor
     }
     
     required init?(coder: NSCoder) {

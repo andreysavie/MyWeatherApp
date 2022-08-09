@@ -17,15 +17,20 @@ var window: UIWindow?
         
         window = UIWindow(frame: UIScreen.main.bounds)
         
+        
+        let viewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        let navigationController = UINavigationController(rootViewController: viewController)
+        
 //        window?.rootViewController = LaunchSettingsViewController()
         
-        let viewController = WeatherViewController()
+//        let viewController = WeatherViewController()
+
 //        let viewController = OnboardingViewController()
 //        let viewController = LaunchSettingsViewController()
 
-        let navigationController = UINavigationController(rootViewController: viewController)
         
         window?.rootViewController = navigationController
+
 
         window?.makeKeyAndVisible()
         
