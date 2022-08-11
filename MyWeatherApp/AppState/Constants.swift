@@ -8,6 +8,116 @@
 import Foundation
 import UIKit
 
+struct CoreData {
+    static let modelName = "CitiesModel"
+    struct City {
+        static let entityName = "City"
+        static let name = "name"
+        static let latitude = "latitude"
+        static let longitude = "longitude"
+        static let orderPosition = "orderPosition"
+    }
+}
+
+struct CellIdentifier {
+    static let cityCell = "cityCell"
+    static let cityLoadingCell = "cityLoadingCell"
+    static let dailyForecastCell = "dailyForecastCell"
+    static let hourlyForecastCell = "hourlyForecastCell"
+    static let colorThemeCell = "colorThemeCell"
+    static let appIconCell = "AppIconCell"
+}
+
+struct ImageName {
+    static let deleteImage = "DeleteAction"
+    
+    static let appIcon = "AppIcon"
+    static let darkWhiteCloudAppIcon3x = "darkWhiteCloudAppIcon@3x.png"
+    static let whiteSunAppIcon3x = "whiteSunAppIcon@3x.png"
+    static let cornerSun3x = "cornerSun@3x.png"
+    static let orangeCloud3x = "orangeCloud@3x.png"
+    static let moon3x = "moon@3x.png"
+    static let yellowSun3x = "yellowSun@3x.png"
+    static let blueWhiteCloud3x = "blueWhiteCloud@3x.png"
+}
+
+struct SystemImageName {
+    static let sunMaxFill = "sun.max.fill"
+    static let sunriseFill = "sunrise.fill"
+    static let sunsetFill = "sunset.fill"
+    static let eyeFill = "eye.fill"
+    static let arrowDownLine = "arrow.down.to.line"
+    static let wind = "wind"
+    static let cloudFill = "cloud.fill"
+    static let drop = "drop.fill"
+    static let cloudFogFill = "cloud.fog.fill"
+    static let cloudSnowFill = "cloud.snow.fill"
+    static let cloudRainFill = "cloud.rain.fill"
+    static let cloudDrizzleFill = "cloud.drizzle.fill"
+    static let cloudBoltFill = "cloud.bolt.fill"
+    static let switch2 = "switch.2"
+    static let magnifyingglass = "magnifyingglass"
+    static let checkmark = "checkmark"
+    static let envelope = "envelope"
+    static let paperplane = "paperplane"
+    static let paintbrush = "paintbrush"
+    static let ruler = "ruler"
+    
+    static let arrowDown = "chevron.compact.down"
+    static let arrowUp = "chevron.compact.up"
+}
+
+struct AccessabilityIdentifier {
+    static let mainMenuTableViewCell = "MainMenuTableViewCell"
+    
+    static let settingsButton = "SettingsButton"
+    static let searchButton = "SearchButton"
+    
+    static let addCityCell = "AddCityCell"
+    
+    static let colorSettingsTableView = "ColorSettingsTableView"
+    
+    static let settingsUnitSwitch = "SettingsUnitSwitch"
+    
+    static let settingsTableView = "SettingsTableView"
+}
+
+struct UserDefaults {
+    static let unit = "Unit"
+    static let imperial = "imperial"
+    static let metric = "metric"
+    
+    static let currentColorTheme = "currentColorTheme"
+    static let colorThemePositionNumber = "colorThemePositionNumber"
+    
+    static let appIconNumber = "AppIconNumber"
+}
+
+struct Network {
+    static let baseURL = "https://api.openweathermap.org/data/2.5/onecall?"
+    static let apiKey = "179a1ef614ca272c4033f5abe4743aed"
+    static let geocodingApiKey = "44ec1ff1-8646-4217-bc84-72cacc2c4217"
+    static let lat = "lat="
+    static let lon = "lon="
+    static let appid = "appid="
+    static let units = "units="
+    static let exclude = "exclude="
+    static let minutely = "minutely"
+}
+
+struct Links {
+    static let telegramAppLink = "https://t.me/climaWeather"
+    static let telegramAppstoreLink = "itms-apps://itunes.apple.com/app/id686449807"
+}
+
+struct Misc {
+    static let defaultSityName = "-"
+    static let colorThemeLocalFile = "ColorThemes"
+}
+
+
+
+
 public enum AppIcons {
     case sunRise
     case sunSet
@@ -41,6 +151,23 @@ public enum Settings: String {
     case visibility = "Блок видимости"
 }
 
+public struct Colors {
+    static let darkTextColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 1)
+    static let mediumTextColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
+    static var lightTextColor = UIColor(red: 180/255, green: 180/255, blue: 180/255, alpha: 1)
+    
+    static let blueColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
+    static let yellowColor = UIColor(red: 248/255, green: 215/255, blue: 74/255, alpha: 1)
+    
+    static let segmentedControlBackColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
+    static let settingsBackgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+    static let separateLineColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
+    static let navigationBarColor = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
+    
+    
+}
+
+
 
 public struct Fonts {
     
@@ -49,7 +176,7 @@ public struct Fonts {
     static let onboardDescriptionFont = UIFont.systemFont(ofSize: 14, weight: .regular)
     static let onboardConfimFont = UIFont.systemFont(ofSize: 12, weight: .semibold)
     static let onboardDeclineFont = UIFont.systemFont(ofSize: 16, weight: .medium)
-
+    
     
     // launch settings controller view
     static let settingsLabelFont = UIFont.systemFont(ofSize: 17, weight: .regular)
@@ -75,7 +202,7 @@ public struct Fonts {
     static let detailsCityFont = UIFont.systemFont(ofSize: 37, weight: .regular)
     static let detailsWeatherFont = UIFont.systemFont(ofSize: 24, weight: .regular)
     static let detailsSunTimeFont = UIFont.systemFont(ofSize: 17, weight: .regular)
-
+    
     
     // details controller: details block
     static let detailsBlockTitleFont = UIFont.systemFont(ofSize: 15, weight: .medium)
@@ -95,7 +222,7 @@ public struct Fonts {
 }
 
 public struct Labels {
-
+    
 }
 
 
@@ -108,7 +235,7 @@ public struct Attributes {
         NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17, weight: .bold),
         NSAttributedString.Key.foregroundColor: Colors.darkTextColor
     ]
-
+    
 }
 
 public struct WeatherColor {
@@ -147,9 +274,9 @@ public extension UIView {
             name = "humidity"
         case .calendar:
             name = "calendar"
-
+            
         }
-                
+        
         imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))?.withTintColor(color, renderingMode: .alwaysOriginal)
         return imageView
     }
@@ -216,7 +343,7 @@ public extension UIView {
         case .none:
             return nil
         }
-
+        
         
         let control = UISegmentedControl(items: items)
         control.frame = CGRect(x: 0, y: 0, width: 80, height: 32)
@@ -249,21 +376,15 @@ public extension UIView {
 //    }
 //}
 
-public struct Colors {
-    static let darkTextColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 1)
-    static let mediumTextColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
-    static var lightTextColor = UIColor(red: 180/255, green: 180/255, blue: 180/255, alpha: 1)
-    
-    static let blueColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
-    static let yellowColor = UIColor(red: 248/255, green: 215/255, blue: 74/255, alpha: 1)
-    
-    static let segmentedControlBackColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
-    
-    static let settingsBackgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
-    
-    static let separateLineColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
-    
-    static let navigationBarColor = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
+public extension Date {
 
+ static func getCurrentDate() -> String {
 
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateFormat = "EEEE, MMM d"
+
+        return dateFormatter.string(from: Date())
+
+    }
 }

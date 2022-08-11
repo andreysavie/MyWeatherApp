@@ -38,8 +38,12 @@ class SettingsTableViewCell: UITableViewCell {
         self.setNeedsDisplay()
     }
     
-
-    
+//    func toggleSegmentedControl() {
+//        segmentedControl?.selectedSegmentIndex =
+//        segmentedControl?.selectedSegmentIndex == 0 ? 1 : 0
+//        self.setNeedsDisplay()
+//    }
+        
     func setupLayout() {
         
         let settingElement = segmentedControl ?? dateFormatButton

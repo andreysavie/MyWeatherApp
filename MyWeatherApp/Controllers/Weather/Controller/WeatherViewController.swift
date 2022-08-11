@@ -8,37 +8,24 @@
 import UIKit
 import SnapKit
 
-class WeatherViewController: UIViewController {
+protocol MainScreenDelegate {
+    func fetchWeatherData()
+}
+
+class WeatherViewController: UIViewController, MainScreenDelegate {
+    
+
+    
     
     // MARK: PROPERTIES
     
-    let city: String
+    var city: CityModel
     var index: Int
-//    
-//    private lazy var searchCityBarButtonItem: UIBarButtonItem = {
-//        let image = UIImage(
-//            systemName: "location",
-//            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
-//            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
-//            )
-//        let button = UIButton()
-//        button.setImage(image, for: .normal)
-//        button.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
-//        return UIBarButtonItem(customView: button)
-//    }()
-//    
-//    private lazy var settingsBarButtonItem: UIBarButtonItem = {
-//        let image = UIImage(
-//            systemName: "gearshape",
-//            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
-//            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
-//            )
-//        let button = UIButton()
-//        button.setImage(image, for: .normal)
-//        button.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
-//        return UIBarButtonItem(customView: button)
-//    }()
     
+    private var weatherManager = NetworkManager()
+    private var savedCities = [CityModel]()
+    
+    var currentWeather: WeatherModel?// ??
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -61,7 +48,7 @@ class WeatherViewController: UIViewController {
     
     // MARK: INITS
     
-    init (city: String, index: Int) {
+    init (city: CityModel, index: Int) {
         self.city = city
         self.index = index
         super.init(nibName: nil, bundle: nil)
@@ -74,7 +61,14 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = city
+        title = city.name // old
+        
+        city = CityModel(name: "Rostow-on-Don", latitude: 47.24, longitude: 39.71)
+        
+        weatherManager.delegate = self
+        
+        fetchWeatherData()
+
         
         collectionView.register(
             CurrentWeatherCollectionViewCell.self,
@@ -104,6 +98,9 @@ class WeatherViewController: UIViewController {
         }
     }
     
+    func fetchWeatherData() {
+        weatherManager.fetchWeather(by: city, at: 0)
+    }
     
     
 //    // MARK: OBJC METHODS
@@ -124,6 +121,41 @@ class WeatherViewController: UIViewController {
 
 // MARK: EXTENSIONS
 
+extension WeatherViewController: NetworkManagerDelegate {
+    
+    func didUpdateWeather(_ weatherManager: NetworkManager, weather: WeatherModel, at position: Int) {
+        DispatchQueue.global().async {
+            self.currentWeather = weather
+            DispatchQueue.main.sync {
+                self.collectionView.reloadData()
+            }
+//            let indexPath = IndexPath(row: position, section: 0)
+            // Put chosen city name from addCity autoCompletion into weather data model
+//            self.displayWeather[indexPath.row]?.cityName = self.savedCities[indexPath.row].name
+//            self.tableView?.reloadRows(at: [indexPath], with: .fade)
+        }
+    }
+
+    func didFailWithError(error: Error) {
+//        let removeEmptyCells: ((UIAlertAction) -> (Void)) = { _ in
+//            for (i, weatherModel) in self.displayWeather.enumerated() {
+//                if weatherModel == nil {
+//                    self.deleteItem(at: i)
+//                    self.displayWeather.remove(at: i)
+//                    self.tableView?.reloadData()
+//                }
+//            }
+//        }
+//
+//        DispatchQueue.main.async {
+//            let alert = AlertViewBuilder()
+//                .build(title: "Oops", message: error.localizedDescription, preferredStyle: .alert)
+//                .build(title: "Ok", style: .default, handler: removeEmptyCells)
+//                .content
+//            self.present(alert, animated: true, completion: nil)
+//        }
+    }
+}
 
 extension WeatherViewController: UICollectionViewDataSource {
     
@@ -140,6 +172,8 @@ extension WeatherViewController: UICollectionViewDataSource {
         switch indexPath.section {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CurrentWeatherCollectionViewCell.identifier, for: indexPath) as? CurrentWeatherCollectionViewCell else { return UICollectionViewCell() }
+            
+            cell.configureOfCell(weather: currentWeather)
             
             cell.detailsButtonAction = { [weak self] in
                 let viewController = DetailsWeatherViewController()

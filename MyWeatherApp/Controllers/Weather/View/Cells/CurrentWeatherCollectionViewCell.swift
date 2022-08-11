@@ -14,29 +14,30 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     
     var detailsButtonAction: (()->())?
     
+        
     // MARK: PROPERTIES
     
     private lazy var tempLabel = getLabel(
-        text: "21°",
+        text: "??°",
         font: Fonts.tempLargeFont,
         color: Colors.darkTextColor
     )
     
     private lazy var weatherConditionLabel = getLabel(
-        text: "Облачно",
+        text: "unknown",
         font: Fonts.weatherConditionFont,
         color: Colors.darkTextColor
     )
     
     private lazy var lowAndHeightTempLabel = getLabel(
-        text: "Мин. 15°, макс: 29°",
+        text: "Мин. ??°, макс: ??°",
         font: Fonts.cityLowHeightTempFont,
         color: Colors.darkTextColor
     )
     
     private lazy var todayLabel: CustomLabel = {
         let label = CustomLabel(
-            text: "Понедельник, 8 августа, 13:58",
+            text: "Понедельник, 8 августа",
             font: Fonts.cityLowHeightTempFont,
             textColor: Colors.darkTextColor
         )
@@ -84,7 +85,15 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     // MARK: METHODS
     
     
-    func setConfigureOfCell() {
+    func configureOfCell(weather: WeatherModel?) {
+        guard let wthr = weather else { return }
+        
+        self.tempLabel.text = wthr.temperatureString
+        self.weatherConditionLabel.text = "\(wthr.description)"
+        let min = String(format: "%.0f°", wthr.daily[0].temp.min)
+        let max = String(format: "%.0f°", wthr.daily[0].temp.max)
+        self.lowAndHeightTempLabel.text = "Мин. \(min), макс: \(max)" // add farehngate
+        self.todayLabel.text = Date.getCurrentDate()
     }
     
     

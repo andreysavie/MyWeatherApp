@@ -7,9 +7,9 @@
 
 import UIKit
 
-let cities = ["Москва", "Санкт-Петербург", "Ростов-на-Дону", "Гуково", "Зверево", ]
+let cities: [CityModel] = [CityModel(name: "Ростов-на-Дону", latitude: 21.13, longitude: 43.34)]
 
-class PageViewController: UIPageViewController, UIPageViewControllerDataSource {
+class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDataSource {
     
     
     private lazy var searchCityBarButtonItem: UIBarButtonItem = {
@@ -115,7 +115,7 @@ class PageViewController: UIPageViewController, UIPageViewControllerDataSource {
         
         let controller = WeatherViewController(city: cities[index], index: index)
         
-        self.title = cities[index]
+        self.title = cities[index].name
         
         return controller
         

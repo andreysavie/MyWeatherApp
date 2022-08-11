@@ -15,10 +15,14 @@ var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        let city = CityModel(name: "", latitude: 47.24, longitude: 39.71)
+        let manager = NetworkManager()
+        manager.fetchWeather(by: city)
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         
         
-        let viewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+        let viewController = MainScreenPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         let navigationController = UINavigationController(rootViewController: viewController)
         
 //        window?.rootViewController = LaunchSettingsViewController()
