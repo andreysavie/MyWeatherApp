@@ -11,6 +11,12 @@ import SnapKit
 class DailyTableViewCell: UITableViewCell {
 
     static let identifier = "DailyTableViewCell"
+    
+    var image: UIImage? {
+        didSet {
+            weatherIcon.image = image
+        }
+    }
 
     // MARK: PROPERTIES ============================================================================
 
@@ -32,7 +38,10 @@ class DailyTableViewCell: UITableViewCell {
         color: Colors.darkTextColor
     )
     
-    private lazy var weatherIcon = getWeatherIcon(.sun)
+    private lazy var weatherIcon: UIImageView = {
+        let view = UIImageView(frame: CGRect())
+        return view
+    }()
     
     private lazy var weatherStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
@@ -62,7 +71,27 @@ class DailyTableViewCell: UITableViewCell {
     
     // MARK: METHODS ============================================================================
 
-    func setConfigureOfCell() {
+    func configureOfCell(_ weather: WeatherModel?, at day: Int) {
+        guard let wthr = weather else { return }
+        let conditionId = wthr.daily[day].weather[0].id
+
+        let min = getFormattedTemp(wthr.daily[day].temp.min)
+        let max = getFormattedTemp(wthr.daily[day].temp.max)
+
+        let date = Date(timeIntervalSince1970: TimeInterval(wthr.daily[day].dt))
+        print("🥶\(date)")
+
+        self.dayOfWeekLabel.text = day == 0 ?
+        "Сегодня" :
+        Date.getCurrentDate(date: date, style: .day)
+        
+        self.image = getWeatherImage(conditionId: conditionId)
+        self.lowTempLabel.text = min
+        self.heightTempLabel.text = max
+        
+        print("📆\(wthr.daily.count)")
+
+        
     }
 
     

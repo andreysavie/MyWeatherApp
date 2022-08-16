@@ -71,6 +71,14 @@ class HourlyCollectionViewCell: UICollectionViewCell {
             make.leading.top.trailing.bottom.equalToSuperview()
         }
     }
+    
+    func configureOfCell(weather: WeatherModel?) {
+        guard let wthr = weather else { return }
+        print("🐤\(wthr.descriptionString)")
+        currentWeather = wthr
+        print("🐤\(self.currentWeather?.descriptionString)")
+
+    }
 }
 
 extension HourlyCollectionViewCell: UICollectionViewDataSource {
@@ -84,7 +92,7 @@ extension HourlyCollectionViewCell: UICollectionViewDataSource {
         guard
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourForecastCollectionViewCell.identifier, for: indexPath) as? HourForecastCollectionViewCell
         else { return UICollectionViewCell() }
-//        cell.configureOfCell(currentWeather, at: indexPath.item)
+        cell.configureOfCell(currentWeather, at: indexPath.item)
         return cell
     }
     

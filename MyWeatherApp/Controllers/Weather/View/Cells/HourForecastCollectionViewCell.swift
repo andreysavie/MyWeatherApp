@@ -14,9 +14,19 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
         
     let hour = Calendar.current.component(.hour, from: Date())
     
+    var image: UIImage? {
+        didSet {
+            weatherIcon.image = image
+        }
+    }
+    
+//    private lazy var weatherIcon: UIImageView = {
+//        let imageView = UIImageView()
+//        return imageView
+//    }()
     private lazy var weatherIcon: UIImageView = {
-        let imageView = UIImageView()
-        return imageView
+        let view = UIImageView(frame: CGRect())
+        return view
     }()
     
     private lazy var hourTitleLabel = getLabel(
@@ -63,26 +73,22 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
     func configureOfCell(_ weather: WeatherModel?, at hour: Int) {
         
         guard let wthr = weather else { return }
-        
-        let currentHour = Date(timeIntervalSinceNow: TimeInterval(wthr.hourly[hour].dt))
+                
+        let currentHour = Date(timeIntervalSince1970: TimeInterval(wthr.hourly[hour].dt))
         let dateformat = DateFormatter()
         dateformat.dateFormat = "HH" // "h a"
-        
-        let strHour = dateformat.string(from: currentHour)
+        let strHour = "\(dateformat.string(from: currentHour)):00"
         print("⏰\(strHour)")
+              
         let conditionId = wthr.hourly[hour].weather[0].id
+        print("🌆\(conditionId)")
+
         let hourlyTemp = getFormattedTemp(wthr.hourly[hour].temp)
 
         self.hourTitleLabel.text = strHour
-        let weatherIconName = WeatherModel.getConditionNameBy(conditionId: conditionId)
-        print("🌆\(weatherIconName)")
-
-        weatherIcon.image = UIImage(systemName: weatherIconName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(Colors.blueColor, renderingMode: .alwaysOriginal)
-
-        
+        self.image = getWeatherImage(conditionId: conditionId)
         self.hourlyTempLabel.text = hourlyTemp
-        print("🌡\(hourlyTempLabel)")
-
+        
     }
     
     override func prepareForReuse() {

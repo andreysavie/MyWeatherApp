@@ -116,7 +116,10 @@ struct Misc {
     static let colorThemeLocalFile = "ColorThemes"
 }
 
-
+public enum DataStyle {
+    case day // just day of week
+    case full // day of week, number and month
+}
 
 
 public enum AppIcons {
@@ -282,38 +285,68 @@ public extension UIView {
         return imageView
     }
     
-    func getWeatherIcon (_ icon: ForecastIcons) -> UIImageView {
+    func getWeatherIcon (conditionId id: Int) -> UIImageView {
         let imageView = UIImageView()
-        let name: String
-        var color: UIColor = Colors.blueColor
+        let name = getConditionNameBy(conditionId: id)
+        var color = name == SystemImageName.sunMaxFill ?
+                            Colors.yellowColor :
+                            Colors.blueColor
         
-        switch icon {
-        case .sun:
-            name = "sun.max"
-            color = Colors.yellowColor
-        case .cloud:
-            name = "cloud.fill"
-        case .partlyCloud:
-            name = "cloud.sun.fill"
-        case .rain:
-            name = "cloud.rain.fill"
-        case .heavyRain:
-            name = "cloud.heavyrain.fill"
-        case .fog:
-            name = "cloud.fog.fill"
-        case .snow:
-            name = "snowflake"
-        case .bolt:
-            name = "cloud.bolt.fill"
-        case .rainBolt:
-            name = "cloud.bolt.rain.fill"
-        case .wind:
-            name = "wind"
-        }
+//        switch id {
+//        case 200...232:
+//            name = SystemImageName.cloudBoltFill
+//        case 300...321:
+//            name = SystemImageName.cloudDrizzleFill
+//        case 500...531:
+//            name = SystemImageName.cloudRainFill
+//        case 600...622:
+//            name = SystemImageName.cloudSnowFill
+//        case 701...781:
+//            name = SystemImageName.cloudFogFill
+//        case 800:
+//            name = SystemImageName.sunMaxFill
+//            color = Colors.yellowColor
+//        case 801...804:
+//            name = SystemImageName.cloudFill
+//        default:
+//            return UIImageView()
+//        }
         
         imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(color, renderingMode: .alwaysOriginal)
         return imageView
     }
+    
+    func getWeatherImage (conditionId id: Int) -> UIImage {
+        let name = getConditionNameBy(conditionId: id)
+        let color = name == SystemImageName.sunMaxFill ?
+                            Colors.yellowColor :
+                            Colors.blueColor
+                
+        return UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(color, renderingMode: .alwaysOriginal) ?? UIImage()
+    }
+    
+    func getConditionNameBy(conditionId id: Int) -> String {
+        switch id {
+        case 200...232:
+            return SystemImageName.cloudBoltFill
+        case 300...321:
+            return SystemImageName.cloudDrizzleFill
+        case 500...531:
+            return SystemImageName.cloudRainFill
+        case 600...622:
+            return SystemImageName.cloudSnowFill
+        case 701...781:
+            return SystemImageName.cloudFogFill
+        case 800:
+            return SystemImageName.sunMaxFill
+        case 801...804:
+            return SystemImageName.cloudFill
+        default:
+            return "error"
+        }
+    }
+    
+    
     
     func getLabel (text: String, font: UIFont, color: UIColor) -> UILabel {
         let label = UILabel()
@@ -369,14 +402,12 @@ public extension UIView {
     
 }
 public extension Date {
-
- static func getCurrentDate() -> String {
-
+    
+    static func getCurrentDate(date: Date = Date(), style: DataStyle = .full) -> String {
+        
         let dateFormatter = DateFormatter()
-
-        dateFormatter.dateFormat = "EEEE, MMMM d"
-
-        return dateFormatter.string(from: Date())
-
+        dateFormatter.dateFormat = style == .full ? "EEEE, MMMM d" : "EE, d"
+        let str = dateFormatter.string(from: date)
+        return str.prefix(1).uppercased() + str.lowercased().dropFirst()
     }
 }

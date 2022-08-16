@@ -12,6 +12,12 @@ class DailyCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "DailyForecastCollectionViewCell"
     
+    var currentWeather: WeatherModel? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
     private lazy var titleLabel: CustomLabel = {
         let label = CustomLabel(
             text: "Прогноз на 10 дней".uppercased(),
@@ -71,16 +77,22 @@ class DailyCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.bottom.equalToSuperview()
         }
     }
+    
+    func configureOfCell(weather: WeatherModel?) {
+        guard let wthr = weather else { return }
+        currentWeather = wthr
+    }
 
 }
 
 extension DailyCollectionViewCell: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return currentWeather?.daily.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DailyTableViewCell.identifier, for: indexPath) as? DailyTableViewCell else { return UITableViewCell() }
+        cell.configureOfCell(currentWeather, at: indexPath.row)
         return cell
     }
 

@@ -183,11 +183,12 @@ extension WeatherViewController: UICollectionViewDataSource {
            
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyCollectionViewCell.identifier, for: indexPath) as? HourlyCollectionViewCell else { return UICollectionViewCell() }
-//            cell.configureOfCell(weather: currentWeather)
+            cell.configureOfCell(weather: currentWeather)
             return cell
             
         case 2:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyCollectionViewCell.identifier, for: indexPath) as? DailyCollectionViewCell else { return UICollectionViewCell() }
+            cell.configureOfCell(weather: currentWeather)
             return cell
         default:
             return UICollectionViewCell()

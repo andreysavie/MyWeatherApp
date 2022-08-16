@@ -136,24 +136,4 @@ struct WeatherModel {
         String(format: "%.0f°", temperature)
     }
 
-    static func getConditionNameBy(conditionId id: Int) -> String {
-        switch id {
-        case 200...232:
-            return SystemImageName.cloudBoltFill
-        case 300...321:
-            return SystemImageName.cloudDrizzleFill
-        case 500...531:
-            return SystemImageName.cloudRainFill
-        case 600...622:
-            return SystemImageName.cloudSnowFill
-        case 701...781:
-            return SystemImageName.cloudFogFill
-        case 800:
-            return SystemImageName.sunMaxFill
-        case 801...804:
-            return SystemImageName.cloudFill
-        default:
-            return "error"
-        }
-    }
 }
