@@ -15,25 +15,28 @@ var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        let city = CityModel(name: "", latitude: 47.24, longitude: 39.71)
-        let manager = NetworkManager()
-        manager.fetchWeather(by: city)
+//        let city = CityModel(name: "", latitude: 47.24, longitude: 39.71)
+//        let manager = NetworkManager()
+//        manager.fetchWeather(by: city)
         
         window = UIWindow(frame: UIScreen.main.bounds)
         
         
-        let viewController = MainScreenPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-        let navigationController = UINavigationController(rootViewController: viewController)
+//        let viewController = MainScreenPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+//        let navigationController = UINavigationController(rootViewController: viewController)
         
 //        window?.rootViewController = LaunchSettingsViewController()
         
 //        let viewController = WeatherViewController()
 
-//        let viewController = OnboardingViewController()
-//        let viewController = LaunchSettingsViewController()
+        let viewController = OnboardingViewController()
+        let navigationController = UINavigationController(rootViewController: viewController)
 
-        
+//        let viewController = LaunchSettingsViewController()
+        navigationController.isNavigationBarHidden = true
         window?.rootViewController = navigationController
+
+//        window?.rootViewController = navigationController
 
 
         window?.makeKeyAndVisible()

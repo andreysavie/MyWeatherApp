@@ -25,7 +25,21 @@ class LaunchSettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        settingsView.setButton.tapAction = { [weak self] in
+            self?.buttonPressed()
+        }
+
         layout()
+    }
+    
+    deinit {
+        print ("launchSettings has deinited!")
+    }
+    
+    func buttonPressed() {
+        let viewController = MainScreenPageViewController()
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     func layout() {

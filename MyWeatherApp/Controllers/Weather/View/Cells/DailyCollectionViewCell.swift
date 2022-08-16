@@ -26,7 +26,7 @@ class DailyCollectionViewCell: UICollectionViewCell {
         table.backgroundColor = .clear
         table.separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         table.sectionHeaderHeight = UITableView.automaticDimension
-        table.estimatedSectionHeaderHeight = 50
+//        table.estimatedSectionHeaderHeight = 0
         table.showsVerticalScrollIndicator = false
         return table
     }()

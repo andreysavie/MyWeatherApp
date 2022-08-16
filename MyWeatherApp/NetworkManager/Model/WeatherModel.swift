@@ -18,8 +18,14 @@ struct SunState {
     let time: Int
 }
 
+enum WindUnitType {
+    case miph
+    case kmph
+}
+
 enum HourlyDataType {
-    case weatherType(Hourly)
+//    case weatherType(Hourly)
+    case weatherType(Current)
     case sunState(SunState)
 }
 
@@ -33,7 +39,9 @@ struct WeatherModel {
     let temperature: Double
     let timezone: Int
     let feelsLike: Double
-    let description: String
+//    let description: String
+    let description: Description
+
 
     let humidity: Int
     let uviIndex: Double
@@ -46,7 +54,7 @@ struct WeatherModel {
     let sunset: Int
 
     let daily: [Daily]
-    let hourly: [Hourly]
+    let hourly: [Current]
 
     var hourlyDisplayData: [HourlyDataType] {
         var hourlyDataMix = [HourlyDataType]()
@@ -78,11 +86,26 @@ struct WeatherModel {
         return hourlyDataMix
     }
 
-    var cityRequest: CityModel {
-        return CityModel(name: cityName, latitude: lat, longitude: lon)
-    }
 
     // Strings
+    
+    var descriptionString: String {
+        switch description {
+        case .brokenClouds:
+            return "Преимущественно облачно"
+        case .clearSky:
+            return "Ясно"
+        case .fewClouds:
+            return "Малооблачно"
+        case .lightRain:
+            return "Легкий дождь"
+        case .overcastClouds:
+            return "Пасмурно"
+        case .scatteredClouds:
+            return "Малооблачно"
+        }
+    }
+    
     var humidityString: String {
         String("\(humidity)%")
     }

@@ -7,10 +7,9 @@
 
 import UIKit
 
-let cities: [CityModel] = [CityModel(name: "Ростов-на-Дону", latitude: 21.13, longitude: 43.34)]
+let cities: [CityModel] = [CityModel(name: "Ростов-на-Дону", longitude: 39.455768, latitude: 47.153251)]
 
 class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDataSource {
-    
     
     private lazy var searchCityBarButtonItem: UIBarButtonItem = {
         let image = UIImage(
@@ -62,12 +61,12 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     func setupLayout() {
         let appearanceNavigationBar = UINavigationBarAppearance()
         appearanceNavigationBar.configureWithOpaqueBackground()
-        appearanceNavigationBar.backgroundColor = Colors.navigationBarColor
+        appearanceNavigationBar.backgroundColor = .white
         
         self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.isNavigationBarHidden = false
-        self.navigationController?.navigationBar.barTintColor = Colors.navigationBarColor
+        self.navigationController?.navigationBar.barTintColor = .white
         self.navigationController?.navigationBar.standardAppearance = appearanceNavigationBar
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
 

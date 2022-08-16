@@ -40,7 +40,7 @@ class OnboardingView: UIView {
     }()
     
     
-    private lazy var confimButton: CustomButton = {
+    lazy var confimButton: CustomButton = {
         let button = CustomButton(
             title: "Использовать местоположение устройства".uppercased(),
             font: Fonts.onboardConfimFont

@@ -37,13 +37,25 @@ class OnboardingViewController: UIViewController {
         super.viewDidLoad()
         layout()
         
+        onboardingView.confimButton.tapAction = { [weak self] in
+            self?.buttonPressed()
+        }
+        
         declineButton.tapAction = { [weak self] in
             self?.buttonPressed()
         }
+        
+    }
+    
+    deinit {
+        print ("Onboarding has deinited!")
     }
     
     func buttonPressed() {
-        print ("pressed!!!")
+        let viewController = LaunchSettingsViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+        //        navigationController?.pushViewController(viewController, animated: true)
+        
     }
     
     func layout() {

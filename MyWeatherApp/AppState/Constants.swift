@@ -95,6 +95,7 @@ struct UserDefaults {
 
 struct Network {
     static let baseURL = "https://api.openweathermap.org/data/2.5/onecall?"
+    static let geocodeURL = "https://geocode-maps.yandex.ru/1.x/?"
     static let apiKey = "179a1ef614ca272c4033f5abe4743aed"
     static let geocodingApiKey = "44ec1ff1-8646-4217-bc84-72cacc2c4217"
     static let lat = "lat="
@@ -359,30 +360,21 @@ public extension UIView {
     }
 }
 
-//public extension UIViewController {
-//    
-//    func getGradient(start: CGPoint, end: CGPoint) -> CAGradientLayer {
-//        let gradient = CAGradientLayer()
-//        gradient.type = .axial
-//        gradient.colors = [
-//            GradientColors.foneFirstColor.cgColor,
-//            GradientColors.foneLastColor.cgColor
-//        ]
-//        gradient.startPoint = start
-//        gradient.endPoint = end
-//
-//        gradient.locations = [0, 1]
-//        return gradient
-//    }
-//}
-
+public extension UIView {
+    
+    func getFormattedTemp (_ temp: Double) -> String {
+        String(format: "%.0f°", temp)
+    }
+    
+    
+}
 public extension Date {
 
  static func getCurrentDate() -> String {
 
         let dateFormatter = DateFormatter()
 
-        dateFormatter.dateFormat = "EEEE, MMM d"
+        dateFormatter.dateFormat = "EEEE, MMMM d"
 
         return dateFormatter.string(from: Date())
 

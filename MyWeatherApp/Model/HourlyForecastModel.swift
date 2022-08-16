@@ -10,8 +10,8 @@ import UIKit
 
 struct HourlyForecast {
     
-    var hour: String
-    var weather: UIImageView
-    var temp: String
+    var hour: Int
+    var weather: Int
+    var temp: Double
     
 }

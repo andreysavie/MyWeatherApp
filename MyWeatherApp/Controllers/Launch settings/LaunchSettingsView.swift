@@ -101,7 +101,7 @@ class LaunchSettingsView: UIView {
     }()
 
     
-    private lazy var setButton: CustomButton = {
+    public lazy var setButton: CustomButton = {
         let button = CustomButton(title: "Установить", font: Fonts.settingsLabelFont)
         return button
     }()

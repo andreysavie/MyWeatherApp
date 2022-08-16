@@ -14,34 +14,40 @@ protocol MainScreenDelegate {
 
 class WeatherViewController: UIViewController, MainScreenDelegate {
     
-
-    
     
     // MARK: PROPERTIES
     
     var city: CityModel
+    var hourly = [HourlyForecast]()
     var index: Int
     
     private var weatherManager = NetworkManager()
     private var savedCities = [CityModel]()
     
-    var currentWeather: WeatherModel?// ??
+    var currentWeather: WeatherModel? {
+        didSet {
+            DispatchQueue.main.sync {
+                collectionView.reloadData()
+            }
+        }
+    }// ??
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
-        collectionView.isScrollEnabled = false
+        collectionView.isScrollEnabled = true
+        collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-        //        layout.minimumLineSpacing = 16
+        layout.minimumLineSpacing = 16
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(
-            top: 8,
+            top: 16,
             left: 0,
-            bottom: 8,
+            bottom: 0,
             right: 0)
         return layout
     }()
@@ -60,11 +66,7 @@ class WeatherViewController: UIViewController, MainScreenDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        title = city.name // old
-        
-        city = CityModel(name: "Rostow-on-Don", latitude: 47.24, longitude: 39.71)
-        
+                 
         weatherManager.delegate = self
         
         fetchWeatherData()
@@ -73,6 +75,11 @@ class WeatherViewController: UIViewController, MainScreenDelegate {
         collectionView.register(
             CurrentWeatherCollectionViewCell.self,
             forCellWithReuseIdentifier: CurrentWeatherCollectionViewCell.identifier
+        )
+        
+        collectionView.register(
+            HourlyCollectionViewCell.self,
+            forCellWithReuseIdentifier: HourlyCollectionViewCell.identifier
         )
         
         collectionView.register(
@@ -164,7 +171,7 @@ extension WeatherViewController: UICollectionViewDataSource {
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -180,8 +187,13 @@ extension WeatherViewController: UICollectionViewDataSource {
                 self?.navigationController?.pushViewController(viewController, animated: true)
             }
             return cell
-            
+           
         case 1:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyCollectionViewCell.identifier, for: indexPath) as? HourlyCollectionViewCell else { return UICollectionViewCell() }
+            cell.configureOfCell(weather: currentWeather)
+            return cell
+            
+        case 2:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyCollectionViewCell.identifier, for: indexPath) as? DailyCollectionViewCell else { return UICollectionViewCell() }
             return cell
         default:
@@ -204,8 +216,10 @@ extension WeatherViewController: UICollectionViewDelegateFlowLayout {
         
         switch indexPath.section {
         case 0:
-            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.55
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.35
         case 1:
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.25
+        case 2:
             height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.40
         default:
             break

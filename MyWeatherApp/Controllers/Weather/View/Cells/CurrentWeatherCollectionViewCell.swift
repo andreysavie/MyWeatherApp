@@ -44,11 +44,6 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .center
         return label
     }()
-
-    private lazy var hourlyForecastView: HourlyForecastView = {
-        let view = HourlyForecastView()
-        return view
-    }()
         
     private lazy var separateView: SeparateLineView = {
         let line = SeparateLineView(frame: .zero)
@@ -63,18 +58,14 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         button.semanticContentAttribute = .forceRightToLeft
         return button
     }()
-    
-    
-    
-    // MARK: INITS
-    
+        
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        
+
         detailsButton.tapAction = { [weak self] in
             self?.detailsButtonPressed()
         }
-        
+
         setupLayout()
     }
     
@@ -88,29 +79,26 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     func configureOfCell(weather: WeatherModel?) {
         guard let wthr = weather else { return }
         
-        self.tempLabel.text = wthr.temperatureString
-        self.weatherConditionLabel.text = "\(wthr.description)"
+        self.tempLabel.text = String(describing: wthr.temperatureString)
+        self.weatherConditionLabel.text = String(describing: wthr.descriptionString)
         let min = String(format: "%.0f°", wthr.daily[0].temp.min)
         let max = String(format: "%.0f°", wthr.daily[0].temp.max)
         self.lowAndHeightTempLabel.text = "Мин. \(min), макс: \(max)" // add farehngate
         self.todayLabel.text = Date.getCurrentDate()
     }
-    
-    
-    
+        
     private func setupLayout() {
         
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 16
         
         getShadow(contentView)
-        
+                
         contentView.addSubviews(
             tempLabel,
             weatherConditionLabel,
             lowAndHeightTempLabel,
             todayLabel,
-            hourlyForecastView,
             detailsButton,
             separateView
         )
@@ -135,12 +123,6 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
             make.top.equalTo(lowAndHeightTempLabel.snp.bottom).offset(8)
         }
         
-        hourlyForecastView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(todayLabel.snp.bottom).offset(16)
-            make.height.equalTo(130)
-        }
-        
         separateView.makeConstraints(atBottom: self.snp.bottom)
         
         detailsButton.snp.makeConstraints { make in
@@ -155,5 +137,10 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     func detailsButtonPressed() {
         detailsButtonAction?()
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+
     
 }
