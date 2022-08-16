@@ -4,24 +4,9 @@
 //
 //  Created by Андрей Рыбалкин on 11.08.2022.
 //
-
 import Foundation
 
-//   let weather = try? newJSONDecoder().decode(Weather.self, from: jsonData)
-
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.weatherTask(with: url) { weather, response, error in
-//     if let weather = weather {
-//       ...
-//     }
-//   }
-//   task.resume()
-
-import Foundation
-
-// MARK: - Weather
+// MARK: - WeatherData
 struct WeatherData: Codable {
     let lat, lon: Double
     let timezone: String
@@ -37,16 +22,6 @@ struct WeatherData: Codable {
     }
 }
 
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.currentTask(with: url) { current, response, error in
-//     if let current = current {
-//       ...
-//     }
-//   }
-//   task.resume()
-
 // MARK: - Current
 struct Current: Codable {
     let dt: Int
@@ -58,7 +33,7 @@ struct Current: Codable {
     let windSpeed: Double
     let windDeg: Int
     let windGust: Double
-    let weather: [WeatherElement]
+    let weather: [Weather]
     let pop: Double?
     let rain: Rain?
 
@@ -75,16 +50,6 @@ struct Current: Codable {
     }
 }
 
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.rainTask(with: url) { rain, response, error in
-//     if let rain = rain {
-//       ...
-//     }
-//   }
-//   task.resume()
-
 // MARK: - Rain
 struct Rain: Codable {
     let the1H: Double
@@ -94,18 +59,8 @@ struct Rain: Codable {
     }
 }
 
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.weatherElementTask(with: url) { weatherElement, response, error in
-//     if let weatherElement = weatherElement {
-//       ...
-//     }
-//   }
-//   task.resume()
-
-// MARK: - WeatherElement
-struct WeatherElement: Codable {
+// MARK: - Weather
+struct Weather: Codable {
     let id: Int
     let main: Main
     let weatherDescription: Description
@@ -118,7 +73,6 @@ struct WeatherElement: Codable {
     }
 }
 
-
 enum Main: String, Codable {
     case clear = "Clear"
     case clouds = "Clouds"
@@ -130,19 +84,10 @@ enum Description: String, Codable {
     case clearSky = "clear sky"
     case fewClouds = "few clouds"
     case lightRain = "light rain"
+    case moderateRain = "moderate rain"
     case overcastClouds = "overcast clouds"
     case scatteredClouds = "scattered clouds"
 }
-
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.dailyTask(with: url) { daily, response, error in
-//     if let daily = daily {
-//       ...
-//     }
-//   }
-//   task.resume()
 
 // MARK: - Daily
 struct Daily: Codable {
@@ -155,7 +100,7 @@ struct Daily: Codable {
     let dewPoint, windSpeed: Double
     let windDeg: Int
     let windGust: Double
-    let weather: [WeatherElement]
+    let weather: [Weather]
     let clouds: Int
     let pop: Double
     let rain: Double?
@@ -175,80 +120,13 @@ struct Daily: Codable {
     }
 }
 
-//struct Weather: Codable {
-//    let id: Int
-//    let main: String
-//    let description: String
-//}
-//struct Hourly: Codable {
-//    let dt: Int
-//    let temp: Double
-//    let weather: [Weather]
-//}
-
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.feelsLikeTask(with: url) { feelsLike, response, error in
-//     if let feelsLike = feelsLike {
-//       ...
-//     }
-//   }
-//   task.resume()
-
 // MARK: - FeelsLike
 struct FeelsLike: Codable {
     let day, night, eve, morn: Double
 }
-
-//
-// To read values from URLs:
-//
-//   let task = URLSession.shared.tempTask(with: url) { temp, response, error in
-//     if let temp = temp {
-//       ...
-//     }
-//   }
-//   task.resume()
 
 // MARK: - Temp
 struct Temp: Codable {
     let day, min, max, night: Double
     let eve, morn: Double
 }
-
-// MARK: - Helper functions for creating encoders and decoders
-
-func newJSONDecoder() -> JSONDecoder {
-    let decoder = JSONDecoder()
-    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
-        decoder.dateDecodingStrategy = .iso8601
-    }
-    return decoder
-}
-
-func newJSONEncoder() -> JSONEncoder {
-    let encoder = JSONEncoder()
-    if #available(iOS 10.0, OSX 10.12, tvOS 10.0, watchOS 3.0, *) {
-        encoder.dateEncodingStrategy = .iso8601
-    }
-    return encoder
-}
-
-// MARK: - URLSession response handlers
-
-//extension URLSession {
-//    fileprivate func codableTask<T: Codable>(with url: URL, completionHandler: @escaping (T?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-//        return self.dataTask(with: url) { data, response, error in
-//            guard let data = data, error == nil else {
-//                completionHandler(nil, response, error)
-//                return
-//            }
-//            completionHandler(try? newJSONDecoder().decode(T.self, from: data), response, nil)
-//        }
-//    }
-//
-//    func weatherTask(with url: URL, completionHandler: @escaping (WeatherData?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-//        return self.codableTask(with: url, completionHandler: completionHandler)
-//    }
-//}

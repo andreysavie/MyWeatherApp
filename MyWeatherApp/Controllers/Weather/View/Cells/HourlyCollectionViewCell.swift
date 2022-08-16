@@ -12,51 +12,90 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "HourlyCollectionViewCell"
     
-//    let currentWeather: WeatherModel?
-
-    private lazy var hourlyForecastView: HourlyForecastView = {
-        let view = HourlyForecastView()
-        return view
+    //    var city: CityModel = CityModel(name: "Ростов-на-Дону", longitude: 39.455768, latitude: 47.153251)
+    
+    var currentWeather: WeatherModel? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    let itemsPerRow: CGFloat = 6
+    
+    let sectionInsets = UIEdgeInsets(
+        top: 0,
+        left: 8,
+        bottom: 0,
+        right: 8
+    )
+    
+    private lazy var layout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = sectionInsets.left
+        layout.sectionInset = sectionInsets
+        layout.scrollDirection = .horizontal
+        return layout
     }()
     
-//    override init (frame: CGRect) {
-//        super.init(frame: .zero)
-//
-//        setupLayout()
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    private lazy var collectionView: UICollectionView = {
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.register(HourForecastCollectionViewCell.self, forCellWithReuseIdentifier: HourForecastCollectionViewCell.identifier)
+        collection.dataSource = self
+        collection.delegate = self
+        collection.backgroundColor = .clear
+        collection.showsHorizontalScrollIndicator = false
+        return collection
+    }()
     
-    func configureOfCell(weather: WeatherModel?) {
+    override init (frame: CGRect) {
+        super.init(frame: frame)
         
-        guard let wthr = weather else { return }
+        collectionView.register(HourForecastCollectionViewCell.self, forCellWithReuseIdentifier: HourForecastCollectionViewCell.identifier)
         
-        self.hourlyForecastView = HourlyForecastView(weather: wthr)
+        setupLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupLayout() {
         
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 16
-        getShadow(contentView)
         
-        contentView.addSubview(hourlyForecastView)
+        contentView.getShadow(contentView)
+        contentView.addSubview(collectionView)
         
-        hourlyForecastView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.leading.top.trailing.bottom.equalToSuperview()
         }
     }
-//
-//    private func setupLayout() {
-//
-//        contentView.backgroundColor = .white
-//        contentView.layer.cornerRadius = 16
-//        getShadow(contentView)
-//
-//        contentView.addSubview(hourlyForecastView)
-//
-//        hourlyForecastView.snp.makeConstraints { make in
-//            make.leading.top.trailing.bottom.equalToSuperview()
-//        }
-//    }
+}
+
+extension HourlyCollectionViewCell: UICollectionViewDataSource {
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 24
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourForecastCollectionViewCell.identifier, for: indexPath) as? HourForecastCollectionViewCell
+        else { return UICollectionViewCell() }
+//        cell.configureOfCell(currentWeather, at: indexPath.item)
+        return cell
+    }
+    
+}
+
+extension HourlyCollectionViewCell: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let paddingWidth = sectionInsets.left * (itemsPerRow + 1)
+        let availableWidth = UIScreen.main.bounds.width - paddingWidth
+        let widthPerItem = (availableWidth / itemsPerRow) - sectionInsets.left / itemsPerRow
+        return CGSize(width: widthPerItem, height: 130)
+    }
 }

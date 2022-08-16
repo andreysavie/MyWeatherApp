@@ -24,13 +24,7 @@ class WeatherViewController: UIViewController, MainScreenDelegate {
     private var weatherManager = NetworkManager()
     private var savedCities = [CityModel]()
     
-    var currentWeather: WeatherModel? {
-        didSet {
-            DispatchQueue.main.sync {
-                collectionView.reloadData()
-            }
-        }
-    }// ??
+    var currentWeather: WeatherModel?
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -70,7 +64,6 @@ class WeatherViewController: UIViewController, MainScreenDelegate {
         weatherManager.delegate = self
         
         fetchWeatherData()
-
         
         collectionView.register(
             CurrentWeatherCollectionViewCell.self,
@@ -190,7 +183,7 @@ extension WeatherViewController: UICollectionViewDataSource {
            
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyCollectionViewCell.identifier, for: indexPath) as? HourlyCollectionViewCell else { return UICollectionViewCell() }
-            cell.configureOfCell(weather: currentWeather)
+//            cell.configureOfCell(weather: currentWeather)
             return cell
             
         case 2:

@@ -103,6 +103,8 @@ struct WeatherModel {
             return "Пасмурно"
         case .scatteredClouds:
             return "Малооблачно"
+        case .moderateRain:
+            return "Умеренный дождь"
         }
     }
     

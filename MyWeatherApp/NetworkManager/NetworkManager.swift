@@ -26,7 +26,7 @@ struct NetworkManager {
         let apiKey = Network.apiKey
         let units = "metric" // connect UserDefaults
         
-        let urlString = "\(baseURL)lat=\(lat)&lon=\(lon)&appid=\(apiKey)&units=\(units)&exclude=\(Network.minutely)"
+        let urlString = "\(baseURL)lat=\(lat)&lon=\(lon)&appid=\(apiKey)&units=\(units)&exclude=minutely,alerts"
         
         print(urlString)
         
@@ -69,7 +69,7 @@ struct NetworkManager {
         
         do {
             let weather = try? newJSONDecoder().decode(WeatherData.self, from: weatherData)
-                        
+                    
             guard let decodedData = weather else { return nil }
             
             let result = WeatherModel(lat: decodedData.lat,
@@ -93,28 +93,4 @@ struct NetworkManager {
             return result
         }
     }
-    
-    fileprivate func parseHourlyJSON(_ weatherData: Data) -> [HourlyForecast]? {
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-
-        do {
-            let weather = try? decoder.decode(WeatherData.self, from: weatherData)
-                        
-            guard let decodedData = weather else { return nil }
-            
-            var result = [HourlyForecast]()
-            
-            decodedData.hourly.forEach {
-                result.append(HourlyForecast(
-                    hour: $0.dt,
-                    weather: $0.weather[0].id,
-                    temp: $0.temp)
-                )
-            }
-            return result
-        }
-    }
-    
 }
