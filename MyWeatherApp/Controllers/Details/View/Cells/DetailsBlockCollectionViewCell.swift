@@ -12,12 +12,16 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "DetailsBlockCollectionViewCell"
     
-    
     // MARK: PROPERTIES ============================================================================
     
+    private lazy var blockIcon: UIImageView = {
+        let view = UIImageView(frame: CGRect())
+        view.tintColor = Colors.mediumTextColor
+        return view
+    }()
     
     private lazy var titleLabel = getLabel(
-        text: "􀆭 УФ ИНДЕКC",
+        text: "TITLE",
         font: Fonts.detailsBlockTitleFont,
         color: Colors.mediumTextColor
     )
@@ -54,11 +58,13 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
     
     // MARK: METHODS ===================================================================================
     
-    
-    func setConfigureOfCell() {
+    func configureOfCell(_ weather: WeatherModel?, for item: Int) {
+        guard let weather = weather else { return }
+        
+        self.blockIcon.image = UIImage(systemName: AppIcons.allCases[item].rawValue) ?? UIImage()
+        self.titleLabel.text = BlockTitle.allCases[item].rawValue.uppercased()
+
     }
-    
-    
     
     private func setupLayout() {
         
@@ -68,6 +74,7 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
         getShadow(contentView)
         
         contentView.addSubviews(
+            blockIcon,
             titleLabel,
             detalisValueLabel,
             detalisSubscriptionLabel,
@@ -78,9 +85,13 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
             $0.textAlignment = .left
         }
 
-        
+        blockIcon.snp.makeConstraints { make in
+            make.leading.top.equalToSuperview().inset(16)
+
+        }
         titleLabel.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(16)
+            make.leading.equalTo(blockIcon.snp.trailing).offset(4)
+            make.top.trailing.equalToSuperview().inset(16)
         }
         
         detalisValueLabel.snp.makeConstraints { make in

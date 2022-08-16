@@ -176,8 +176,9 @@ extension WeatherViewController: UICollectionViewDataSource {
             cell.configureOfCell(weather: currentWeather)
             
             cell.detailsButtonAction = { [weak self] in
-                let viewController = DetailsWeatherViewController()
-                self?.navigationController?.pushViewController(viewController, animated: true)
+                guard let self = self else { return }
+                let viewController = DetailsWeatherViewController(for: self.currentWeather, in: self.city)
+                self.navigationController?.pushViewController(viewController, animated: true)
             }
             return cell
            

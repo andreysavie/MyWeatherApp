@@ -46,8 +46,8 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
         color: Colors.darkTextColor
     )
     
-    private lazy var sunriseIcon = getAppIcon(.sunRise, 24)
-    private lazy var sunsetIcon = getAppIcon(.sunSet, 24)
+    private lazy var sunriseIcon = getAppIcon(.sunrise, 24)
+    private lazy var sunsetIcon = getAppIcon(.sunset, 24)
     
     
     
@@ -65,7 +65,23 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     // MARK: METHODS ===================================================================================
     
     
-    func setConfigureOfCell() {
+    func configureOfCell(_ weather: WeatherModel?, for city: CityModel?) {
+        guard let city = city, let weather = weather else { return }
+        
+        self.cityNameLabel.text = city.name
+        
+        let dayTemp = String(describing: weather.dayTempString)
+        let nightTemp = String(describing: weather.nightTempString)
+        let sunriseDate = Date(timeIntervalSince1970: TimeInterval(weather.sunrise))
+        let sunsetDate = Date(timeIntervalSince1970: TimeInterval(weather.sunset))
+
+//        let dayDesc = weather.hourly
+
+        self.dayForecastLabel.text = "Днём \(dayTemp) | \(weather.descriptionString)" // изменить на дневное!
+        self.nightForecastLabel.text = "Ночью \(nightTemp) | \(weather.descriptionString)" // изменить на ночное!
+
+        self.sunriseTimeLabel.text = Date.getCurrentDate(date: sunriseDate, style: .time)
+        self.sunsetTimeLabel.text = Date.getCurrentDate(date: sunsetDate, style: .time)
     }
     
     

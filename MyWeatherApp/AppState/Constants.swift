@@ -117,20 +117,25 @@ struct Misc {
 }
 
 public enum DataStyle {
+    case time // time like 21:00
     case day // just day of week
     case full // day of week, number and month
 }
 
 
-public enum AppIcons {
-    case sunRise
-    case sunSet
-    case sun
-    case wind
-    case temp
-    case drop
-    case air
-    case calendar
+public enum AppIcons: String, CaseIterable {
+    case sun = "sun.max"
+    case wind = "wind"
+    case temp = "thermometer"
+    case drop = "drop.fill"
+    case air = "aqi.low"
+    case hum = "humidity"
+    case cloudy = "cloud.fill"
+    case visibility = "binoculars.fill"
+    case pressure = "barometer"
+    case sunrise = "sunrise.fill"
+    case sunset = "sunset.fill"
+    case calendar = "calendar"
 }
 
 public enum ForecastIcons {
@@ -153,6 +158,23 @@ public enum Settings: String {
     case temp = "Температура"
     case speed = "Скорость ветра"
     case visibility = "Блок видимости"
+}
+
+public enum BlockTitle: String, CaseIterable {
+    case uvi = "УФ индекс"
+    case wind = "Ветер"
+    case feels = "Ощущается"
+    case prec = "Осадки"
+    case air = "Воздух"
+    case hum = "Влажность"
+    case cloud = "Облачность"
+    case vis = "Видимость"
+    case press = "Давление"
+}
+
+public enum BlockType {
+    case icon
+    case label
 }
 
 public struct Colors {
@@ -260,10 +282,10 @@ public extension UIView {
         var color = Colors.mediumTextColor
         
         switch icon {
-        case .sunRise:
+        case .sunrise:
             name = "sunrise"
             color = Colors.yellowColor
-        case .sunSet:
+        case .sunset:
             name = "sunset"
             color = Colors.yellowColor
         case .sun:
@@ -278,7 +300,15 @@ public extension UIView {
             name = "humidity"
         case .calendar:
             name = "calendar"
-            
+        case .pressure:
+            name = "barometer"
+        case .visibility:
+            name = "binoculars.fill"
+        case .cloudy:
+            name = "cloud.fill"
+        case .hum:
+            name = "humidity"
+
         }
         
         imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))?.withTintColor(color, renderingMode: .alwaysOriginal)
@@ -399,14 +429,34 @@ public extension UIView {
         String(format: "%.0f°", temp)
     }
     
+    func getBlockTitle(for item: Int) -> String {
+        guard item >= 0 , item <= 8 else { return "block label error" }
+        
+//        let array = type == .icon ?
+//        ["sun.max", "wind", "thermometer", "drop.fill", "humidity", "humidity", "cloud.fill", "binoculars.fill", "barometer"]:
+        let array = ["УФ индекс", "Ветер", "Ощущается", "Осадки", "Воздух", "Влажность", "Облачность", "Видимость", "Давление"]
+        
+        return array[item]
+    }
     
+    
+//    func switchItem (_ item: Int) {}
 }
 public extension Date {
     
     static func getCurrentDate(date: Date = Date(), style: DataStyle = .full) -> String {
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = style == .full ? "EEEE, MMMM d" : "EE, d"
+        
+        switch style {
+        case .time:
+            dateFormatter.dateFormat = "HH:mm"
+        case .day:
+            dateFormatter.dateFormat = "EE, d"
+        case .full:
+            dateFormatter.dateFormat = "EEEE, MMMM d"
+        }
+        
         let str = dateFormatter.string(from: date)
         return str.prefix(1).uppercased() + str.lowercased().dropFirst()
     }

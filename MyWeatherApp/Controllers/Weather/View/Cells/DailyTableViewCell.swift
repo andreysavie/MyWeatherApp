@@ -52,7 +52,7 @@ class DailyTableViewCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.spacing = 8
         stackView.alignment = .trailing
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .equalCentering
         return stackView
     }()
     

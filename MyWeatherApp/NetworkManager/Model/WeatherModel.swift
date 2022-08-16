@@ -39,7 +39,6 @@ struct WeatherModel {
     let temperature: Double
     let timezone: Int
     let feelsLike: Double
-//    let description: String
     let description: Description
 
 
@@ -134,6 +133,14 @@ struct WeatherModel {
 
     var temperatureString: String {
         String(format: "%.0f°", temperature)
+    }
+    
+    var dayTempString: String {
+        String(format: "%.0f°", daily[0].temp.day)
+    }
+    
+    var nightTempString: String {
+        String(format: "%.0f°", daily[0].temp.night)
     }
 
 }

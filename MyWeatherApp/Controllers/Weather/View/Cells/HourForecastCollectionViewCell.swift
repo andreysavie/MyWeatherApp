@@ -14,11 +14,7 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
         
     let hour = Calendar.current.component(.hour, from: Date())
     
-    var image: UIImage? {
-        didSet {
-            weatherIcon.image = image
-        }
-    }
+    var image: UIImage? { didSet { weatherIcon.image = image } }
     
 //    private lazy var weatherIcon: UIImageView = {
 //        let imageView = UIImageView()
@@ -48,7 +44,7 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
         ])
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .equalCentering
         return stackView
     }()
 
@@ -77,7 +73,7 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
         let currentHour = Date(timeIntervalSince1970: TimeInterval(wthr.hourly[hour].dt))
         let dateformat = DateFormatter()
         dateformat.dateFormat = "HH" // "h a"
-        let strHour = "\(dateformat.string(from: currentHour)):00"
+        let strHour = dateformat.string(from: currentHour)
         print("⏰\(strHour)")
               
         let conditionId = wthr.hourly[hour].weather[0].id
