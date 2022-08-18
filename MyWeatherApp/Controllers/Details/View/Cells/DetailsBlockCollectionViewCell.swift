@@ -32,11 +32,21 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
         color: Colors.darkTextColor
     )
     
-    private lazy var detalisSubscriptionLabel = getLabel(
-        text: "Низкий",
-        font: Fonts.detailsUnderTextFont,
-        color: Colors.darkTextColor
-    )
+//    private lazy var detalisSubscriptionLabel = getLabel(
+//        text: "Низкий",
+//        font:  Fonts.detailsUnderTextFont,
+//        color: Colors.darkTextColor
+//    )
+    
+    private lazy var detalisSubscriptionLabel: CustomLabel = {
+        let label = CustomLabel(
+            numberOfLines: 3,
+            text: "Низкий",
+            font: Fonts.detailsUnderTextFont,
+            textColor: Colors.darkTextColor)
+        return label
+    }()
+
     
     private lazy var detalisDescriptionLabel = getLabel(
         text: "Низкий уровень до конца дня.",
@@ -63,7 +73,45 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
         
         self.blockIcon.image = UIImage(systemName: AppIcons.allCases[item].rawValue) ?? UIImage()
         self.titleLabel.text = BlockTitle.allCases[item].rawValue.uppercased()
-
+        
+        // TODO: - Добавить проверку на выход за пределы массива
+        
+        let values = [
+            weather.uviString,
+            weather.windDirectionString,
+            weather.feelsLikeString,
+            weather.rainString,
+            weather.humidityString,
+            weather.cloudinessString,
+            weather.visibilityString,
+            weather.pressureString
+        ]
+        
+        let subscripts = [
+            weather.uviLevel,
+            weather.windSpeedString,
+            "",
+            "за последние сутки",
+            "",
+            "",
+            "",
+            "мм.рт.ст."
+        ]
+        
+        let descripts = [
+            weather.uviDesc,
+            "",
+            weather.feelsLikeDesc,
+            weather.rainDesc,
+            weather.humidityDesc,
+            weather.cloudinessDesc,
+            weather.visibilityDesc,
+            ""
+        ]
+        
+        self.detalisValueLabel.text = values[item]
+        self.detalisSubscriptionLabel.text = subscripts[item]
+        self.detalisDescriptionLabel.text = descripts[item]
     }
     
     private func setupLayout() {
@@ -100,12 +148,12 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
         }
         
         detalisSubscriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(detalisValueLabel.snp.bottom).offset(8)
+            make.top.equalTo(detalisValueLabel.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
         detalisDescriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(detalisSubscriptionLabel.snp.bottom).offset(8)
+            make.bottom.equalToSuperview().inset(8)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         

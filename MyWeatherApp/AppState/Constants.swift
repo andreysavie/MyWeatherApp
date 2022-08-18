@@ -128,7 +128,6 @@ public enum AppIcons: String, CaseIterable {
     case wind = "wind"
     case temp = "thermometer"
     case drop = "drop.fill"
-    case air = "aqi.low"
     case hum = "humidity"
     case cloudy = "cloud.fill"
     case visibility = "binoculars.fill"
@@ -165,12 +164,12 @@ public enum BlockTitle: String, CaseIterable {
     case wind = "Ветер"
     case feels = "Ощущается"
     case prec = "Осадки"
-    case air = "Воздух"
     case hum = "Влажность"
     case cloud = "Облачность"
     case vis = "Видимость"
     case press = "Давление"
 }
+
 
 public enum BlockType {
     case icon
@@ -234,6 +233,7 @@ public struct Fonts {
     static let detailsBlockTitleFont = UIFont.systemFont(ofSize: 15, weight: .medium)
     static let detailsDataFont = UIFont.systemFont(ofSize: 36, weight: .regular)
     static let detailsUnderTextFont = UIFont.systemFont(ofSize: 22, weight: .medium)
+    static let detailsUnderTextFontSmall = UIFont.systemFont(ofSize: 14, weight: .medium)
     static let detailsDescriptionFont = UIFont.systemFont(ofSize: 18, weight: .regular)
     
     // choose city controller
@@ -296,8 +296,6 @@ public extension UIView {
             name = "thermometer"
         case .drop:
             name = "drop.fill"
-        case .air:
-            name = "humidity"
         case .calendar:
             name = "calendar"
         case .pressure:
@@ -429,15 +427,15 @@ public extension UIView {
         String(format: "%.0f°", temp)
     }
     
-    func getBlockTitle(for item: Int) -> String {
-        guard item >= 0 , item <= 8 else { return "block label error" }
-        
-//        let array = type == .icon ?
-//        ["sun.max", "wind", "thermometer", "drop.fill", "humidity", "humidity", "cloud.fill", "binoculars.fill", "barometer"]:
-        let array = ["УФ индекс", "Ветер", "Ощущается", "Осадки", "Воздух", "Влажность", "Облачность", "Видимость", "Давление"]
-        
-        return array[item]
-    }
+//    func getBlockTitle(for item: Int) -> String {
+//        guard item >= 0 , item <= 8 else { return "block label error" }
+//
+////        let array = type == .icon ?
+////        ["sun.max", "wind", "thermometer", "drop.fill", "humidity", "humidity", "cloud.fill", "binoculars.fill", "barometer"]:
+//        let array = ["УФ индекс", "Ветер", "Ощущается", "Осадки", "Влажность", "Облачность", "Видимость", "Давление"]
+//
+//        return array[item]
+//    }
     
     
 //    func switchItem (_ item: Int) {}

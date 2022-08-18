@@ -10,6 +10,14 @@ import SnapKit
 
 class SearchCityViewController: UIViewController {
 
+    var cities: [CityModel] = [
+    
+        CityModel(name: "Ростов-на-Дону", longitude: 39.720358, latitude: 47.222078),
+        CityModel(name: "Москва", longitude: 37.617698, latitude: 55.755864),
+        CityModel(name: "Самара", longitude: 50.100202, latitude: 53.195878),
+        CityModel(name: "Курск", longitude: 36.193015, latitude: 51.730846),
+    
+    ]
     
     
     private lazy var collectionView: UICollectionView = {
@@ -80,7 +88,7 @@ class SearchCityViewController: UIViewController {
 
 extension SearchCityViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return cities.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
