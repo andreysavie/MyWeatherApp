@@ -64,8 +64,6 @@ class CityCollectionViewCell: UICollectionViewCell {
     
     func configureOfCell(city: CityModel) {
         self.cityNameLabel.text = city.name
-        
-        
     }
     
     
@@ -91,8 +89,9 @@ class CityCollectionViewCell: UICollectionViewCell {
         
         cityNameLabel.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().inset(16)
-            make.trailing.equalTo(contentView.snp.centerX)
+            make.trailing.equalTo(cityTempLabel.snp.leading).offset(-16)
         }
+        
         
         cityTimeLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(16)
@@ -111,5 +110,8 @@ class CityCollectionViewCell: UICollectionViewCell {
 
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
     
 }

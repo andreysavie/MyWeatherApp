@@ -66,22 +66,18 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     
     
     func configureOfCell(_ weather: WeatherModel?, for city: CityModel?) {
-        guard let city = city, let weather = weather else { return }
+        guard let city = city, let wthr = weather else { return }
         
         self.cityNameLabel.text = city.name
         
-        let dayTemp = String(describing: weather.dayTempString)
-        let nightTemp = String(describing: weather.nightTempString)
-        let sunriseDate = Date(timeIntervalSince1970: TimeInterval(weather.sunrise))
-        let sunsetDate = Date(timeIntervalSince1970: TimeInterval(weather.sunset))
+        let dayTemp = String(describing: wthr.dayTempString)
+        let nightTemp = String(describing: wthr.nightTempString)
 
-//        let dayDesc = weather.hourly
+        self.dayForecastLabel.text = "Днём \(dayTemp) | \(wthr.descriptionString)" // изменить на дневное!
+        self.nightForecastLabel.text = "Ночью \(nightTemp) | \(wthr.descriptionString)" // изменить на ночное!
 
-        self.dayForecastLabel.text = "Днём \(dayTemp) | \(weather.descriptionString)" // изменить на дневное!
-        self.nightForecastLabel.text = "Ночью \(nightTemp) | \(weather.descriptionString)" // изменить на ночное!
-
-        self.sunriseTimeLabel.text = Date.getCurrentDate(date: sunriseDate, style: .time)
-        self.sunsetTimeLabel.text = Date.getCurrentDate(date: sunsetDate, style: .time)
+        self.sunriseTimeLabel.text = Date.getCurrentDate(dt: wthr.sunrise, style: .time)
+        self.sunsetTimeLabel.text = Date.getCurrentDate(dt: wthr.sunset, style: .time)
     }
     
     

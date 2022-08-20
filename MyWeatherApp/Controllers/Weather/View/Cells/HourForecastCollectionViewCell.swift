@@ -70,15 +70,8 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
         
         guard let wthr = weather else { return }
                 
-        let currentHour = Date(timeIntervalSince1970: TimeInterval(wthr.hourly[hour].dt))
-        let dateformat = DateFormatter()
-        dateformat.dateFormat = "HH" // "h a"
-        let strHour = dateformat.string(from: currentHour)
-        print("⏰\(strHour)")
-              
+        let strHour = Date.getCurrentDate(dt: wthr.hourly[hour].dt, style: .hour)
         let conditionId = wthr.hourly[hour].weather[0].id
-        print("🌆\(conditionId)")
-
         let hourlyTemp = getFormattedTemp(wthr.hourly[hour].temp)
 
         self.hourTitleLabel.text = strHour

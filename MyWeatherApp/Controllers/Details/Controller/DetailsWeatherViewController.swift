@@ -112,6 +112,7 @@ extension DetailsWeatherViewController: UICollectionViewDataSource {
             
         case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsChartCollectionViewCell.identifier, for: indexPath) as? DetailsChartCollectionViewCell else { return UICollectionViewCell() }
+            cell.configureOfCell(currentWeather)
             return cell
             
         case 2:

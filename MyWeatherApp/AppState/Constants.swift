@@ -117,7 +117,8 @@ struct Misc {
 }
 
 public enum DataStyle {
-    case time // time like 21:00
+    case hour // time like "21"
+    case time // time like "21:00"
     case day // just day of week
     case full // day of week, number and month
 }
@@ -234,7 +235,7 @@ public struct Fonts {
     static let detailsDataFont = UIFont.systemFont(ofSize: 36, weight: .regular)
     static let detailsUnderTextFont = UIFont.systemFont(ofSize: 22, weight: .medium)
     static let detailsUnderTextFontSmall = UIFont.systemFont(ofSize: 14, weight: .medium)
-    static let detailsDescriptionFont = UIFont.systemFont(ofSize: 18, weight: .regular)
+    static let detailsDescriptionFont = UIFont.systemFont(ofSize: 14, weight: .regular)
     
     // choose city controller
     static let cityChooseLabel = UIFont.systemFont(ofSize: 37, weight: .bold)
@@ -442,11 +443,15 @@ public extension UIView {
 }
 public extension Date {
     
-    static func getCurrentDate(date: Date = Date(), style: DataStyle = .full) -> String {
-        
+//    static func getCurrentDate(date: Date = Date(), style: DataStyle = .full) -> String {
+    static func getCurrentDate(dt: Int = 0, style: DataStyle = .full) -> String {
+
         let dateFormatter = DateFormatter()
         
+        let date = dt == 0 ? Date() : Date(timeIntervalSince1970: TimeInterval(dt))
         switch style {
+        case .hour:
+            dateFormatter.dateFormat = "HH"
         case .time:
             dateFormatter.dateFormat = "HH:mm"
         case .day:
@@ -456,6 +461,6 @@ public extension Date {
         }
         
         let str = dateFormatter.string(from: date)
-        return str.prefix(1).uppercased() + str.lowercased().dropFirst()
+        return style == .full || style == .day ? str : str.prefix(1).uppercased() + str.lowercased().dropFirst()
     }
 }

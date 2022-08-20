@@ -78,12 +78,9 @@ class DailyTableViewCell: UITableViewCell {
         let min = getFormattedTemp(wthr.daily[day].temp.min)
         let max = getFormattedTemp(wthr.daily[day].temp.max)
 
-        let date = Date(timeIntervalSince1970: TimeInterval(wthr.daily[day].dt))
-        print("🥶\(date)")
-
         self.dayOfWeekLabel.text = day == 0 ?
         "Сегодня" :
-        Date.getCurrentDate(date: date, style: .day)
+        Date.getCurrentDate(dt: wthr.daily[day].dt, style: .day)
         
         self.image = getWeatherImage(conditionId: conditionId)
         self.lowTempLabel.text = min

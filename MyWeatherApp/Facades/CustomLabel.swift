@@ -17,7 +17,7 @@ final class CustomLabel: UILabel {
     
     init (
         numberOfLines: Int = 2,
-        text: String,
+        text: String = "",
         font: UIFont,
         textColor: UIColor
     ) {

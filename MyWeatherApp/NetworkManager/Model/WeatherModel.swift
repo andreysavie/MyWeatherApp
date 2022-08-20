@@ -187,7 +187,7 @@ struct WeatherModel {
     }
     
     var humidityDesc: String {
-        "Точка росы сейчас - \(dewPointString)."
+        "Точка росы сейчас: \(dewPointString)."
     }
     
     

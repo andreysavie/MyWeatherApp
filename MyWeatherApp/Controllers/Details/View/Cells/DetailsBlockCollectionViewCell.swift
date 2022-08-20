@@ -19,41 +19,36 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
         view.tintColor = Colors.mediumTextColor
         return view
     }()
+
+    private lazy var titleLabel: CustomLabel = {
+        let label = CustomLabel(
+            font: Fonts.detailsBlockTitleFont,
+            textColor: Colors.mediumTextColor)
+        return label
+    }()
     
-    private lazy var titleLabel = getLabel(
-        text: "TITLE",
-        font: Fonts.detailsBlockTitleFont,
-        color: Colors.mediumTextColor
-    )
-    
-    private lazy var detalisValueLabel = getLabel(
-        text: "14%",
-        font: Fonts.detailsDataFont,
-        color: Colors.darkTextColor
-    )
-    
-//    private lazy var detalisSubscriptionLabel = getLabel(
-//        text: "Низкий",
-//        font:  Fonts.detailsUnderTextFont,
-//        color: Colors.darkTextColor
-//    )
-    
+    private lazy var detalisValueLabel: CustomLabel = {
+        let label = CustomLabel(
+            font: Fonts.detailsDataFont,
+            textColor: Colors.darkTextColor)
+        return label
+    }()
+
     private lazy var detalisSubscriptionLabel: CustomLabel = {
         let label = CustomLabel(
             numberOfLines: 3,
-            text: "Низкий",
             font: Fonts.detailsUnderTextFont,
             textColor: Colors.darkTextColor)
         return label
     }()
 
-    
-    private lazy var detalisDescriptionLabel = getLabel(
-        text: "Низкий уровень до конца дня.",
-        font: Fonts.detailsDescriptionFont,
-        color: Colors.lightTextColor
-    )
-    
+    private lazy var detalisDescriptionLabel: CustomLabel = {
+        let label = CustomLabel(
+            numberOfLines: 3,
+            font: Fonts.detailsDescriptionFont,
+            textColor: Colors.darkTextColor)
+        return label
+    }()
     
     // MARK: INITS ============================================================================
     
