@@ -25,15 +25,16 @@ struct NetworkManager {
         let lon = city.longitude
         let apiKey = Network.apiKey
         let units = "metric" // connect UserDefaults
+        let lang = "ru"
         
-        let urlString = "\(baseURL)lat=\(lat)&lon=\(lon)&appid=\(apiKey)&units=\(units)&exclude=minutely,alerts"
+        let urlString = "\(baseURL)lat=\(lat)&lon=\(lon)&appid=\(apiKey)&units=\(units)&exclude=minutely,alerts&lang=\(lang)"
         
         print(urlString)
         
         performRequest(with: urlString, at: position)
     }
     
-    // MARK: - PRIVATE METHODS
+    // MARK: - METHODS
     
     fileprivate func performRequest(with urlString: String, at position: Int) {
         let encodedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
@@ -49,7 +50,6 @@ struct NetworkManager {
                 
                 
                 if let weatherData = data {
-                    
                     if let weather = self.parseJSON(weatherData) {
                         delegate?.didUpdateWeather(self, weather: weather, at: position)
                     }
@@ -71,9 +71,10 @@ struct NetworkManager {
             let weather = try? newJSONDecoder().decode(WeatherData.self, from: weatherData)
                     
             guard let decodedData = weather else { return nil }
-            
+                        
             let result = WeatherModel(lat: decodedData.lat,
                                       lon: decodedData.lon,
+                                      dt: decodedData.current.dt,
                                       conditionId: decodedData.current.weather[0].id,
                                       cityName: Misc.defaultSityName,
                                       temperature: decodedData.current.temp,

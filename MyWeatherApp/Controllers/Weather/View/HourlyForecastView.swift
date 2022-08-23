@@ -11,7 +11,7 @@ import SnapKit
 class HourlyForecastView: UIView {
     
     // MOK
-    var city: CityModel = CityModel(name: "Ростов-на-Дону", longitude: 39.455768, latitude: 47.153251)
+//    var city: CityModel = CityModel(name: "Ростов-на-Дону", longitude: 39.455768, latitude: 47.153251)
     
     var currentWeather: WeatherModel? {
         didSet {

@@ -84,7 +84,8 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         let min = String(format: "%.0f°", wthr.daily[0].temp.min)
         let max = String(format: "%.0f°", wthr.daily[0].temp.max)
         self.lowAndHeightTempLabel.text = "Мин. \(min), макс: \(max)" // add farehngate
-        self.todayLabel.text = Date.getCurrentDate()
+        let currentDate = wthr.dt
+        self.todayLabel.text = Date.getCurrentDate(dt: currentDate, style: .full)
     }
         
     private func setupLayout() {

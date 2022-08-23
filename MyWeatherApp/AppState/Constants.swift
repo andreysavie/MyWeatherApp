@@ -82,7 +82,7 @@ struct AccessabilityIdentifier {
     static let settingsTableView = "SettingsTableView"
 }
 
-struct UserDefaults {
+struct UDManager {
     static let unit = "Unit"
     static let imperial = "imperial"
     static let metric = "metric"
@@ -151,7 +151,7 @@ public enum ForecastIcons {
     case wind
 }
 
-public enum Settings: String {
+public enum Settings: String, CaseIterable {
     case notifications = "Уведомления"
     case time = "Формат времени"
     case date = "Формат даты"
@@ -443,9 +443,8 @@ public extension UIView {
 }
 public extension Date {
     
-//    static func getCurrentDate(date: Date = Date(), style: DataStyle = .full) -> String {
     static func getCurrentDate(dt: Int = 0, style: DataStyle = .full) -> String {
-
+        print("🐰\(dt)")
         let dateFormatter = DateFormatter()
         
         let date = dt == 0 ? Date() : Date(timeIntervalSince1970: TimeInterval(dt))
@@ -457,7 +456,7 @@ public extension Date {
         case .day:
             dateFormatter.dateFormat = "EE, d"
         case .full:
-            dateFormatter.dateFormat = "EEEE, MMMM d"
+            dateFormatter.dateFormat = "EEEE, MMMM d, HH:mm"
         }
         
         let str = dateFormatter.string(from: date)

@@ -53,7 +53,7 @@ class LaunchSettingsViewController: UIViewController {
         settingsView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(380)
+            make.height.equalTo(450)
         }
     }
 

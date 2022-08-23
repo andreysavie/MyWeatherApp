@@ -43,7 +43,6 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
         self.navigationItem.rightBarButtonItem = searchCityBarButtonItem
         self.navigationItem.leftBarButtonItem = settingsBarButtonItem
         
-                
         self.dataSource = self
                 
         if let controller = self.pageViewController(for: 0) {
@@ -76,16 +75,16 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     
     @objc
     private func searchButtonPressed() {
-//        let controller = SearchCityViewController()
-//        self.navigationController?.pushViewController(controller, animated: true)
-        let controller = UINavigationController(rootViewController: SearchCityViewController())
-        present(controller, animated: true)
+        let viewController = SearchCityViewController()
+        let navController = UINavigationController(rootViewController: viewController)
+        present(navController, animated: true)
     }
     
     @objc
     private func settingsButtonPressed() {
-        let controller = UINavigationController(rootViewController: SettingsViewController(style: .insetGrouped))
-        present(controller, animated: true)
+        let viewController = SettingsViewController(style: .insetGrouped)
+        let navController = UINavigationController(rootViewController: viewController)
+        present(navController, animated: true)
         
     }
     
@@ -113,7 +112,6 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
         }
         
         let controller = WeatherViewController(city: cities[index], index: index)
-        
         self.title = cities[index].name
         
         return controller

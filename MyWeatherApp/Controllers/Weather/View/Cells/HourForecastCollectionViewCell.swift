@@ -12,7 +12,7 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "HourForecastCollectionViewCell"
         
-    let hour = Calendar.current.component(.hour, from: Date())
+//    let hour = Calendar.current.component(.hour, from: Date())
     
     var image: UIImage? { didSet { weatherIcon.image = image } }
     

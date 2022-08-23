@@ -12,8 +12,8 @@ protocol MainScreenDelegate {
     func fetchWeatherData()
 }
 
-class WeatherViewController: UIViewController, MainScreenDelegate {
-    
+//class WeatherViewController: UIViewController, MainScreenDelegate {
+class WeatherViewController: UICollectionViewController, MainScreenDelegate {
     
     // MARK: PROPERTIES
     
@@ -26,15 +26,32 @@ class WeatherViewController: UIViewController, MainScreenDelegate {
     
     var currentWeather: WeatherModel?
     
-    private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.isScrollEnabled = true
-        collectionView.showsVerticalScrollIndicator = false
-        return collectionView
-    }()
+//    private lazy var collectionView: UICollectionView = {
+//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+//        collectionView.backgroundColor = .clear
+//        collectionView.isScrollEnabled = true
+//        collectionView.showsVerticalScrollIndicator = false
+//        return collectionView
+//    }()
     
-    private lazy var layout: UICollectionViewFlowLayout = {
+//    static let layout: UICollectionViewFlowLayout = {
+//        let layout = UICollectionViewFlowLayout()
+//        layout.minimumLineSpacing = 16
+//        layout.scrollDirection = .vertical
+//        layout.sectionInset = UIEdgeInsets(
+//            top: 16,
+//            left: 0,
+//            bottom: 0,
+//            right: 0)
+//        return layout
+//    }()
+    
+    // MARK: INITS
+    
+    init (city: CityModel, index: Int) {
+        self.city = city
+        self.index = index
+        
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 16
         layout.scrollDirection = .vertical
@@ -43,16 +60,16 @@ class WeatherViewController: UIViewController, MainScreenDelegate {
             left: 0,
             bottom: 0,
             right: 0)
-        return layout
-    }()
-    
-    // MARK: INITS
-    
-    init (city: CityModel, index: Int) {
-        self.city = city
-        self.index = index
-        super.init(nibName: nil, bundle: nil)
+
+        super.init(collectionViewLayout: layout)
+//        super.init(nibName: nil, bundle: nil)
     }
+    
+    
+    
+//    override init(collectionViewLayout layout: UICollectionViewLayout) {
+//        super.init(collectionViewLayout: layout)
+//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -60,10 +77,10 @@ class WeatherViewController: UIViewController, MainScreenDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                 
-        weatherManager.delegate = self
         
-        fetchWeatherData()
+        collectionView.backgroundColor = .clear
+        collectionView.isScrollEnabled = true
+        collectionView.showsVerticalScrollIndicator = false
         
         collectionView.register(
             CurrentWeatherCollectionViewCell.self,
@@ -82,7 +99,9 @@ class WeatherViewController: UIViewController, MainScreenDelegate {
         
         collectionView.dataSource = self
         collectionView.delegate = self
+        weatherManager.delegate = self
         
+        fetchWeatherData()
         setupLayout()
     }
     
@@ -155,19 +174,20 @@ extension WeatherViewController: NetworkManagerDelegate {
 //            self.present(alert, animated: true, completion: nil)
 //        }
     }
-}
+//}
+//
+//extension WeatherViewController: UICollectionViewDataSource {
 
-extension WeatherViewController: UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
     }
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 3
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         switch indexPath.section {
         case 0:
@@ -196,12 +216,8 @@ extension WeatherViewController: UICollectionViewDataSource {
         }
     }
     
-    
 }
 
-extension WeatherViewController: UICollectionViewDelegate {
-    
-}
 
 extension WeatherViewController: UICollectionViewDelegateFlowLayout {
     
@@ -215,10 +231,12 @@ extension WeatherViewController: UICollectionViewDelegateFlowLayout {
         case 1:
             height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.25
         case 2:
-            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.40
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.8
         default:
             break
         }
         return CGSize(width: floor(collectionView.frame.width - 32), height: height)
     }
 }
+
+    

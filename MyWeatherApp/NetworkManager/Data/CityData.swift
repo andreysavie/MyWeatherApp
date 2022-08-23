@@ -6,8 +6,6 @@
 //
 
 import Foundation
-//   let cityData = try? newJSONDecoder().decode(CityData.self, from: jsonData)
-
 
 // MARK: - CityData
 struct CityData: Codable {

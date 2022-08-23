@@ -18,21 +18,11 @@ class DailyCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private lazy var titleLabel: CustomLabel = {
-        let label = CustomLabel(
-            text: "Прогноз на 10 дней".uppercased(),
-            font: Fonts.tenDayTitleFont,
-            textColor: Colors.mediumTextColor
-        )
-        return label
-    }()
-    
     private lazy var tableView: UITableView = {
         let table = UITableView(frame: .zero, style: .insetGrouped)
         table.backgroundColor = .clear
         table.separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         table.sectionHeaderHeight = UITableView.automaticDimension
-//        table.estimatedSectionHeaderHeight = 0
         table.showsVerticalScrollIndicator = false
         return table
     }()
@@ -56,25 +46,13 @@ class DailyCollectionViewCell: UICollectionViewCell {
     func setupLayout() {
         
         getShadow(contentView)
-        let calendarIcon = getAppIcon(.calendar, 15)
         
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 16
-        contentView.addSubviews(calendarIcon, titleLabel, tableView)
-        
-        calendarIcon.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().inset(16)
-        }
-
-        
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(calendarIcon.snp.trailing).offset(4)
-            make.top.trailing.equalToSuperview().inset(16)
-        }
+        contentView.addSubview(tableView)
 
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.top.trailing.bottom.equalToSuperview()
         }
     }
     

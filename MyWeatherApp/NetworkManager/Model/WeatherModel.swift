@@ -8,39 +8,38 @@
 import Foundation
 
 // Enum for different types of collectionView cells
-enum SunStateDescription {
-    case sunset
-    case sunrise
-}
-
-struct SunState {
-    let description: SunStateDescription
-    let time: Int
-}
-
-enum WindUnitType {
-    case miph
-    case kmph
-}
-
-enum HourlyDataType {
-    //    case weatherType(Hourly)
-    case weatherType(Current)
-    case sunState(SunState)
-}
+//enum SunStateDescription {
+//    case sunset
+//    case sunrise
+//}
+//
+//struct SunState {
+//    let description: SunStateDescription
+//    let time: Int
+//}
+//
+//enum WindUnitType {
+//    case miph
+//    case kmph
+//}
+//
+//enum HourlyDataType {
+//    case weatherType(Current)
+//    case sunState(SunState)
+//}
 
 struct WeatherModel {
     
     let lat: Double
     let lon: Double
+    let dt: Int
     
     let conditionId: Int
     var cityName: String
     let temperature: Double
     let timezone: Int
     let feelsLike: Double
-    let description: Description
-    
+    let description: String
     
     let humidity: Int
     let uviIndex: Double
@@ -58,56 +57,41 @@ struct WeatherModel {
     let rain: Double
     let dewPoint: Double
     
-    var hourlyDisplayData: [HourlyDataType] {
-        var hourlyDataMix = [HourlyDataType]()
-        
-        // SunType cells data for sunset/sunrise for the current day and the next one
-        var sunStates = [SunState(description: .sunrise, time: sunrise),
-                         SunState(description: .sunset, time: sunset),
-                         SunState(description: .sunrise, time: daily[1].sunrise),
-                         SunState(description: .sunset, time: daily[1].sunset)]
-        
-        for i in 0...24 {
-            let currentHour = hourly[i]
-            
-            // Add SunType cell data
-            for (i, sunState) in sunStates.enumerated() {
-                // Check the next hour syntetically
-                // Add sunType cell data after current time cell and before the next time cell
-                if sunState.time < currentHour.dt &&  sunState.time > Int(Date().timeIntervalSince1970) {
-                    hourlyDataMix.append(HourlyDataType.sunState(SunState(description: sunState.description,
-                                                                          time: sunState.time)))
-                    sunStates.remove(at: i)
-                }
-            }
-            // Add weather cell data
-            let currentTemp = HourlyDataType.weatherType(currentHour)
-            hourlyDataMix.append(currentTemp)
-        }
-        
-        return hourlyDataMix
-    }
+//    var hourlyDisplayData: [HourlyDataType] {
+//        var hourlyDataMix = [HourlyDataType]()
+//
+//        // SunType cells data for sunset/sunrise for the current day and the next one
+//        var sunStates = [SunState(description: .sunrise, time: sunrise),
+//                         SunState(description: .sunset, time: sunset),
+//                         SunState(description: .sunrise, time: daily[1].sunrise),
+//                         SunState(description: .sunset, time: daily[1].sunset)]
+//
+//        for i in 0...24 {
+//            let currentHour = hourly[i]
+//
+//            // Add SunType cell data
+//            for (i, sunState) in sunStates.enumerated() {
+//                // Check the next hour syntetically
+//                // Add sunType cell data after current time cell and before the next time cell
+//                if sunState.time < currentHour.dt &&  sunState.time > Int(Date().timeIntervalSince1970) {
+//                    hourlyDataMix.append(HourlyDataType.sunState(SunState(description: sunState.description,
+//                                                                          time: sunState.time)))
+//                    sunStates.remove(at: i)
+//                }
+//            }
+//            // Add weather cell data
+//            let currentTemp = HourlyDataType.weatherType(currentHour)
+//            hourlyDataMix.append(currentTemp)
+//        }
+//
+//        return hourlyDataMix
+//    }
     
     
     // Strings
     
     var descriptionString: String {
-        switch description {
-        case .brokenClouds:
-            return "Преимущественно облачно"
-        case .clearSky:
-            return "Ясно"
-        case .fewClouds:
-            return "Малооблачно"
-        case .lightRain:
-            return "Легкий дождь"
-        case .overcastClouds:
-            return "Пасмурно"
-        case .scatteredClouds:
-            return "Малооблачно"
-        case .moderateRain:
-            return "Умеренный дождь"
-        }
+        return description.prefix(1).uppercased() + description.lowercased().dropFirst()
     }
     
     
@@ -142,7 +126,8 @@ struct WeatherModel {
     }
     
     var windDirectionString: String {
-        let winddirections = ["С 􀄨", "СВ 􀰾", "В 􀄫", "ЮВ 􀱈", "Ю 􀄩", "ЮЗ 􀱃", "З 􀄪", "СЗ 􀰹"]
+//        let winddirections = ["С 􀄨", "СВ 􀰾", "В 􀄫", "ЮВ 􀱈", "Ю 􀄩", "ЮЗ 􀱃", "З 􀄪", "СЗ 􀰹"]
+        let winddirections = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"]
         let degrees = daily[0].windDeg
         let direction = Int((degrees + Int(22.5)) / 45 % 8)
         return winddirections[direction]
@@ -196,24 +181,31 @@ struct WeatherModel {
     }
     
     var cloudinessDesc: String {
-        switch description {
-        case .brokenClouds:
-            return "Сейчас облачно"
-        case .clearSky:
-            return "Сейчас ясно"
-        case .fewClouds:
-            return "Сейчас малооблачно"
-        default:
+        
+        // TODO: ДОПОЛНИТЬ!
+        
+        switch conditionId {
+        case 300...531:
             return "Сейчас пасмурно"
-        }    }
+        case 800:
+            return "Сейчас ясно"
+        case 801:
+            return "Сейчас малооблачно"
+        case 802...804:
+            return "Сейчас облачно"
+        default:
+            return "Сейчас облачно" // или нет
+        }
+    }
+    
     
     var visibilityString: String {
         String("\(visibility / 1000) км")
     }
     
     var visibilityDesc: String {
-        switch description {
-        case .clearSky:
+        switch conditionId {
+        case 800:
             return "Сейчас ясно"
         default:
             return "Видимость ограничена"

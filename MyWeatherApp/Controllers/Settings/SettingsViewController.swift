@@ -42,6 +42,10 @@ class SettingsViewController: UITableViewController {
         tableView.isScrollEnabled = false
     }
     
+    func loadSettingsValues() {
+        
+    }
+    
     override init(style: UITableView.Style) {
         super.init(style: style)
     }
@@ -76,40 +80,12 @@ class SettingsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.identifier, for: indexPath) as? SettingsTableViewCell else { return UITableViewCell() }
-                
+                        
         switch indexPath.section {
-        case 0:
+        case 0, 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.identifier, for: indexPath) as? SettingsTableViewCell else { return UITableViewCell() }
             cell.selectionStyle = .none
-
-            switch indexPath.row {
-            case 0:
-                cell.configure(.notifications)
-            case 1:
-                cell.configure(.time)
-            case 2:
-                cell.configure(.date)
-            default:
-                return UITableViewCell()
-            }
-            return cell
-
-        case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.identifier, for: indexPath) as? SettingsTableViewCell else { return UITableViewCell() }
-            cell.selectionStyle = .none
-
-            switch indexPath.row {
-            case 0:
-                cell.configure(.temp)
-            case 1:
-                cell.configure(.speed)
-            case 2:
-                cell.configure(.visibility)
-            default:
-                return UITableViewCell()
-            }
+            cell.configure(indexPath.section, for: indexPath.row)
             return cell
 
         case 2:
