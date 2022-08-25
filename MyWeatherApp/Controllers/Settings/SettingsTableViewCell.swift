@@ -21,14 +21,27 @@ class SettingsTableViewCell: UITableViewCell {
         label.text = setting?.rawValue ?? "none"
         return label
     }()
-    
+        
     private lazy var dateFormatButton: UIButton = {
         let button = UIButton()
         button.setTitle("дд/мм/гггг", for: .normal)
         button.setTitleColor(Colors.mediumTextColor, for: .normal)
         button.titleLabel?.font = Fonts.settingsLabelFont
+//        button.addTarget(self, action: #selector(dateFormatButtonTapped), for: .touchUpInside)
+        button.addInteraction(interaction)
         return button
     }()
+    
+    private lazy var interaction: UIContextMenuInteraction = {
+       let interaction = UIContextMenuInteraction(delegate: self)
+        return interaction
+    }()
+
+    
+    @objc
+    private func dateFormatButtonTapped() {
+        
+    }
     
     private lazy var segmentedControl = getSegmentedControl(setting)
     
@@ -75,5 +88,36 @@ class SettingsTableViewCell: UITableViewCell {
         }
         print("🔑\(String(describing: setting.rawValue))")
         UserDefaults.standard.set(segmentedControl?.selectedSegmentIndex, forKey: setting.rawValue)
+    }
+    
+    func showAlert(title: String) {
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+        alert.addAction(.init(title: "OK", style: .cancel, handler: nil))
+        print ("alert action!")
+        
+    }
+}
+
+extension SettingsTableViewCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { actions -> UIMenu? in
+            let save = UIAction(title: "My Button", image: nil) { action in
+                print ("BUTTON TAPPED!")
+//                self.showAlert(title: action.title)
+              }
+
+              // Creating Rotate button
+              let rotate = UIAction(title: "Rotate", image: UIImage(systemName: "arrow.counterclockwise")) { action in
+//                  self.showAlert(title: action.title)
+              }
+              // Creating Delete button
+              let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash.fill")) { action in
+//                  self.showAlert(title: action.title)
+            }
+            
+            return UIMenu(title: "MENU", image: UIImage(), identifier: .edit, options: .destructive, children: [save, rotate, delete])
+
+        }
+        return configuration
     }
 }

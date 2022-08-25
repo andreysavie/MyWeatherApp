@@ -8,14 +8,16 @@
 import UIKit
 import SnapKit
 import MapKit
+import CoreData
 
 class SearchCityViewController: UIViewController {
 
     // MARK: PROPERTIES
     
-    private var cities = [CityModel]()
     private var matchingItems: [MKMapItem] = []
-    
+    private var blockOperations: [BlockOperation] = []
+    private var fetchedResultsController = CoreDataManager.shared.fetchedResultsController
+
     private lazy var citiesCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -66,6 +68,8 @@ class SearchCityViewController: UIViewController {
                 
         searchTableView.dataSource = self
         searchTableView.delegate = self
+        
+        fetchedResultsController.delegate = self
 
         setupLayout()
         
@@ -86,7 +90,7 @@ class SearchCityViewController: UIViewController {
         searchController.searchBar.becomeFirstResponder()
     }
     
-    // MARK: METHODS
+    // MARK: LAYOUT
 
     func setupLayout() {
         
@@ -103,7 +107,7 @@ class SearchCityViewController: UIViewController {
         }
     }
     
-    // OBJC METHODS
+    // MARK: OBJC METHODS
     
     @objc func editingDidBegin() {
         
@@ -140,23 +144,7 @@ class SearchCityViewController: UIViewController {
 }
 // MARK: EXTENSIONS
 
-
-// EXTENSION: CollectionViewController
-
-extension SearchCityViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cities.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CityCollectionViewCell.identifier, for: indexPath) as? CityCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureOfCell(city: cities[indexPath.item])
-        return cell
-    }
-    
-}
-
-// EXTENSION: TableViewController
+// EXTENSION: TableView
 
 extension SearchCityViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -188,8 +176,9 @@ extension SearchCityViewController: UITableViewDataSource, UITableViewDelegate {
         let coordinate = selectItem.coordinate
         let locality = selectItem.locality ?? ""
         let city = CityModel(name: locality, longitude: coordinate.longitude, latitude: coordinate.latitude)
-        cities.append(city) // connect CoreData
-        citiesCollectionView.reloadData()
+        
+        CoreDataManager.shared.saveCity(city: city)
+
         searchController.isActive = false
         matchingItems.removeAll()
         searchTableView.reloadData()
@@ -205,7 +194,29 @@ extension SearchCityViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 
-// EXTENSION: SearchViewController
+// EXTENSION: CollectionView
+
+extension SearchCityViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return fetchedResultsController.sections?.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let sectionInfo = fetchedResultsController.sections![section]
+        return sectionInfo.numberOfObjects
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CityCollectionViewCell.identifier, for: indexPath) as? CityCollectionViewCell else { return UICollectionViewCell() }
+        
+        let city = fetchedResultsController.object(at: indexPath)
+
+        cell.configureOfCell(city: city)
+
+        return cell
+    }
+}
 
 extension SearchCityViewController: UICollectionViewDelegateFlowLayout {
     
@@ -214,6 +225,51 @@ extension SearchCityViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: floor(collectionView.frame.width - 32), height: 130)
     }
 }
+
+// EXTENSION: NSFetchedResultsController
+
+extension SearchCityViewController: NSFetchedResultsControllerDelegate {
+        
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        blockOperations.removeAll(keepingCapacity: false)
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+
+        let op: BlockOperation
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else { return }
+            op = BlockOperation { self.citiesCollectionView.insertItems(at: [newIndexPath]) }
+
+        case .delete:
+            guard let indexPath = indexPath else { return }
+            op = BlockOperation { self.citiesCollectionView.deleteItems(at: [indexPath]) }
+        case .move:
+            guard let indexPath = indexPath,  let newIndexPath = newIndexPath else { return }
+            op = BlockOperation { self.citiesCollectionView.moveItem(at: indexPath, to: newIndexPath) }
+        case .update:
+            guard let indexPath = indexPath else { return }
+            op = BlockOperation { self.citiesCollectionView.reloadItems(at: [indexPath]) }
+        @unknown default:
+            fatalError()
+        }
+
+        blockOperations.append(op)
+    }
+
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        citiesCollectionView.performBatchUpdates({
+            self.blockOperations.forEach { $0.start() }
+        }, completion: { finished in
+            self.blockOperations.removeAll(keepingCapacity: false)
+        })
+    }
+}
+
+
+// EXTENSION: SearchController
 
 extension SearchCityViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
@@ -229,3 +285,5 @@ extension SearchCityViewController: UISearchResultsUpdating {
         }
     }
 }
+
+

@@ -62,7 +62,7 @@ class CityCollectionViewCell: UICollectionViewCell {
     // MARK: METHODS ===================================================================================
     
     
-    func configureOfCell(city: CityModel) {
+    func configureOfCell(city: CityModelEntity) {
         self.cityNameLabel.text = city.name
     }
     

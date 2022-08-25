@@ -20,7 +20,7 @@ class CoreDataStack {
     var persistentContainer: NSPersistentContainer
     
     private init() {
-        let container = NSPersistentContainer(name: "FavoritePostModel")
+        let container = NSPersistentContainer(name: "MyWeatherApp")
         container.loadPersistentStores { description, error in
             if let error = error {
                 fatalError("Unable to load persistent stores: \(error)")
