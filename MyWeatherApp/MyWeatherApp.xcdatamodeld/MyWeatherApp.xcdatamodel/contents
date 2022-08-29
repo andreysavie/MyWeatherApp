@@ -3,7 +3,7 @@
     <entity name="CityModelEntity" representedClassName="CityModelEntity" syncable="YES" codeGenerationType="class">
         <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String" defaultValueString="unknown"/>
     </entity>
     <elements>
         <element name="CityModelEntity" positionX="-63" positionY="-18" width="128" height="74"/>

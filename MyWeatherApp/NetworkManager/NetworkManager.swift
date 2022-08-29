@@ -64,7 +64,7 @@ struct NetworkManager {
         decoder.dateDecodingStrategy = .iso8601
         return decoder
     }
-        
+            
     fileprivate func parseJSON(_ weatherData: Data) -> WeatherModel? {
         
         do {

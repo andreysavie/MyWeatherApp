@@ -16,35 +16,53 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     // MARK: PROPERTIES ============================================================================
     
     
-    private lazy var cityNameLabel = getLabel(
-        text: "Москва",
-        font: Fonts.detailsCityFont,
-        color: Colors.darkTextColor
-    )
+    private lazy var cityNameLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "Москва",
+            font: Fonts.detailsCityFont,
+            textColor: Colors.darkTextColor
+        )
+        return label
+    }()
     
-    private lazy var dayForecastLabel = getLabel(
-        text: "Днём 21° | Облачно",
-        font: Fonts.detailsWeatherFont,
-        color: Colors.darkTextColor
-    )
+    private lazy var dayForecastLabel: CustomLabel = {
+        let label = CustomLabel(
+            numberOfLines: 1,
+            text: "Днём 21° | Облачно",
+            font: Fonts.detailsWeatherFont,
+            textColor: Colors.darkTextColor
+        )
+        return label
+    }()
     
-    private lazy var nightForecastLabel = getLabel(
-        text: "Ночью 12° | Ясно",
-        font: Fonts.detailsWeatherFont,
-        color: Colors.lightTextColor
-    )
+    private lazy var nightForecastLabel: CustomLabel = {
+        let label = CustomLabel(
+            numberOfLines: 1,
+            text: "Днём 21° | Облачно",
+            font: Fonts.detailsWeatherFont,
+            textColor: Colors.lightTextColor
+        )
+        return label
+    }()
     
-    private lazy var sunriseTimeLabel = getLabel(
-        text: "04:39",
-        font: Fonts.detailsSunTimeFont,
-        color: Colors.darkTextColor
-    )
+    private lazy var sunriseTimeLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "04:39",
+            font: Fonts.detailsSunTimeFont,
+            textColor: Colors.darkTextColor
+        )
+        return label
+    }()
     
-    private lazy var sunsetTimeLabel = getLabel(
-        text: "20:40",
-        font: Fonts.detailsSunTimeFont,
-        color: Colors.darkTextColor
-    )
+    
+    private lazy var sunsetTimeLabel: CustomLabel = {
+        let label = CustomLabel(
+            text: "04:39",
+            font: Fonts.detailsSunTimeFont,
+            textColor: Colors.darkTextColor
+        )
+        return label
+    }()
     
     private lazy var sunriseIcon = getAppIcon(.sunrise, 24)
     private lazy var sunsetIcon = getAppIcon(.sunset, 24)

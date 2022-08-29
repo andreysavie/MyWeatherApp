@@ -15,6 +15,9 @@ var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+//        let city = CityModel(name: "Мухосранск", longitude: 39.71, latitude: 47.24)
+//        CoreDataManager.shared.saveCity(city: city)
+        
 //        let city = CityModel(name: "", latitude: 47.24, longitude: 39.71)
 //        let manager = NetworkManager()
 //        manager.fetchWeather(by: city)

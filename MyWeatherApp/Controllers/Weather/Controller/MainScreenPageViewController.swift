@@ -7,9 +7,19 @@
 
 import UIKit
 
-let cities: [CityModel] = [CityModel(name: "Ростов-на-Дону", longitude: 39.455768, latitude: 47.153251)]
+//let cities: [CityModel] = [CityModel(name: "Ростов-на-Дону", longitude: 39.455768, latitude: 47.153251)]
+
 
 class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDataSource {
+    
+    var cities = CoreDataManager.shared.fetchCities() {
+        didSet {
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+        }
+    }
+    
+    private var fetchedResultsController = CoreDataManager.shared.fetchedResultsController
     
     private lazy var searchCityBarButtonItem: UIBarButtonItem = {
         let image = UIImage(
@@ -102,6 +112,9 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     }
         
     func pageViewController (for index: Int) -> UIViewController? {
+        
+        guard let cities = cities else { return nil }
+
         
         if index < 0 {
             return nil

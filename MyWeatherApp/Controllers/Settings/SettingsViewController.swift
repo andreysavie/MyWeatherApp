@@ -91,7 +91,7 @@ class SettingsViewController: UITableViewController {
         case 2:
             let cell = UITableViewCell (style: .default, reuseIdentifier: nil)
             var content: UIListContentConfiguration = cell.defaultContentConfiguration()
-            content.text = "Сохранить"
+            content.text = "Закрыть"
             content.textProperties.alignment = .center
             cell.contentConfiguration = content
             cell.backgroundColor = Colors.blueColor

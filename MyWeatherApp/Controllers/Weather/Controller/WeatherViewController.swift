@@ -24,6 +24,7 @@ class WeatherViewController: UICollectionViewController, MainScreenDelegate {
     private var weatherManager = NetworkManager()
     private var savedCities = [CityModel]()
     
+    
     var currentWeather: WeatherModel?
     
 //    private lazy var collectionView: UICollectionView = {

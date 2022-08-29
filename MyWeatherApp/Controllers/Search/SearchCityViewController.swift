@@ -10,22 +10,35 @@ import SnapKit
 import MapKit
 import CoreData
 
-class SearchCityViewController: UIViewController {
+class SearchCityViewController: UIViewController, MainScreenDelegate {
+
+    
+//class SearchCityViewController: UIViewController {
 
     // MARK: PROPERTIES
     
     private var matchingItems: [MKMapItem] = []
-    private var blockOperations: [BlockOperation] = []
-    private var fetchedResultsController = CoreDataManager.shared.fetchedResultsController
+    private var savedCities = [CityModel]()
+//    private var savedCities = [CityModelEntity]()
 
-    private lazy var citiesCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        return collectionView
+    private var fetchedResultsController = CoreDataManager.shared.fetchedResultsController
+    private var weatherManager = NetworkManager()
+    var displayWeather: [WeatherModel?] = []
+
+//    private var currentWeather: WeatherModel?
+
+    private lazy var citiesTableView: UITableView = {
+        let table = UITableView(frame: .zero, style: .plain)
+        table.backgroundColor = .clear
+        table.showsVerticalScrollIndicator = false
+        table.separatorStyle = .none
+        table.isScrollEnabled = true
+        table.isUserInteractionEnabled = true
+        return table
     }()
     
     private lazy var searchTableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        let tableView = UITableView(frame: .zero, style: .plain)
         tableView.isHidden = true
         tableView.alpha = 0
         tableView.isUserInteractionEnabled = false
@@ -33,17 +46,6 @@ class SearchCityViewController: UIViewController {
         return tableView
     }()
     
-    private lazy var layout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 8
-        layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(
-            top: 0,
-            left: 16,
-            bottom: 0,
-            right: 16)
-        return layout
-    }()
     
     private lazy var searchController: UISearchController = {
         let search = UISearchController()
@@ -57,21 +59,23 @@ class SearchCityViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        citiesCollectionView.register(
-            CityCollectionViewCell.self,
-            forCellWithReuseIdentifier: CityCollectionViewCell.identifier
-        )
         
-        citiesCollectionView.dataSource = self
-        citiesCollectionView.delegate = self
-                
+        citiesTableView.register(
+            CityTableViewCell.self,
+            forCellReuseIdentifier: CityTableViewCell.identifier)
+        
+        citiesTableView.dataSource = self
+        citiesTableView.delegate = self
         searchTableView.dataSource = self
         searchTableView.delegate = self
+        weatherManager.delegate = self
+        
+        searchController.searchResultsUpdater = self
         
         fetchedResultsController.delegate = self
 
         setupLayout()
+        fetchWeatherData()
         
         title = "Погода"
         navigationItem.titleView?.tintColor = Colors.darkTextColor
@@ -79,24 +83,32 @@ class SearchCityViewController: UIViewController {
         view.backgroundColor = .white
         
         navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = true
+        navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
         
-        searchController.searchResultsUpdater = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         searchController.searchBar.becomeFirstResponder()
+        print("😱\(displayWeather.count)")
+        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//            let city = CityModel(name: "Мухосранск", longitude: 0, latitude: 0)
+//            self.displayWeather.append(nil)
+//            self.displayWeather[self.displayWeather.count - 1]?.cityName = city.name
+//            CoreDataManager.shared.saveCity(city: city)
+//            self.fetchWeatherData()
+//        }
     }
     
     // MARK: LAYOUT
 
     func setupLayout() {
         
-        view.addSubviews(citiesCollectionView, searchTableView)
-
-        citiesCollectionView.snp.makeConstraints { make in
+        view.addSubviews(citiesTableView, searchTableView)
+        
+        citiesTableView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.top.equalTo(searchController.searchBar.frame.minY).offset(16)
         }
@@ -107,166 +119,260 @@ class SearchCityViewController: UIViewController {
         }
     }
     
+    // MARK: METHODS
+
+    func fetchWeatherData() {
+//        weatherManager.fetchWeather(by: city, at: 0)
+        guard let savedCities = CoreDataManager.shared.fetchCities() else { return }
+//        guard let savedCities = fetchedResultsController.fetchedObjects else { return }
+
+        savedCities.forEach({ print("💀\(String(describing: $0.name))") })
+        
+        self.savedCities = savedCities
+        displayWeather.removeAll()
+
+        for _ in 0..<savedCities.count {
+            displayWeather.append(nil)
+        }
+
+        
+        for (i, city) in self.savedCities.enumerated() {
+//            let modeledCity = CityModel(name: city.name ?? "unknown city", longitude: city.lon, latitude: city.lat)
+            weatherManager.fetchWeather(by: city, at: i)
+        }
+
+    }
+    
     // MARK: OBJC METHODS
     
     @objc func editingDidBegin() {
-        
-        UIView.animate(
-            withDuration: 0.3) { [weak citiesCollectionView, weak searchTableView] in
-                citiesCollectionView?.alpha = 0
-                searchTableView?.alpha = 1
-            } completion: { _ in
-                self.view.setNeedsLayout()
-                self.citiesCollectionView.isHidden = true
-                self.citiesCollectionView.isUserInteractionEnabled = false
-                self.searchTableView.isHidden = false
-                self.searchTableView.isUserInteractionEnabled = true
-            }
-    }
-    
-    @objc func editingDidEnd() {
-        
-        matchingItems.removeAll()
-        citiesCollectionView.isHidden = false
-        searchTableView.reloadData()
-        
-        UIView.animate(
-            withDuration: 0.3) { [weak citiesCollectionView, weak searchTableView] in
-                citiesCollectionView?.alpha = 1
-                searchTableView?.alpha = 0
-            } completion: { _ in
-                self.citiesCollectionView.isUserInteractionEnabled = true
-                self.searchTableView.isHidden = true
-                self.searchTableView.isUserInteractionEnabled = false
-            }
-    }
+         
+         UIView.animate(
+             withDuration: 0.3) { [weak citiesTableView, weak searchTableView] in
+                 citiesTableView?.alpha = 0
+                 searchTableView?.alpha = 1
+             } completion: { _ in
+                 self.view.setNeedsLayout()
+                 self.citiesTableView.isHidden = true
+                 self.citiesTableView.isUserInteractionEnabled = false
+                 self.searchTableView.isHidden = false
+                 self.searchTableView.isUserInteractionEnabled = true
+             }
+     }
+     
+     @objc func editingDidEnd() {
+         
+         matchingItems.removeAll()
+         citiesTableView.isHidden = false
+         searchTableView.reloadData()
+         
+         UIView.animate(
+             withDuration: 0.3) { [weak citiesTableView, weak searchTableView] in
+                 citiesTableView?.alpha = 1
+                 searchTableView?.alpha = 0
+             } completion: { _ in
+                 self.citiesTableView.isUserInteractionEnabled = true
+                 self.searchTableView.isHidden = true
+                 self.searchTableView.isUserInteractionEnabled = false
+             }
+     }
         
 }
+
 // MARK: EXTENSIONS
 
 // EXTENSION: TableView
 
 extension SearchCityViewController: UITableViewDataSource, UITableViewDelegate {
+        
+    func numberOfSections(in tableView: UITableView) -> Int {
+        switch tableView {
+        case citiesTableView:
+            return fetchedResultsController.sections?.count ?? 0
+        case searchTableView:
+            return matchingItems.count
+        default:
+            return 0
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return matchingItems.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = UITableViewCell (style: .default, reuseIdentifier: nil)
-        var content: UIListContentConfiguration = cell.defaultContentConfiguration()
-
-        let selectedItem = matchingItems[indexPath.row].placemark
-        
-        let locality = selectedItem.locality ?? ""
-        let subLocality = selectedItem.subLocality ?? ""
-        let thoroughfare = selectedItem.thoroughfare ?? ""
-        content.text = locality
-        content.secondaryText = !subLocality.isEmpty ? subLocality : thoroughfare
-        cell.tintColor = .black
-        cell.backgroundColor = .white
-        cell.contentConfiguration = content
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectItem = matchingItems[indexPath.row].placemark
-        let coordinate = selectItem.coordinate
-        let locality = selectItem.locality ?? ""
-        let city = CityModel(name: locality, longitude: coordinate.longitude, latitude: coordinate.latitude)
-        
-        CoreDataManager.shared.saveCity(city: city)
-
-        searchController.isActive = false
-        matchingItems.removeAll()
-        searchTableView.reloadData()
-
-                
-//        DataManager.shared.addLocation(location)
-//        DataManager.shared.fetchWeather(from: coordinate,
-//                                        with: locality,
-//                                        completionHandler: nil)
-//    })
-//}
-    }
-}
-
-
-// EXTENSION: CollectionView
-
-extension SearchCityViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return fetchedResultsController.sections?.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard tableView == citiesTableView else { return 1 }
         let sectionInfo = fetchedResultsController.sections![section]
         return sectionInfo.numberOfObjects
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CityCollectionViewCell.identifier, for: indexPath) as? CityCollectionViewCell else { return UICollectionViewCell() }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let city = fetchedResultsController.object(at: indexPath)
+        switch tableView {
+            
+        case citiesTableView:
+                        
+            guard
+//                indexPath.row <= displayWeather.count - 1,
+                displayWeather[indexPath.row] != nil,
+                  let weatherDataForCell = displayWeather[indexPath.row],
+                  let cell = tableView.dequeueReusableCell(withIdentifier: CityTableViewCell.identifier, for: indexPath) as? CityTableViewCell else {
+//                return UITableViewCell()
+                return CityTableViewCell()
 
-        cell.configureOfCell(city: city)
+            }
+//
+//            let city = fetchedResultsController.object(at: indexPath)
+//            cell.configureOfCell(city: city)
 
-        return cell
+            cell.configureOfCell(weather: weatherDataForCell)
+            cell.layoutIfNeeded()
+            return cell
+
+
+        case searchTableView:
+
+            let cell = UITableViewCell (style: .default, reuseIdentifier: nil)
+            var content: UIListContentConfiguration = cell.defaultContentConfiguration()
+
+            let selectedItem = matchingItems[indexPath.row].placemark
+
+            let locality = selectedItem.locality ?? ""
+            let subLocality = selectedItem.subLocality ?? ""
+            let thoroughfare = selectedItem.thoroughfare ?? ""
+            content.text = locality
+            content.secondaryText = !subLocality.isEmpty ? subLocality : thoroughfare
+            cell.tintColor = .black
+            cell.backgroundColor = .white
+            cell.contentConfiguration = content
+            return cell
+
+        default:
+            return UITableViewCell()
+        }
     }
-}
-
-extension SearchCityViewController: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return tableView == citiesTableView ? 150 : tableView.rowHeight
+    }
+
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch tableView {
+            
+        case searchTableView:
+            
+            let selectItem = matchingItems[indexPath.row].placemark
+            let coordinate = selectItem.coordinate
+            let locality = selectItem.locality ?? ""
+            let city = CityModel(name: locality, longitude: coordinate.longitude, latitude: coordinate.latitude)
+
+//            CoreDataManager.shared.saveCity(city: city)
+            
+            searchController.isActive = false
+            matchingItems.removeAll()
+            searchTableView.reloadData()
+            
+            self.displayWeather.append(nil)
+            self.displayWeather[self.displayWeather.count - 1]?.cityName = city.name
+            CoreDataManager.shared.saveCity(city: city)
+            
+            self.fetchWeatherData()
+
+            tableView.deselectRow(at: indexPath, animated: true)
+
+        default:
+            
+            tableView.deselectRow(at: indexPath, animated: false)
+        }
+        // По нажатию нужно открыть погоду в текущем городе
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return tableView == citiesTableView ? true : false
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        return CGSize(width: floor(collectionView.frame.width - 32), height: 130)
+        guard tableView == citiesTableView else { return nil }
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { _, _, completion in
+            
+            let context = self.fetchedResultsController.managedObjectContext
+            context.delete(self.fetchedResultsController.object(at: indexPath))
+            completion(true)
+            
+            do {
+                try context.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+        
+        deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: 120, height: 120)).image { _ in
+            UIImage(named: "deleteAction")?.draw(in: CGRect(x: 0, y: 0, width: 120, height: 120))
+        }
+        deleteAction.backgroundColor = UIColor(white: 1, alpha: 0)
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        return configuration
     }
 }
 
-// EXTENSION: NSFetchedResultsController
 
 extension SearchCityViewController: NSFetchedResultsControllerDelegate {
-        
+    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        blockOperations.removeAll(keepingCapacity: false)
+        citiesTableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            citiesTableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .delete:
+            citiesTableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        default:
+            return
+        }
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-
-        let op: BlockOperation
         switch type {
         case .insert:
-            guard let newIndexPath = newIndexPath else { return }
-            op = BlockOperation { self.citiesCollectionView.insertItems(at: [newIndexPath]) }
-
+            citiesTableView.insertRows(at: [newIndexPath!], with: .fade)
         case .delete:
-            guard let indexPath = indexPath else { return }
-            op = BlockOperation { self.citiesCollectionView.deleteItems(at: [indexPath]) }
-        case .move:
-            guard let indexPath = indexPath,  let newIndexPath = newIndexPath else { return }
-            op = BlockOperation { self.citiesCollectionView.moveItem(at: indexPath, to: newIndexPath) }
+            citiesTableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
-            guard let indexPath = indexPath else { return }
-            op = BlockOperation { self.citiesCollectionView.reloadItems(at: [indexPath]) }
+            guard let indexPath = indexPath, let cell = citiesTableView.cellForRow(at: indexPath) as? CityTableViewCell else { return }
+                        
+            let weatherDataForCell = displayWeather[indexPath.row]
+            cell.configureOfCell(weather: weatherDataForCell)
+
+//            let city = fetchedResultsController.object(at: indexPath)
+//            cell.configureOfCell(city: city)
+
+        case .move:
+            guard
+                let indexPath = indexPath,
+                let newIndexPath = newIndexPath,
+                let cell = citiesTableView.cellForRow(at: indexPath) as? CityTableViewCell
+            else { return }
+            
+            let weatherDataForCell = displayWeather[indexPath.row]
+            cell.configureOfCell(weather: weatherDataForCell)
+
+//            let city = fetchedResultsController.object(at: indexPath)
+//            cell.configureOfCell(city: city)
+
+            citiesTableView.moveRow(at: indexPath, to: newIndexPath)
+
         @unknown default:
             fatalError()
         }
-
-        blockOperations.append(op)
     }
-
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        citiesCollectionView.performBatchUpdates({
-            self.blockOperations.forEach { $0.start() }
-        }, completion: { finished in
-            self.blockOperations.removeAll(keepingCapacity: false)
-        })
+        citiesTableView.endUpdates()
     }
 }
+
 
 
 // EXTENSION: SearchController
@@ -283,6 +389,24 @@ extension SearchCityViewController: UISearchResultsUpdating {
             self.matchingItems = response.mapItems
             self.searchTableView.reloadData()
         }
+    }
+}
+
+extension SearchCityViewController: NetworkManagerDelegate {
+    
+    func didUpdateWeather(_ weatherManager: NetworkManager, weather: WeatherModel, at position: Int) {
+        
+            DispatchQueue.main.async {
+                self.displayWeather[position] = weather
+                let indexPath = IndexPath(row: position, section: 0)
+
+                self.displayWeather[indexPath.row]?.cityName = self.savedCities[indexPath.row].name
+                self.citiesTableView.reloadRows(at: [indexPath], with: .fade)
+            }
+    }
+    
+    func didFailWithError(error: Error) {
+        ()
     }
 }
 

@@ -36,7 +36,7 @@ final class CoreDataManager {
         
     // MARK: METHODS
     
-   public func saveCity (city: CityModel) {
+   public func saveCity(city: CityModel) {
 
         guard let savedCities = fetchedResultsController.fetchedObjects else { return }
         
@@ -53,6 +53,28 @@ final class CoreDataManager {
             
             CoreDataStack.shared.saveContext()
         }
+    }
+    
+    public func fetchCities() -> [CityModel]? {
+        let fetchRequest = CityModelEntity.fetchRequest()
+        var fetchedCities = [CityModel]()
+        var cities = [CityModelEntity]()
+        do {
+            cities = try CoreDataStack.shared.context.fetch(fetchRequest)
+            for fetchedCity in cities {
+                
+                let city = CityModel(
+                    name: fetchedCity.name ?? "unknown",
+                    longitude: fetchedCity.lon,
+                    latitude: fetchedCity.lat
+                )
+                
+                fetchedCities.append(city)
+            }
+        } catch let error {
+            print(error)
+        }
+        return fetchedCities
     }
 }
 
