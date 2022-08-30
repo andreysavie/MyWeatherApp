@@ -231,7 +231,7 @@ extension WeatherViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.4
         case 1:
-            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.25
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.2
         case 2:
             height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.8
         default:

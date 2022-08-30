@@ -83,14 +83,8 @@ struct AccessabilityIdentifier {
 }
 
 struct UDManager {
-    static let unit = "Unit"
     static let imperial = "imperial"
     static let metric = "metric"
-    
-    static let currentColorTheme = "currentColorTheme"
-    static let colorThemePositionNumber = "colorThemePositionNumber"
-    
-    static let appIconNumber = "AppIconNumber"
 }
 
 struct Network {
@@ -177,6 +171,11 @@ public enum BlockType {
     case label
 }
 
+public enum DateType: String {
+    case us = "мм/дд/гггг"
+    case eu = "дд/мм/гггг"
+}
+
 public struct Colors {
     static let darkTextColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 1)
     static let mediumTextColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
@@ -208,7 +207,7 @@ public struct Fonts {
     static let settingsTitleFont = UIFont.systemFont(ofSize: 37, weight: .regular)
     
     // weather controller: current forecast
-    static let cityFont = UIFont.systemFont(ofSize: 37, weight: .regular)
+    static let cityFont = UIFont.systemFont(ofSize: 37, weight: .light)
     static let tempLargeFont = UIFont.systemFont(ofSize: 102, weight: .thin)
     static let weatherConditionFont = UIFont.systemFont(ofSize: 24, weight: .regular)
     static let tempUnderFont = UIFont.systemFont(ofSize: 17, weight: .light)
@@ -446,6 +445,10 @@ public extension Date {
 
         let dateFormatter = DateFormatter()
         
+        let dateType = UserDefaults.standard.bool(forKey: Settings.date.rawValue)
+        let fullDateFormat = dateType == true ? "EEEE, MMMM d, HH:mm" : "MMMM, EEEE d, HH:mm"
+        
+        
         let date = dt == 0 ? Date() : Date(timeIntervalSince1970: TimeInterval(dt))
         switch style {
         case .hour:
@@ -455,7 +458,7 @@ public extension Date {
         case .day:
             dateFormatter.dateFormat = "EE, d"
         case .full:
-            dateFormatter.dateFormat = "EEEE, MMMM d, HH:mm"
+            dateFormatter.dateFormat = fullDateFormat
         }
         
         let str = dateFormatter.string(from: date)

@@ -24,10 +24,13 @@ struct NetworkManager {
         let lat = city.latitude
         let lon = city.longitude
         let apiKey = Network.apiKey
-        let units = "metric" // connect UserDefaults
+        let unitsType = UserDefaults.standard.integer(forKey: Settings.temp.rawValue)
+        let unit = unitsType == 0 ? UDManager.metric : UDManager.imperial
         let lang = "ru"
         
-        let urlString = "\(baseURL)lat=\(lat)&lon=\(lon)&appid=\(apiKey)&units=\(units)&exclude=minutely,alerts&lang=\(lang)"
+        print ("✅\(unit)")
+
+        let urlString = "\(baseURL)lat=\(lat)&lon=\(lon)&appid=\(apiKey)&units=\(unit)&exclude=minutely,alerts&lang=\(lang)"
         
         print(urlString)
         

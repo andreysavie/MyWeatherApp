@@ -97,7 +97,7 @@ extension LaunchSettingsView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.identifier, for: indexPath) as? SettingsTableViewCell else { return UITableViewCell() }
         cell.selectionStyle = .none
-        cell.configure(indexPath.section, for: indexPath.row)
+        cell.configure(indexPath)
         return cell
 
     }

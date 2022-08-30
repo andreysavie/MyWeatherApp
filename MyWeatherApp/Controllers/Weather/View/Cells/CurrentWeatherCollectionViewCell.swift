@@ -118,7 +118,7 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         )
         
         cityNamelabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().inset(8)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         

@@ -19,7 +19,7 @@ class ToolBar: UIToolbar {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(
             systemName: "gearshape",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))?
             .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(settingsDidTap), for: .touchUpInside)
         return button
@@ -29,7 +29,7 @@ class ToolBar: UIToolbar {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(
             systemName: "list.bullet",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))?
             .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(locationsDidTap), for: .touchUpInside)
         return button
@@ -57,12 +57,12 @@ class ToolBar: UIToolbar {
         
         settingsButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().inset(16)
+            make.leading.equalToSuperview().inset(24)
         }
         
         locationListButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(16)
+            make.trailing.equalToSuperview().inset(24)
         }
     }
     

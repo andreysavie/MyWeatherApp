@@ -89,6 +89,7 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
             self.setController(num)
         }
         
+        
         toolBar.settingsCallBack = { [weak self] in
             guard let self = self else { return }
             self.settingsButtonPressed()
@@ -166,6 +167,7 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
             let viewController = viewController as? WeatherViewController,
             let cities = cities 
         else { return nil }
+        
         
         let index = viewController.index
         

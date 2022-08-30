@@ -10,6 +10,8 @@ import SnapKit
 
 class SettingsViewController: UITableViewController {
     
+    var refreshCallback: (() -> ())?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,14 +26,6 @@ class SettingsViewController: UITableViewController {
         setupLayout()
         
     }
-    
-    private lazy var saveButton: CustomButton = {
-        let button = CustomButton(normalColor: Colors.darkTextColor, highlightedColor: Colors.mediumTextColor, title: "Сохранить", font: Fonts.settingsLabelFont)
-        button.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
-        button.backgroundColor = Colors.blueColor
-        button.layer.cornerRadius = 16
-        return button
-    }()
     
     func setupLayout() {
         
@@ -83,8 +77,8 @@ class SettingsViewController: UITableViewController {
         switch indexPath.section {
         case 0, 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.identifier, for: indexPath) as? SettingsTableViewCell else { return UITableViewCell() }
+            cell.configure(indexPath)
             cell.selectionStyle = .none
-            cell.configure(indexPath.section, for: indexPath.row)
             return cell
 
         case 2:
@@ -114,7 +108,17 @@ class SettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 2 {
             dismiss(animated: true)
+            
+        } else {
+            if let cell = tableView.cellForRow(at: indexPath) as? SettingsTableViewCell {
+                cell.toggleSegment()
+                if indexPath == IndexPath(row: 2, section: 0) {
+                    cell.isEUFormat?.toggle()
+                }
+            }
+       
         }
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

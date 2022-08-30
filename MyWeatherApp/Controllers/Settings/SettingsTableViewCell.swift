@@ -13,6 +13,11 @@ class SettingsTableViewCell: UITableViewCell {
     static let identifier = "SettingsTableViewCell"
     
     private var setting: Settings?
+    internal var isEUFormat: Bool? {
+        didSet {
+            dateFormatLabel.text = isEUFormat == true ? "дд/мм/гггг" : "мм/дд/гггг"
+        }
+    }
 
     private lazy var title: UILabel = {
         let label = UILabel()
@@ -21,49 +26,39 @@ class SettingsTableViewCell: UITableViewCell {
         label.text = setting?.rawValue ?? "none"
         return label
     }()
-        
-    private lazy var dateFormatButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("дд/мм/гггг", for: .normal)
-        button.setTitleColor(Colors.mediumTextColor, for: .normal)
-        button.titleLabel?.font = Fonts.settingsLabelFont
-//        button.addTarget(self, action: #selector(dateFormatButtonTapped), for: .touchUpInside)
-        button.addInteraction(interaction)
-        return button
-    }()
     
-    private lazy var interaction: UIContextMenuInteraction = {
-       let interaction = UIContextMenuInteraction(delegate: self)
-        return interaction
+    private lazy var dateFormatLabel: CustomLabel = {
+
+        let label = CustomLabel(
+            numberOfLines: 1,
+            text: "дд/мм/гггг",
+            font: Fonts.settingsLabelFont,
+            textColor: Colors.mediumTextColor)
+        return label
     }()
 
-    
-    @objc
-    private func dateFormatButtonTapped() {
-        
-    }
-    
     private lazy var segmentedControl = getSegmentedControl(setting)
     
-    func configure(_ section: Int, for indexPathRow: Int) {
+    func configure(_ indexPath: IndexPath) {
         
-        self.setting = section == 0 ?
-        Settings.allCases[indexPathRow] :
-        Settings.allCases[indexPathRow + 3]
+        self.setting = indexPath.section == 0 ?
+        Settings.allCases[indexPath.row] :
+        Settings.allCases[indexPath.row + 3]
         
         setupLayout()
         setupSettings()
-        
     }
         
     func setupSettings() {
+        let segmentIndex = UserDefaults.standard.integer(forKey: setting!.rawValue)
         segmentedControl?.addTarget(self, action: #selector(saveSetting), for: .valueChanged)
-        segmentedControl?.selectedSegmentIndex = UserDefaults.standard.integer(forKey: setting!.rawValue)
+        segmentedControl?.selectedSegmentIndex = segmentIndex
+        self.isEUFormat = UserDefaults.standard.bool(forKey: setting!.rawValue)
     }
         
     func setupLayout() {
                 
-        let settingElement = segmentedControl ?? dateFormatButton
+        let settingElement = segmentedControl ?? dateFormatLabel
         
         contentView.addSubviews(title, settingElement)
 
@@ -79,6 +74,12 @@ class SettingsTableViewCell: UITableViewCell {
         }
     }
     
+    internal func toggleSegment() {
+        guard segmentedControl != nil else { return }
+        segmentedControl?.selectedSegmentIndex = segmentedControl?.selectedSegmentIndex == 0 ? 1 : 0
+        segmentedControl?.sendActions(for: .valueChanged)
+    }
+    
     @objc
     private func saveSetting() throws {
         guard let setting = setting else {
@@ -89,34 +90,4 @@ class SettingsTableViewCell: UITableViewCell {
         UserDefaults.standard.set(segmentedControl?.selectedSegmentIndex, forKey: setting.rawValue)
     }
     
-    func showAlert(title: String) {
-        let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
-        alert.addAction(.init(title: "OK", style: .cancel, handler: nil))
-        print ("alert action!")
-        
-    }
-}
-
-extension SettingsTableViewCell: UIContextMenuInteractionDelegate {
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { actions -> UIMenu? in
-            let save = UIAction(title: "My Button", image: nil) { action in
-                print ("BUTTON TAPPED!")
-//                self.showAlert(title: action.title)
-              }
-
-              // Creating Rotate button
-              let rotate = UIAction(title: "Rotate", image: UIImage(systemName: "arrow.counterclockwise")) { action in
-//                  self.showAlert(title: action.title)
-              }
-              // Creating Delete button
-              let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash.fill")) { action in
-//                  self.showAlert(title: action.title)
-            }
-            
-            return UIMenu(title: "MENU", image: UIImage(), identifier: .edit, options: .destructive, children: [save, rotate, delete])
-
-        }
-        return configuration
-    }
 }

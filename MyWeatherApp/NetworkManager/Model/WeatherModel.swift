@@ -242,8 +242,5 @@ struct WeatherModel {
     var dewPointString: String {
         String(format: "%.0f°", dewPoint)
     }
-
-    
-    
 }
 
