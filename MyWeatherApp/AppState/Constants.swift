@@ -203,7 +203,6 @@ public struct Fonts {
     static let onboardConfimFont = UIFont.systemFont(ofSize: 12, weight: .semibold)
     static let onboardDeclineFont = UIFont.systemFont(ofSize: 16, weight: .medium)
     
-    
     // launch settings controller view
     static let settingsLabelFont = UIFont.systemFont(ofSize: 17, weight: .regular)
     static let settingsTitleFont = UIFont.systemFont(ofSize: 37, weight: .regular)
@@ -444,7 +443,7 @@ public extension UIView {
 public extension Date {
     
     static func getCurrentDate(dt: Int = 0, style: DataStyle = .full) -> String {
-        print("🐰\(dt)")
+
         let dateFormatter = DateFormatter()
         
         let date = dt == 0 ? Date() : Date(timeIntervalSince1970: TimeInterval(dt))

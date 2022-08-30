@@ -132,6 +132,17 @@ class CityTableViewCell: UITableViewCell {
     
     // MARK: PROPERTIES ============================================================================
         
+    private lazy var indicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        indicator.frame = CGRect(
+            x: contentView.frame.midX,
+            y: contentView.frame.midY,
+            width: 50,
+            height: 50)
+        return indicator
+    }()
+    
     private lazy var cityNameLabel: CustomLabel = {
         let label = CustomLabel(
             numberOfLines: 2,
@@ -196,6 +207,9 @@ class CityTableViewCell: UITableViewCell {
     
     func configureOfCell(weather: WeatherModel?) {
         guard let wthr = weather else { return }
+        
+        indicator.stopAnimating()
+        
         let currentDate = wthr.dt
         let min = String(format: "%.0f°", wthr.daily[0].temp.min)
         let max = String(format: "%.0f°", wthr.daily[0].temp.max)
@@ -226,8 +240,11 @@ class CityTableViewCell: UITableViewCell {
             cityTimeLabel,
             cityForecastLabel,
             cityTempLabel,
-            cityLowHeightTempsLabel
+            cityLowHeightTempsLabel,
+            indicator
         )
+        
+        indicator.startAnimating()
         
         cityTempLabel.snp.makeConstraints { make in
             make.top.trailing.equalToSuperview().inset(16)

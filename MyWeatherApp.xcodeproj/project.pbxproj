@@ -49,6 +49,7 @@
 		D5E8A4D328A1B11100A5A38F /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E8A4D228A1B11100A5A38F /* CustomButton.swift */; };
 		D5E8A4D528A1BE8300A5A38F /* DetailsChartCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E8A4D428A1BE8300A5A38F /* DetailsChartCollectionViewCell.swift */; };
 		D5E8A4DB28A1C18400A5A38F /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = D5E8A4DA28A1C18400A5A38F /* Charts */; };
+		D5F0C57028BE0EBA00B878EC /* ToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F0C56F28BE0EBA00B878EC /* ToolBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +96,7 @@
 		D5E8A4D028A1AB5E00A5A38F /* CustomSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControl.swift; sourceTree = "<group>"; };
 		D5E8A4D228A1B11100A5A38F /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		D5E8A4D428A1BE8300A5A38F /* DetailsChartCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsChartCollectionViewCell.swift; sourceTree = "<group>"; };
+		D5F0C56F28BE0EBA00B878EC /* ToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -273,6 +275,7 @@
 				D5E8A4CE28A1A75500A5A38F /* CustomLabel.swift */,
 				D5E8A4D028A1AB5E00A5A38F /* CustomSegmentedControl.swift */,
 				D5E8A4D228A1B11100A5A38F /* CustomButton.swift */,
+				D5F0C56F28BE0EBA00B878EC /* ToolBar.swift */,
 			);
 			path = Facades;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 				D592B095289E8EA700BE85D2 /* SettingsViewController.swift in Sources */,
 				D59DF92A289C497400374D63 /* DailyCollectionViewCell.swift in Sources */,
 				D558873828A288860003F11C /* MainScreenPageViewController.swift in Sources */,
+				D5F0C57028BE0EBA00B878EC /* ToolBar.swift in Sources */,
 				D5E8A4D528A1BE8300A5A38F /* DetailsChartCollectionViewCell.swift in Sources */,
 				D5E8A4C928A18DC200A5A38F /* OnboardingViewController.swift in Sources */,
 				D59DF936289C6F3F00374D63 /* CityTableViewCell.swift in Sources */,

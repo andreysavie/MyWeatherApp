@@ -86,7 +86,6 @@ class SettingsTableViewCell: UITableViewCell {
             throw Errors.userDefaults
             
         }
-        print("🔑\(String(describing: setting.rawValue))")
         UserDefaults.standard.set(segmentedControl?.selectedSegmentIndex, forKey: setting.rawValue)
     }
     

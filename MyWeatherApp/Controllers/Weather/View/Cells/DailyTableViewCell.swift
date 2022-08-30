@@ -86,9 +86,6 @@ class DailyTableViewCell: UITableViewCell {
         self.lowTempLabel.text = min
         self.heightTempLabel.text = max
         
-        print("📆\(wthr.daily.count)")
-
-        
     }
 
     

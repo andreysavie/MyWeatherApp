@@ -38,7 +38,12 @@ class LaunchSettingsViewController: UIViewController {
     }
     
     func buttonPressed() {
-        let viewController = MainScreenPageViewController()
+        
+        let viewController = MainScreenPageViewController(
+            transitionStyle: .pageCurl,
+            navigationOrientation: .horizontal
+        )
+        
         navigationController?.pushViewController(viewController, animated: true)
     }
     

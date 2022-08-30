@@ -95,7 +95,7 @@ class DetailsBlockCollectionViewCell: UICollectionViewCell {
         
         let descripts = [
             weather.uviDesc,
-            "",
+            weather.windGustDesc,
             weather.feelsLikeDesc,
             weather.rainDesc,
             weather.humidityDesc,

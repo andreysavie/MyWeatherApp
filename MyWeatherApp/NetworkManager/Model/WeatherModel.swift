@@ -43,7 +43,10 @@ struct WeatherModel {
     
     let humidity: Int
     let uviIndex: Double
-    let wind: Double
+    
+    let windSpeed: Double
+    let windGust: Double
+    
     let cloudiness: Int
     let pressure: Int
     let visibility: Int
@@ -134,7 +137,16 @@ struct WeatherModel {
     }
     
     var windSpeedString: String {
-        String("\(wind) м/с") // добавить империческую
+        String("\(Int(round(windSpeed))) м/с") // добавить империческую
+    }
+    
+    var windGustDesc: String {
+        switch windGust {
+        case 0.5... :
+            return String("Порывы ветра до \(Int(round(windGust)))) м/с")
+        default:
+            return "Сегодня штиль"
+        }
     }
     
     var feelsLikeString: String {
@@ -174,7 +186,6 @@ struct WeatherModel {
     var humidityDesc: String {
         "Точка росы сейчас: \(dewPointString)."
     }
-    
     
     var cloudinessString: String {
         String("\(cloudiness)%")
@@ -231,6 +242,8 @@ struct WeatherModel {
     var dewPointString: String {
         String(format: "%.0f°", dewPoint)
     }
+
+    
     
 }
 

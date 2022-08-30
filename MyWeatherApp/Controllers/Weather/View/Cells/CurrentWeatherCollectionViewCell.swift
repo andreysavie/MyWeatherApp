@@ -17,6 +17,17 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         
     // MARK: PROPERTIES
     
+    private lazy var cityNamelabel: CustomLabel = {
+        let label = CustomLabel(
+            numberOfLines: 1,
+            text: "--",
+            font: Fonts.cityFont,
+            textColor: Colors.darkTextColor
+        )
+        label.textAlignment = .center
+        return label
+    }()
+    
     private lazy var tempLabel = getLabel(
         text: "??°",
         font: Fonts.tempLargeFont,
@@ -76,9 +87,10 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     // MARK: METHODS
     
     
-    func configureOfCell(weather: WeatherModel?) {
-        guard let wthr = weather else { return }
+    func configureOfCell(weather: WeatherModel?, for city: CityModel?) {
+        guard let wthr = weather, let city = city else { return }
         
+        self.cityNamelabel.text = city.name
         self.tempLabel.text = String(describing: wthr.temperatureString)
         self.weatherConditionLabel.text = String(describing: wthr.descriptionString)
         let min = String(format: "%.0f°", wthr.daily[0].temp.min)
@@ -96,6 +108,7 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         getShadow(contentView)
                 
         contentView.addSubviews(
+            cityNamelabel,
             tempLabel,
             weatherConditionLabel,
             lowAndHeightTempLabel,
@@ -104,9 +117,14 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
             separateView
         )
         
+        cityNamelabel.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
         
         tempLabel.snp.makeConstraints { make in
-            make.top.centerX.equalToSuperview()
+            make.top.equalTo(cityNamelabel.snp.bottom)
+            make.centerX.equalToSuperview()
         }
         
         weatherConditionLabel.snp.makeConstraints { make in

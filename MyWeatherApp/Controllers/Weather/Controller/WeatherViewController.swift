@@ -8,12 +8,11 @@
 import UIKit
 import SnapKit
 
-protocol MainScreenDelegate {
+protocol FetchWeatherDelegate {
     func fetchWeatherData()
 }
 
-//class WeatherViewController: UIViewController, MainScreenDelegate {
-class WeatherViewController: UICollectionViewController, MainScreenDelegate {
+class WeatherViewController: UICollectionViewController, FetchWeatherDelegate {
     
     // MARK: PROPERTIES
     
@@ -104,7 +103,9 @@ class WeatherViewController: UICollectionViewController, MainScreenDelegate {
         
         fetchWeatherData()
         setupLayout()
+        
     }
+    
     
     // MARK: LAYOUT
 
@@ -194,7 +195,7 @@ extension WeatherViewController: NetworkManagerDelegate {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CurrentWeatherCollectionViewCell.identifier, for: indexPath) as? CurrentWeatherCollectionViewCell else { return UICollectionViewCell() }
             
-            cell.configureOfCell(weather: currentWeather)
+            cell.configureOfCell(weather: currentWeather, for: city)
             
             cell.detailsButtonAction = { [weak self] in
                 guard let self = self else { return }
@@ -228,7 +229,7 @@ extension WeatherViewController: UICollectionViewDelegateFlowLayout {
         
         switch indexPath.section {
         case 0:
-            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.35
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.4
         case 1:
             height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.25
         case 2:

@@ -12,7 +12,6 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "HourlyCollectionViewCell"
     
-    //    var city: CityModel = CityModel(name: "Ростов-на-Дону", longitude: 39.455768, latitude: 47.153251)
     
     var currentWeather: WeatherModel? {
         didSet {
@@ -74,10 +73,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     
     func configureOfCell(weather: WeatherModel?) {
         guard let wthr = weather else { return }
-        print("🐤\(wthr.descriptionString)")
         currentWeather = wthr
-        print("🐤\(self.currentWeather?.descriptionString)")
-
     }
 }
 

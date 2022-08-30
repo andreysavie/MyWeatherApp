@@ -55,7 +55,6 @@ class SettingsViewController: UITableViewController {
     }
     
     func tapAction() {
-        print ("tap!!!")
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
