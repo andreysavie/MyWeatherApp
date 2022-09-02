@@ -73,16 +73,18 @@ class DailyTableViewCell: UITableViewCell {
 
     func configureOfCell(_ weather: WeatherModel?, at day: Int) {
         guard let wthr = weather else { return }
-        let conditionId = wthr.daily[day].weather[0].id
+//        let conditionId = wthr.daily[day].weather[0].id
 
         let min = getFormattedTemp(wthr.daily[day].temp.min)
         let max = getFormattedTemp(wthr.daily[day].temp.max)
+        let iconName = wthr.daily[day].weather[0].icon
 
         self.dayOfWeekLabel.text = day == 0 ?
         "Сегодня" :
         Date.getCurrentDate(dt: wthr.daily[day].dt, style: .day)
         
-        self.image = getWeatherImage(conditionId: conditionId)
+//        self.image = getWeatherImage(conditionId: conditionId)
+        self.image = getWeatherIcon(iconName)
         self.lowTempLabel.text = min
         self.heightTempLabel.text = max
         

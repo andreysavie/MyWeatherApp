@@ -130,6 +130,7 @@ public enum AppIcons: String, CaseIterable {
     case sunrise = "sunrise.fill"
     case sunset = "sunset.fill"
     case calendar = "calendar"
+    case clock = "clock"
 }
 
 public enum ForecastIcons {
@@ -189,10 +190,7 @@ public struct Colors {
     static let separateLineColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
     static let navigationBarColor = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
     
-    
 }
-
-
 
 public struct Fonts {
     
@@ -275,6 +273,38 @@ public extension UIView {
         view.layer.shadowOpacity = 0.25
     }
     
+    func getWeatherIcon (_ name: String) -> UIImage {
+        
+        let imageName: String
+        let image: UIImage
+        
+        switch name {
+        case "01d": imageName = "sun.max.fill"
+        case "02d": imageName = "cloud.sun.fill"
+        case "10d": imageName = "cloud.sun.rain.fill"
+        case "01n": imageName = "moon.fill"
+        case "02n": imageName = "cloud.moon.fill"
+        case "10n": imageName = "cloud.moon.rain.fill"
+        case "03d", "03n": imageName = "cloud.fill"
+        case "04d", "04n": imageName = "smoke.fill"
+        case "09d", "09n": imageName = "cloud.rain.fill"
+        case "11d", "11n": imageName = "cloud.bolt.fill"
+        case "13d", "13n": imageName = "cloud.snow.fill"
+        case "50d", "50n": imageName = "cloud.fog.fill"
+        default:
+            imageName = "xmark.octagon.fill"
+        }
+        
+        let color = imageName == SystemImageName.sunMaxFill ?
+                            Colors.yellowColor :
+                            Colors.blueColor
+        
+        image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(color, renderingMode: .alwaysOriginal) ?? UIImage()
+        return image
+
+    }
+
+    
     func getAppIcon (_ icon: AppIcons, _ size: CGFloat) -> UIImageView {
         let imageView = UIImageView()
         let name: String
@@ -305,7 +335,8 @@ public extension UIView {
             name = "cloud.fill"
         case .hum:
             name = "humidity"
-
+        case .clock:
+            name = "clock"
         }
         
         imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))?.withTintColor(color, renderingMode: .alwaysOriginal)
@@ -315,7 +346,7 @@ public extension UIView {
     func getWeatherIcon (conditionId id: Int) -> UIImageView {
         let imageView = UIImageView()
         let name = getConditionNameBy(conditionId: id)
-        var color = name == SystemImageName.sunMaxFill ?
+        let color = name == SystemImageName.sunMaxFill ?
                             Colors.yellowColor :
                             Colors.blueColor
         
@@ -343,8 +374,17 @@ public extension UIView {
         return imageView
     }
     
-    func getWeatherImage (conditionId id: Int) -> UIImage {
-        let name = getConditionNameBy(conditionId: id)
+//    func getWeatherImage (conditionId id: Int) -> UIImage {
+//        let name = getConditionNameBy(conditionId: id)
+//        let color = name == SystemImageName.sunMaxFill ?
+//                            Colors.yellowColor :
+//                            Colors.blueColor
+//
+//        return UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(color, renderingMode: .alwaysOriginal) ?? UIImage()
+//    }
+    
+    func getWeatherImage (iconName name: String) -> UIImage {
+//        let name = getConditionNameBy(conditionId: id)
         let color = name == SystemImageName.sunMaxFill ?
                             Colors.yellowColor :
                             Colors.blueColor
@@ -413,6 +453,21 @@ public extension UIView {
         control.selectedSegmentTintColor = .white
         control.setTitleTextAttributes(Attributes.settingsSemgentedControlAttributes, for: .normal)
         return control
+    }
+    
+    func getLabelWithIcon(text: String, icon: AppIcons) -> NSMutableAttributedString {
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: icon.rawValue)
+
+        let imageOffsetY: CGFloat = -5.0
+        imageAttachment.bounds = CGRect(x: 0, y: imageOffsetY, width: imageAttachment.image!.size.width, height: imageAttachment.image!.size.height)
+
+        let attachmentString = NSAttributedString(attachment: imageAttachment)
+        let completeText = NSMutableAttributedString(string: "")
+        completeText.append(attachmentString)
+        let textAfterIcon = NSAttributedString(string: text)
+        completeText.append(textAfterIcon)
+        return completeText
     }
     
     func addSubviews(_ views: UIView ...) {

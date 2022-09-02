@@ -9,9 +9,7 @@ import UIKit
 import SnapKit
 
 class SettingsViewController: UITableViewController {
-    
-    var refreshCallback: (() -> ())?
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,16 +26,11 @@ class SettingsViewController: UITableViewController {
     }
     
     func setupLayout() {
-        
         tableView.backgroundColor = Colors.settingsBackgroundColor
         tableView.sectionIndexBackgroundColor = .white
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.isScrollEnabled = false
-    }
-    
-    func loadSettingsValues() {
-        
     }
     
     override init(style: UITableView.Style) {
@@ -48,8 +41,6 @@ class SettingsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func tapAction() {
-    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 65

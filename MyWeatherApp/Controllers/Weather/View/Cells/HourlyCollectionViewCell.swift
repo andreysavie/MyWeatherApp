@@ -36,6 +36,18 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         return layout
     }()
     
+    private lazy var icon = getAppIcon(.clock, 18)
+    
+    private lazy var titleLabel: CustomLabel = {
+        let label = CustomLabel(
+            numberOfLines: 1,
+            text: "Прогноз на 24 часа",
+            font: Fonts.tenDayTitleFont,
+            textColor: Colors.mediumTextColor
+        )
+        return label
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.register(HourForecastCollectionViewCell.self, forCellWithReuseIdentifier: HourForecastCollectionViewCell.identifier)
@@ -64,10 +76,20 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 16
         
         contentView.getShadow(contentView)
-        contentView.addSubview(collectionView)
+        contentView.addSubviews(icon, titleLabel, collectionView)
+        
+        icon.snp.makeConstraints { make in
+            make.leading.top.equalToSuperview().inset(16)
+            make.width.height.equalTo(18)
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(icon.snp.trailing).offset(8)
+            make.top.trailing.equalToSuperview().inset(16)
+        }
         
         collectionView.snp.makeConstraints { make in
-            make.leading.top.trailing.bottom.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
     

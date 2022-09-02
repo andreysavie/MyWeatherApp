@@ -71,11 +71,11 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
         guard let wthr = weather else { return }
                 
         let strHour = Date.getCurrentDate(dt: wthr.hourly[hour].dt, style: .hour)
-        let conditionId = wthr.hourly[hour].weather[0].id
         let hourlyTemp = getFormattedTemp(wthr.hourly[hour].temp)
+        let iconName = wthr.hourly[hour].weather[0].icon
 
         self.hourTitleLabel.text = strHour
-        self.image = getWeatherImage(conditionId: conditionId)
+        self.image = getWeatherIcon(iconName)
         self.hourlyTempLabel.text = hourlyTemp
         
     }

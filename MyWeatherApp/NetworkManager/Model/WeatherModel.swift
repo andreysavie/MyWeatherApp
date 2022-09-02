@@ -59,37 +59,24 @@ struct WeatherModel {
     
     let rain: Double
     let dewPoint: Double
+
+    let icon: String
     
-//    var hourlyDisplayData: [HourlyDataType] {
-//        var hourlyDataMix = [HourlyDataType]()
-//
-//        // SunType cells data for sunset/sunrise for the current day and the next one
-//        var sunStates = [SunState(description: .sunrise, time: sunrise),
-//                         SunState(description: .sunset, time: sunset),
-//                         SunState(description: .sunrise, time: daily[1].sunrise),
-//                         SunState(description: .sunset, time: daily[1].sunset)]
-//
-//        for i in 0...24 {
-//            let currentHour = hourly[i]
-//
-//            // Add SunType cell data
-//            for (i, sunState) in sunStates.enumerated() {
-//                // Check the next hour syntetically
-//                // Add sunType cell data after current time cell and before the next time cell
-//                if sunState.time < currentHour.dt &&  sunState.time > Int(Date().timeIntervalSince1970) {
-//                    hourlyDataMix.append(HourlyDataType.sunState(SunState(description: sunState.description,
-//                                                                          time: sunState.time)))
-//                    sunStates.remove(at: i)
-//                }
-//            }
-//            // Add weather cell data
-//            let currentTemp = HourlyDataType.weatherType(currentHour)
-//            hourlyDataMix.append(currentTemp)
-//        }
-//
-//        return hourlyDataMix
-//    }
     
+    // icons
+  /*
+    case 01d: .png     sun.max              case 01n: .png     moon.fill
+    case 02d: .png     cloud.sun.fill       case 02n: .png     cloud.moon.fill
+    case 03d: .png     cloud.fill           case 03n: .png     cloud.fill
+    case 04d: .png     smoke.fill           case 04n: .png     smoke.fill
+    case 09d: .png     cloud.rain.fill      case 09n: .png     cloud.rain.fill
+    case 10d: .png     cloud.sun.rain.fill  case 10n: .png     cloud.moon.rain.fill
+    case 11d: .png     cloud.bolt.fill      case 11n: .png     cloud.bolt.fill
+    case 13d: .png     cloud.snow.fill      case 13n: .png     cloud.snow.fill
+    case 50d: .png     cloud.fog.fill       case 50n: .png     cloud.fog.fill
+
+  */
+        
     
     // Strings
     

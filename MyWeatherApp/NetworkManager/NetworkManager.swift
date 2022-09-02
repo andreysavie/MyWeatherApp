@@ -96,7 +96,8 @@ struct NetworkManager {
                                       daily: decodedData.daily,
                                       hourly: decodedData.hourly,
                                       rain: decodedData.daily[0].rain ?? 0,
-                                      dewPoint: decodedData.current.dewPoint)
+                                      dewPoint: decodedData.current.dewPoint,
+                                      icon: decodedData.current.weather[0].icon)
             return result
         }
     }

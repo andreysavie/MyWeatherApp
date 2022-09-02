@@ -29,26 +29,26 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var tempLabel = getLabel(
-        text: "??°",
+        text: "--°",
         font: Fonts.tempLargeFont,
         color: Colors.darkTextColor
     )
     
     private lazy var weatherConditionLabel = getLabel(
-        text: "unknown",
+        text: "--",
         font: Fonts.weatherConditionFont,
         color: Colors.darkTextColor
     )
     
     private lazy var lowAndHeightTempLabel = getLabel(
-        text: "Мин. ??°, макс: ??°",
+        text: "Мин. --°, макс: --°",
         font: Fonts.cityLowHeightTempFont,
         color: Colors.darkTextColor
     )
     
     private lazy var todayLabel: CustomLabel = {
         let label = CustomLabel(
-            text: "Понедельник, 8 августа",
+            text: "--, --",
             font: Fonts.cityLowHeightTempFont,
             textColor: Colors.darkTextColor
         )
