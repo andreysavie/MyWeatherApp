@@ -12,7 +12,7 @@ final class CoreDataStore {
         
     // MARK: PROPERTIES
 
-    static let shared = CoreDataManager()
+    static let shared = CoreDataStore()
     
     private let persistentContainer: NSPersistentContainer
     private let fetchRequest: NSFetchRequest<WeatherEntity>
@@ -51,38 +51,11 @@ final class CoreDataStore {
             weatherEntities = try context.fetch(fetchRequest)
             for entity in weatherEntities {
                 
-                let city = CityModel(
-                    name: entity.city?.name ?? "",
-                    longitude: entity.city?.lon ?? 0,
-                    latitude: entity.city?.lat ?? 0
-                )
+       
                 
-                let weather = WeatherModel(
-                    lat: entity.lat,
-                    lon: entity.lon,
-                    dt: Int(entity.current.dt),
-                    conditionId: Int(entity.id),
-                    cityName: entity.city?.name,
-                    temperature: entity.current?.temp,
-                    timezone: Int(entity.timezoneOffset),
-                    feelsLike: entity.current?.feelsLike,
-                    description: entity.weatherDescription,
-                    humidity: entity.current?.humidity,
-                    uviIndex: entity.current?.uvi,
-                    windSpeed: entity.current?.windSpeed,
-                    windGust: entity.current?.windGust,
-                    cloudiness: entity.current?.clouds,
-                    pressure: entity.current?.pressure,
-                    visibility: entity.current?.visibility,
-                    sunrise: entity.current?.sunrise,
-                    sunset: entity.current?.sunset,
-                    daily: entity.daily,
-                    hourly: entity.hourly,
-                    rain: entity.current?.rain,
-                    dewPoint: entity.current?.dewPoint,
-                    icon: entity.icon)
+
                 
-                fetchedForecasts.append(weather)
+//                fetchedForecasts.append(weather)
             }
         } catch let error {
             print(error)
@@ -107,10 +80,51 @@ final class CoreDataStore {
             
             saveContext.perform {
                 let savingForecast = WeatherEntity(context: self.saveContext)
-              
-                savingForecast.icon = weather.icon // и ещё много много ВСЕГО!
                 
+                var daily = [DailyEntity]()
+                var hourly = [HourlyEntity]()
                 
+                savingForecast.lat = weather.lat
+                savingForecast.lon = weather.lon
+                savingForecast.current?.dt = Int32(weather.dt)
+                savingForecast.current?.id = Int16(weather.conditionId)
+                savingForecast.city?.name = weather.cityName
+                savingForecast.current?.temp = weather.temperature
+                savingForecast.timezoneOffset = Int32(Int(weather.timezone))
+                savingForecast.current?.feelsLike = weather.feelsLike
+                savingForecast.current?.descript = weather.description
+                savingForecast.current?.humidity = Int16(weather.humidity)
+                savingForecast.current?.uvi = weather.uviIndex
+                savingForecast.current?.windSpeed = weather.windSpeed
+                savingForecast.current?.windGust = weather.windGust
+                savingForecast.current?.clouds = Int16(weather.cloudiness)
+                savingForecast.current?.pressure = Int16(weather.pressure)
+                savingForecast.current?.visibility = Int16(weather.visibility)
+                savingForecast.current?.sunrise = Int32(weather.sunrise)
+                savingForecast.current?.sunset = Int32(weather.sunset)
+                savingForecast.current?.rain = weather.rain
+                savingForecast.current?.dewPoint = weather.dewPoint
+                savingForecast.current?.icon = weather.icon
+
+                for num in  0...9 {
+                    let dailyEntity = DailyEntity(context: self.saveContext)
+                    dailyEntity.dt = Int32(weather.daily[num].dt)
+                    dailyEntity.icon = weather.daily[num].weather[0].icon
+                    dailyEntity.temp?.min = weather.daily[num].temp.min
+                    dailyEntity.temp?.max = weather.daily[num].temp.max
+                    daily.append(dailyEntity)
+                }
+                savingForecast.mutableSetValue(forKey: "daily").add(daily)
+                
+                for num in  0...23 {
+                    let hourlyEntity = HourlyEntity(context: self.saveContext)
+                    hourlyEntity.dt = Int32(weather.hourly[num].dt)
+                    hourlyEntity.icon = weather.hourly[num].weather[0].icon
+                    hourlyEntity.temp = weather.hourly[num].temp
+                    hourly.append(hourlyEntity)
+                }
+                savingForecast.mutableSetValue(forKey: "hourly").add(hourly)
+
                 do {
                     try self.saveContext.save()
                     print("💾 Saved: \(weather.cityName)")
