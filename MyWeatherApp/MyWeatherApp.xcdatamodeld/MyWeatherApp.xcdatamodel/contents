@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21G72" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CityModelEntity" representedClassName=".CityModelEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="lat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="lon" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="name" attributeType="String" defaultValueString="unknown"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" defaultValueString="unknown"/>
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WeatherEntity" inverseName="city" inverseEntity="WeatherEntity"/>
     </entity>
     <entity name="CurrentEntity" representedClassName=".CurrentEntity" syncable="YES" codeGenerationType="class">
@@ -90,7 +90,7 @@
         <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="timezoneOffset" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="city" maxCount="1" deletionRule="Nullify" destinationEntity="CityModelEntity" inverseName="weather" inverseEntity="CityModelEntity"/>
+        <relationship name="city" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CityModelEntity" inverseName="weather" inverseEntity="CityModelEntity"/>
         <relationship name="current" maxCount="1" deletionRule="Nullify" destinationEntity="CurrentEntity" inverseName="weather" inverseEntity="CurrentEntity"/>
         <relationship name="daily" toMany="YES" deletionRule="Nullify" destinationEntity="DailyEntity" inverseName="weather" inverseEntity="DailyEntity"/>
         <relationship name="hourly" toMany="YES" deletionRule="Nullify" destinationEntity="HourlyEntity" inverseName="weather" inverseEntity="HourlyEntity"/>

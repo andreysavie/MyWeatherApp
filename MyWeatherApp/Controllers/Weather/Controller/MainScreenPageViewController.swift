@@ -16,6 +16,11 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
             view.layoutIfNeeded()
             cities?.forEach({ print("💀\($0)") })
             self.pageControl.numberOfPages = cities?.count ?? 1
+            if cities?.isEmpty == false {
+                addButton.isUserInteractionEnabled = false
+                addButton.alpha = 0
+
+            }
         }
     }
     
@@ -23,6 +28,25 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     private let settingsViewController = SettingsViewController(style: .insetGrouped)
 
     private var fetchedResultsController = CoreDataManager.shared.fetchedResultsController
+    
+    private lazy var addButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 16
+        button.setTitle("Добавить город", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(UIColor.systemGray6, for: .highlighted)
+        button.center = view.center
+        button.addTarget(self, action: #selector(addButtonAction), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc
+    private func addButtonAction() {
+        let navController = UINavigationController(rootViewController: searchViewController)
+        present(navController, animated: true)
+    }
+
     
 //    private lazy var searchCityBarButtonItem: UIBarButtonItem = {
 //        let image = UIImage(
@@ -110,6 +134,8 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
 
     
     func setupLayout() {
+        
+        view.addSubview(addButton)
         
         view.addSubview(toolBar)
         toolBar.addSubview(pageControl)
