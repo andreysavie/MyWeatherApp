@@ -231,3 +231,168 @@ struct WeatherModel {
     }
 }
 
+final class WeatherEntityInterface {
+    
+    var weather: WeatherEntity
+    var daily: [DailyEntity]
+    
+    init(weather: WeatherEntity) {
+        self.weather = weather
+        self.daily = (weather.daily!.allObjects as! [DailyEntity]).sorted(by: { $0.dt < $1.dt })
+
+    // Strings
+    }
+    
+
+    
+    var descriptionString: String {
+        return "\(String(describing: weather.current?.descript?.prefix(1).uppercased())) \(String(describing: weather.current?.descript?.lowercased().dropFirst()))"
+    }
+    
+    
+    var uviString: String {
+        String("\(Int(weather.current?.uvi ?? 0))")
+    }
+    
+    var uviLevel: String {
+        switch Int(weather.current?.uvi ?? 0) {
+        case 0...2:
+            return "низкий"
+        case 3...5:
+            return "средний"
+        case 6...7:
+            return "высокий"
+        default:
+            return "экстримальный"
+        }
+    }
+    
+    var uviDesc: String {
+        switch Int(weather.current?.uvi ?? 0) {
+        case 0...2:
+            return "Солнце сейчас не опасное"
+        case 3...5:
+            return "Не стоит находиться на солнце дольше 2ч."
+        case 6...7:
+            return "Стоит избегать нахождения на солнце"
+        default:
+            return "Солнце максимально опасное сейчас"
+        }
+    }
+    
+    var windDirectionString: String {
+//        let winddirections = ["С 􀄨", "СВ 􀰾", "В 􀄫", "ЮВ 􀱈", "Ю 􀄩", "ЮЗ 􀱃", "З 􀄪", "СЗ 􀰹"]
+        let winddirections = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"]
+        let degrees = daily[0].windDeg
+        let direction = Int((Int(degrees) + Int(22.5)) / 45 % 8)
+        return winddirections[direction]
+    }
+    
+    var windSpeedString: String {
+        String("\(Int(round(weather.current?.windSpeed ?? 0))) м/с") // добавить империческую
+    }
+    
+    var windGustDesc: String {
+        switch weather.current?.windGust ?? 0{
+        case 0.5... :
+            return String("Порывы ветра до \(Int(round((weather.current?.windGust)!))) м/с")
+        default:
+            return "Сегодня штиль"
+        }
+    }
+    
+    var feelsLikeString: String {
+        String(format: "%.0f°", weather.current?.feelsLike ?? 0)
+    }
+    
+    var feelsLikeDesc: String {
+        switch Int(weather.current?.feelsLike ?? 0) {
+        case ..<Int(weather.current?.temp ?? 0):
+            return "По ощущениям ниже из-за ветра"
+        case Int(weather.current?.temp ?? 0)...:
+            return "По ощущениям выше из-за солнца"
+        default:
+            return "Аналогично фактической"
+        }
+    }
+    
+    var rainString: String {
+        String("\(Int(weather.current?.rain ?? 0)) мм")
+    }
+    
+    var rainDesc: String {
+        switch Int(daily[0].rain ) {
+        case ..<Int(daily[1].rain ):
+            return "Завтра уровень осадков выше"
+        case Int(daily[1].rain )...:
+            return "Завтра уровень осадков ниже"
+        default:
+            return "Завтра аналогичный уровень осадков"
+        }
+    }
+    
+    var humidityString: String {
+        String("\(weather.current?.humidity)%")
+    }
+    
+    var humidityDesc: String {
+        "Точка росы сейчас: \(dewPointString)."
+    }
+    
+    var cloudinessString: String {
+        String("\(weather.current?.clouds)%")
+    }
+    
+    var cloudinessDesc: String {
+        
+        // TODO: ДОПОЛНИТЬ!
+        
+        switch weather.current?.id ?? 0{
+        case 300...531:
+            return "Сейчас пасмурно"
+        case 800:
+            return "Сейчас ясно"
+        case 801:
+            return "Сейчас малооблачно"
+        case 802...804:
+            return "Сейчас облачно"
+        default:
+            return "Сейчас облачно" // или нет
+        }
+    }
+    
+    
+    var visibilityString: String {
+        String("\((weather.current?.visibility ?? 0) / 1000) км")
+    }
+    
+    var visibilityDesc: String {
+        switch weather.current?.id ?? 0 {
+        case 800:
+            return "Сейчас ясно"
+        default:
+            return "Видимость ограничена"
+        }
+    }
+    
+    var pressureString: String {
+        String(format: "%.0f", Double(weather.current?.pressure ?? 0) * 0.75)
+    }
+    
+    var temperatureString: String {
+        String(format: "%.0f°", weather.current?.temp ?? 0)
+    }
+    
+    var dayTempString: String {
+        String(format: "%.0f°", daily[0].temp?.day ?? 0)
+    }
+    
+    var nightTempString: String {
+        String(format: "%.0f°", daily[0].temp?.night ?? 0)
+    }
+    
+    var dewPointString: String {
+        String(format: "%.0f°", weather.current?.dewPoint ?? 0)
+    }
+}
+
