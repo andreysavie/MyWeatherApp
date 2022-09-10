@@ -12,21 +12,12 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "HourlyCollectionViewCell"
     
+    private var currentWeather: WeatherModel? { didSet { collectionView.reloadData() } }
     
-    var currentWeather: WeatherModel? {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
+    private let itemsPerRow: CGFloat = 6
+    private let sectionInsets = UIEdgeInsets( top: 0, left: 8, bottom: 0, right: 8 )
     
-    let itemsPerRow: CGFloat = 6
-    
-    let sectionInsets = UIEdgeInsets(
-        top: 0,
-        left: 8,
-        bottom: 0,
-        right: 8
-    )
+    private lazy var icon = getAppIcon(.clock, 18)
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -36,15 +27,12 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         return layout
     }()
     
-    private lazy var icon = getAppIcon(.clock, 18)
-    
     private lazy var titleLabel: CustomLabel = {
         let label = CustomLabel(
             numberOfLines: 1,
             text: "Прогноз на 24 часа",
             font: Fonts.tenDayTitleFont,
-            textColor: Colors.mediumTextColor
-        )
+            textColor: Colors.mediumTextColor)
         return label
     }()
     
@@ -70,7 +58,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupLayout() {
+    private func setupLayout() {
         
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 16

@@ -241,8 +241,6 @@ extension SearchCityViewController: UITableViewDataSource, UITableViewDelegate {
             let city = CityModel(name: locality, longitude: coordinate.longitude, latitude: coordinate.latitude)
             
             searchController.isActive = false
-            //            matchingItems.removeAll()
-            //            searchTableView.reloadData()
             
             self.displayWeather.append(nil)
             self.displayWeather[self.displayWeather.count - 1]?.cityName = city.name

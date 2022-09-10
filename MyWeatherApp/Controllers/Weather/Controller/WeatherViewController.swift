@@ -25,20 +25,6 @@ class WeatherViewController: UICollectionViewController, FetchWeatherDelegate {
     private var savedCities = [CityModel]()
     private var currentWeather: WeatherModel?
     
-//    private lazy var addButton: UIButton = {
-//        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 150, height: 50))
-//        button.backgroundColor = .systemBlue
-//        button.layer.cornerRadius = 16
-//        button.setTitle("Добавить город", for: .normal)
-//        button.setTitleColor(UIColor.white, for: .normal)
-//        button.setTitleColor(UIColor.lightGray, for: .highlighted)
-//        button.center = view.center
-////        button.isUserInteractionEnabled = false
-////        button.alpha = 0
-//        return button
-//    }()
-    
-    
     // MARK: INITS
     
     init (city: CityModel, index: Int) {
@@ -92,7 +78,6 @@ class WeatherViewController: UICollectionViewController, FetchWeatherDelegate {
         
     }
     
-    
     // MARK: LAYOUT
     
     private func setupLayout() {
@@ -122,7 +107,6 @@ extension WeatherViewController: NetworkManagerDelegate {
                 self.collectionView.reloadData()
             }
             //            let indexPath = IndexPath(row: position, section: 0)
-            // Put chosen city name from addCity autoCompletion into weather data model
             //            self.displayWeather[indexPath.row]?.cityName = self.savedCities[indexPath.row].name
             //            self.tableView?.reloadRows(at: [indexPath], with: .fade)
         }
@@ -147,10 +131,7 @@ extension WeatherViewController: NetworkManagerDelegate {
         //            self.present(alert, animated: true, completion: nil)
         //        }
     }
-    //}
-    //
-    //extension WeatherViewController: UICollectionViewDataSource {
-    
+    //}    
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1

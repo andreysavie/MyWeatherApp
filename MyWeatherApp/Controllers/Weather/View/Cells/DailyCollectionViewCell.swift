@@ -12,11 +12,7 @@ class DailyCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "DailyForecastCollectionViewCell"
     
-    var currentWeather: WeatherModel? {
-        didSet {
-            tableView.reloadData()
-        }
-    }
+    private var currentWeather: WeatherModel? { didSet { tableView.reloadData() } }
     
     private lazy var icon = getAppIcon(.calendar, 18)
     
@@ -25,8 +21,7 @@ class DailyCollectionViewCell: UICollectionViewCell {
             numberOfLines: 1,
             text: "Прогноз на 10 дней",
             font: Fonts.tenDayTitleFont,
-            textColor: Colors.mediumTextColor
-        )
+            textColor: Colors.mediumTextColor)
         return label
     }()
     
@@ -37,7 +32,6 @@ class DailyCollectionViewCell: UICollectionViewCell {
         table.showsVerticalScrollIndicator = false
         table.automaticallyAdjustsScrollIndicatorInsets = false
         table.contentInset = UIEdgeInsets.zero
-
         return table
     }()
     
@@ -57,7 +51,7 @@ class DailyCollectionViewCell: UICollectionViewCell {
     }
     
     
-    func setupLayout() {
+    private func setupLayout() {
         
         getShadow(contentView)
         
@@ -80,7 +74,7 @@ class DailyCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func configureOfCell(weather: WeatherModel?) {
+    internal func configureOfCell(weather: WeatherModel?) {
         guard let wthr = weather else { return }
         currentWeather = wthr
     }

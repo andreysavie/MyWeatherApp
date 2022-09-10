@@ -9,15 +9,8 @@ import UIKit
 import SnapKit
 
 class HourlyForecastView: UIView {
-    
-    // MOK
-//    var city: CityModel = CityModel(name: "Ростов-на-Дону", longitude: 39.455768, latitude: 47.153251)
-    
-    var currentWeather: WeatherModel? {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
+        
+    var currentWeather: WeatherModel? { didSet { collectionView.reloadData() } }
     
     var weatherManager = NetworkManager()
 
@@ -57,13 +50,6 @@ class HourlyForecastView: UIView {
         setupLayout()
     }
     
-//    override init (frame: CGRect) {
-//        super.init(frame: .zero)
-//
-//        collectionView.register(HourForecastCollectionViewCell.self, forCellWithReuseIdentifier: HourForecastCollectionViewCell.identifier)
-//
-//        setupLayout()
-//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

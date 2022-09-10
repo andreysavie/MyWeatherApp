@@ -48,30 +48,6 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     }
 
     
-//    private lazy var searchCityBarButtonItem: UIBarButtonItem = {
-//        let image = UIImage(
-//            systemName: "location",
-//            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
-//            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
-//            )
-//        let button = UIButton()
-//        button.setImage(image, for: .normal)
-//        button.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
-//        return UIBarButtonItem(customView: button)
-//    }()
-//
-//    private lazy var settingsBarButtonItem: UIBarButtonItem = {
-//        let image = UIImage(
-//            systemName: "gearshape",
-//            withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))?
-//            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal
-//            )
-//        let button = UIButton()
-//        button.setImage(image, for: .normal)
-//        button.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
-//        return UIBarButtonItem(customView: button)
-//    }()
-    
     private lazy var toolBar: ToolBar = {
       let toolBar = ToolBar(frame: .zero)
       view.addSubview(toolBar)
@@ -90,10 +66,7 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        self.navigationItem.rightBarButtonItem = searchCityBarButtonItem
-//        self.navigationItem.leftBarButtonItem = settingsBarButtonItem
-        
+                
         navigationController?.navigationBar.isHidden = true
         self.view.backgroundColor = .white
         
@@ -136,7 +109,6 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     func setupLayout() {
         
         view.addSubview(addButton)
-        
         view.addSubview(toolBar)
         toolBar.addSubview(pageControl)
         

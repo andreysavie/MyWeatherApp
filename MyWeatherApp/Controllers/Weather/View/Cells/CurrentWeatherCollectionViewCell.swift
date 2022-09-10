@@ -151,7 +151,7 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     }
     
     
-    // MARK: Objc METHODS ==============================================================================
+    // MARK: OBJC METHODS
     
     func detailsButtonPressed() {
         detailsButtonAction?()

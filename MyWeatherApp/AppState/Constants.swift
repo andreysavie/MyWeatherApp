@@ -349,42 +349,13 @@ public extension UIView {
         let color = name == SystemImageName.sunMaxFill ?
                             Colors.yellowColor :
                             Colors.blueColor
-        
-//        switch id {
-//        case 200...232:
-//            name = SystemImageName.cloudBoltFill
-//        case 300...321:
-//            name = SystemImageName.cloudDrizzleFill
-//        case 500...531:
-//            name = SystemImageName.cloudRainFill
-//        case 600...622:
-//            name = SystemImageName.cloudSnowFill
-//        case 701...781:
-//            name = SystemImageName.cloudFogFill
-//        case 800:
-//            name = SystemImageName.sunMaxFill
-//            color = Colors.yellowColor
-//        case 801...804:
-//            name = SystemImageName.cloudFill
-//        default:
-//            return UIImageView()
-//        }
-        
+                
         imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(color, renderingMode: .alwaysOriginal)
         return imageView
     }
-    
-//    func getWeatherImage (conditionId id: Int) -> UIImage {
-//        let name = getConditionNameBy(conditionId: id)
-//        let color = name == SystemImageName.sunMaxFill ?
-//                            Colors.yellowColor :
-//                            Colors.blueColor
-//
-//        return UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(color, renderingMode: .alwaysOriginal) ?? UIImage()
-//    }
-    
+        
     func getWeatherImage (iconName name: String) -> UIImage {
-//        let name = getConditionNameBy(conditionId: id)
+
         let color = name == SystemImageName.sunMaxFill ?
                             Colors.yellowColor :
                             Colors.blueColor
@@ -480,20 +451,8 @@ public extension UIView {
     func getFormattedTemp (_ temp: Double) -> String {
         String(format: "%.0f°", temp)
     }
-    
-//    func getBlockTitle(for item: Int) -> String {
-//        guard item >= 0 , item <= 8 else { return "block label error" }
-//
-////        let array = type == .icon ?
-////        ["sun.max", "wind", "thermometer", "drop.fill", "humidity", "humidity", "cloud.fill", "binoculars.fill", "barometer"]:
-//        let array = ["УФ индекс", "Ветер", "Ощущается", "Осадки", "Влажность", "Облачность", "Видимость", "Давление"]
-//
-//        return array[item]
-//    }
-    
-    
-//    func switchItem (_ item: Int) {}
 }
+
 public extension Date {
     
     static func getCurrentDate(dt: Int = 0, style: DataStyle = .full) -> String {

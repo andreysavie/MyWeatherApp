@@ -12,8 +12,7 @@ class LoadingCityTableViewCell: UITableViewCell {
     
     static let identifier = "LoadingCityTableViewCell"
     
-    
-    // MARK: PROPERTIES ============================================================================
+    // MARK: PROPERTIES
     
     private lazy var cityNameLoadView: UIView = {
         let view = UIView()
@@ -50,9 +49,7 @@ class LoadingCityTableViewCell: UITableViewCell {
         return view
     }()
     
-    
-    
-    // MARK: INITS ============================================================================
+    // MARK: INITS
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -64,9 +61,7 @@ class LoadingCityTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: METHODS ===================================================================================
-    
-    
+    // MARK: METHODS
     
     private func setupLayout() {
         

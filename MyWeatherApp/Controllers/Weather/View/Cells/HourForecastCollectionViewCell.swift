@@ -11,15 +11,9 @@ import SnapKit
 class HourForecastCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "HourForecastCollectionViewCell"
-        
-//    let hour = Calendar.current.component(.hour, from: Date())
+            
+    private var image: UIImage? { didSet { weatherIcon.image = image } }
     
-    var image: UIImage? { didSet { weatherIcon.image = image } }
-    
-//    private lazy var weatherIcon: UIImageView = {
-//        let imageView = UIImageView()
-//        return imageView
-//    }()
     private lazy var weatherIcon: UIImageView = {
         let view = UIImageView(frame: CGRect())
         return view
@@ -57,7 +51,7 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupLayout() {
+    private func setupLayout() {
                 
         addSubview(hourlyStackView)
         
@@ -66,7 +60,7 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func configureOfCell(_ weather: WeatherModel?, at hour: Int) {
+    internal func configureOfCell(_ weather: WeatherModel?, at hour: Int) {
         
         guard let wthr = weather else { return }
                 

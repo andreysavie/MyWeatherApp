@@ -12,13 +12,9 @@ class DailyTableViewCell: UITableViewCell {
 
     static let identifier = "DailyTableViewCell"
     
-    var image: UIImage? {
-        didSet {
-            weatherIcon.image = image
-        }
-    }
+    private var image: UIImage? { didSet { weatherIcon.image = image } }
 
-    // MARK: PROPERTIES ============================================================================
+    // MARK: PROPERTIES
 
     private lazy var dayOfWeekLabel = getLabel(
         text: "Понедельник",
@@ -55,10 +51,8 @@ class DailyTableViewCell: UITableViewCell {
         stackView.distribution = .equalCentering
         return stackView
     }()
-    
-    
 
-    // MARK: INITS ============================================================================
+    // MARK: INITS
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -69,11 +63,10 @@ class DailyTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: METHODS ============================================================================
+    // MARK: METHODS
 
     func configureOfCell(_ weather: WeatherModel?, at day: Int) {
         guard let wthr = weather else { return }
-//        let conditionId = wthr.daily[day].weather[0].id
 
         let min = getFormattedTemp(wthr.daily[day].temp.min)
         let max = getFormattedTemp(wthr.daily[day].temp.max)
@@ -83,7 +76,6 @@ class DailyTableViewCell: UITableViewCell {
         "Сегодня" :
         Date.getCurrentDate(dt: wthr.daily[day].dt, style: .day)
         
-//        self.image = getWeatherImage(conditionId: conditionId)
         self.image = getWeatherIcon(iconName)
         self.lowTempLabel.text = min
         self.heightTempLabel.text = max

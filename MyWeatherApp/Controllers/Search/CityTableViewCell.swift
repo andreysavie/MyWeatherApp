@@ -232,9 +232,7 @@ class CityTableViewCell: UITableViewCell {
         
         contentView.backgroundColor = .systemBlue
         contentView.layer.cornerRadius = 16
-        
-//        getShadow(contentView)
-        
+                
         contentView.addSubviews(
             cityNameLabel,
             cityTimeLabel,
