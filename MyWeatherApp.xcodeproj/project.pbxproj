@@ -612,6 +612,10 @@
 				DEVELOPMENT_TEAM = KY382G7762;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyWeatherApp/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = Test;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = Test;
+				INFOPLIST_KEY_NSLocationUsageDescription = Test;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = Test;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -640,6 +644,10 @@
 				DEVELOPMENT_TEAM = KY382G7762;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyWeatherApp/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = Test;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = Test;
+				INFOPLIST_KEY_NSLocationUsageDescription = Test;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = Test;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

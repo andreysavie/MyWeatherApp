@@ -7,15 +7,21 @@
 
 import UIKit
 import SnapKit
+import MapKit
 
 class OnboardingViewController: UIViewController {
+    
+    private lazy var locationManager: CLLocationManager = {
+        let manager = CLLocationManager()
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        return manager
+    }()
 
     private lazy var onboardingView: OnboardingView = {
        let view = OnboardingView()
         return view
     }()
 
-    
     private lazy var declineButton: CustomButton = {
         let button = CustomButton(
             normalColor: Colors.mediumTextColor,
@@ -35,7 +41,11 @@ class OnboardingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layout()
+        
+        setupLayout()
+        
+        locationManager.delegate = self
+
         
         onboardingView.confimButton.tapAction = { [weak self] in
             self?.buttonPressed()
@@ -52,13 +62,31 @@ class OnboardingViewController: UIViewController {
     }
     
     func buttonPressed() {
+        checkAuthorizationStatus()
         let viewController = LaunchSettingsViewController()
         navigationController?.pushViewController(viewController, animated: true)
-        //        navigationController?.pushViewController(viewController, animated: true)
-        
     }
     
-    func layout() {
+    func checkAuthorizationStatus() {
+        
+        switch locationManager.authorizationStatus {
+            
+        case .notDetermined:
+            locationManager.requestAlwaysAuthorization()
+            locationManager.requestLocation()
+            
+        case .authorizedAlways, .authorizedWhenInUse:
+            locationManager.startUpdatingLocation()
+            
+        case .restricted, .denied:
+            break
+            
+        @unknown default:
+            break
+        }
+    }
+    
+    func setupLayout() {
         
         view.backgroundColor = .white
         view.addSubviews(backgroundImageView, onboardingView, declineButton)
@@ -78,5 +106,20 @@ class OnboardingViewController: UIViewController {
         }
     }
 
+}
+
+extension OnboardingViewController: CLLocationManagerDelegate {
     
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if manager.authorizationStatus == .authorizedAlways {
+            manager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) { }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("⛔️ \(error.localizedDescription)")
+    }
+        
 }
