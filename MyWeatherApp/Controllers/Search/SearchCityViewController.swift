@@ -14,7 +14,6 @@ class SearchCityViewController: UIViewController, FetchWeatherDelegate {
     
     // MARK: PROPERTIES
     
-    var didDisappearCallback: (() -> ())?
     var didChangeCallback: (() -> ())?
     var didChooseCityCallback: ((Int) -> ())?
 
@@ -89,11 +88,6 @@ class SearchCityViewController: UIViewController, FetchWeatherDelegate {
         super.viewDidAppear(animated)
         searchController.searchBar.becomeFirstResponder()
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        didDisappearCallback?()
-    }
-    
     
     // MARK: LAYOUT
     

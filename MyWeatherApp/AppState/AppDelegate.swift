@@ -17,10 +17,15 @@ var window: UIWindow?
         
         window = UIWindow(frame: UIScreen.main.bounds)
         
+        UserDefaults.standard.setValue(true, forKey: "isFirstEntry")
+        
 //        let viewController = MainScreenPageViewController(transitionStyle: .scroll , navigationOrientation: .horizontal)
 //        let navigationController = UINavigationController(rootViewController: viewController)
         
-        let viewController = OnboardingViewController()
+        let viewController = UserDefaultsManager.shared.isAppAlreadyLaunchedOnce() == false ?
+        OnboardingViewController() :
+        MainScreenPageViewController(transitionStyle: .scroll , navigationOrientation: .horizontal)
+        
         let navigationController = UINavigationController(rootViewController: viewController)
         
         window?.rootViewController = navigationController

@@ -9,30 +9,21 @@ import UIKit
 import SnapKit
 
 class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDataSource {
-    
-    var cities = CoreDataManager.shared.fetchCities() {
-        didSet {
-            view.setNeedsLayout()
-            view.layoutIfNeeded()
-            cities?.forEach({ print("💀\($0)") })
-            self.pageControl.numberOfPages = cities?.count ?? 1
-            if cities?.isEmpty == false {
-                addButton.isUserInteractionEnabled = false
-                addButton.alpha = 0
-            }
-        }
-    }
-    
-    var controllers = CoreDataManager.shared.fetchControllers() {
+        
+    private var controllers = CoreDataManager.shared.fetchControllers() {
         didSet {
             view.setNeedsLayout()
             view.layoutIfNeeded()
             self.pageControl.numberOfPages = controllers?.count ?? 1
             if controllers?.isEmpty == false {
-                addButton.isUserInteractionEnabled = false
-                addButton.alpha = 0
+                setAddButtonEnabled()
             }
         }
+    }
+    
+    private func setAddButtonEnabled() {
+        addButton.isUserInteractionEnabled = controllers?.isEmpty == false ? false : true
+        addButton.alpha = controllers?.isEmpty == false ? 0 : 1
     }
     
     private let searchViewController = SearchCityViewController()
@@ -72,17 +63,9 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
         pager.numberOfPages = 1
         pager.currentPageIndicatorTintColor = .black
         pager.pageIndicatorTintColor = .lightGray
-        pager.numberOfPages = cities?.count ?? 1
+        pager.numberOfPages = controllers?.count ?? 1
       return pager
     }()
-
-//    private init(transitionStyle style: UIPageViewController.TransitionStyle = .scroll, navigationOrientation: UIPageViewController.NavigationOrientation = .horizontal) {
-//        super.init(transitionStyle: style, navigationOrientation: navigationOrientation)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,10 +77,11 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
         
         setController(0)
         setupLayout()
+        setAddButtonEnabled()
         
         searchViewController.didChangeCallback = { [weak self] in
             guard let self = self else { return }
-            self.fetchControllers() // TEST!!!
+            self.fetchControllers()
             self.setController(0)
             
             if self.controllers?.isEmpty == true {
@@ -110,15 +94,6 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
             guard let self = self else { return }
             self.setController(num)
         }
-        
-//        searchViewController.didDisappearCallback = { [weak self] in
-//            self?.view.setNeedsLayout()
-//            self?.view.layoutIfNeeded()
-//            if self?.cities?.isEmpty == true {
-//                self?.setViewControllers([], direction: .forward, animated: true)
-//            }
-//        }
-        
         
         toolBar.settingsCallBack = { [weak self] in
             guard let self = self else { return }
@@ -171,10 +146,10 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     
     }
     
-    func fetchCities() {
-        self.cities?.removeAll()
-        self.cities = CoreDataManager.shared.fetchCities()
-    }
+//    func fetchCities() {
+//        self.cities?.removeAll()
+//        self.cities = CoreDataManager.shared.fetchCities()
+//    }
     
     func fetchControllers() {
         self.controllers?.removeAll()
