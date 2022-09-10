@@ -18,11 +18,14 @@ struct NetworkManager {
     
     // MARK: - FETCHING WEATHER DATA
         
-    public func fetchWeather(by city: CityModel, at position: Int = 0) {
+//    public func fetchWeather(by city: CityModel, at position: Int = 0) {
+    public func fetchWeather(by city: CityModelEntity, at position: Int = 0) {
         print ("✅\(city)")
         let baseURL = Network.baseURL
-        let lat = city.latitude
-        let lon = city.longitude
+        let lat = city.lat
+        let lon = city.lon
+//        let lat = city.latitude
+//        let lon = city.longitude
         let apiKey = Network.apiKey
         let unitsType = UserDefaults.standard.integer(forKey: Settings.temp.rawValue)
         let unit = unitsType == 0 ? UDManager.metric : UDManager.imperial

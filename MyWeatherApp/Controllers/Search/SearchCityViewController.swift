@@ -14,11 +14,13 @@ class SearchCityViewController: UIViewController, FetchWeatherDelegate {
     
     // MARK: PROPERTIES
     
+    var didDisappearCallback: (() -> ())?
     var didChangeCallback: (() -> ())?
     var didChooseCityCallback: ((Int) -> ())?
 
     private var matchingItems: [MKMapItem] = []
-    private var savedCities = [CityModel]()
+//    private var savedCities = [CityModel]()
+    private var savedCities = [CityModelEntity]()
     
     private var fetchedResultsController = CoreDataManager.shared.fetchedResultsController
     private var weatherManager = NetworkManager()
@@ -88,6 +90,10 @@ class SearchCityViewController: UIViewController, FetchWeatherDelegate {
         searchController.searchBar.becomeFirstResponder()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        didDisappearCallback?()
+    }
+    
     
     // MARK: LAYOUT
     
@@ -109,10 +115,11 @@ class SearchCityViewController: UIViewController, FetchWeatherDelegate {
     // MARK: METHODS
     
     func fetchWeatherData() {
-        guard let savedCities = CoreDataManager.shared.fetchCities() else { return }
+//        guard let savedCities = CoreDataManager.shared.fetchCities() else { return }
+        guard let savedCities = fetchedResultsController.fetchedObjects else { return }
         
         savedCities.forEach({ print("💀\(String(describing: $0.name))") })
-        
+                
         self.savedCities = savedCities
         displayWeather.removeAll()
         
@@ -374,7 +381,7 @@ extension SearchCityViewController: NetworkManagerDelegate {
             self.displayWeather[position] = weather
             let indexPath = IndexPath(row: position, section: 0)
             
-            self.displayWeather[indexPath.row]?.cityName = self.savedCities[indexPath.row].name
+            self.displayWeather[indexPath.row]?.cityName = self.savedCities[indexPath.row].name ?? "unknown"
             self.citiesTableView.reloadRows(at: [indexPath], with: .fade)
         }
     }

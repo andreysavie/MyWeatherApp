@@ -19,7 +19,18 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
             if cities?.isEmpty == false {
                 addButton.isUserInteractionEnabled = false
                 addButton.alpha = 0
-
+            }
+        }
+    }
+    
+    var controllers = CoreDataManager.shared.fetchControllers() {
+        didSet {
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+            self.pageControl.numberOfPages = controllers?.count ?? 1
+            if controllers?.isEmpty == false {
+                addButton.isUserInteractionEnabled = false
+                addButton.alpha = 0
             }
         }
     }
@@ -37,6 +48,8 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
         button.setTitleColor(UIColor.white, for: .normal)
         button.setTitleColor(UIColor.systemGray6, for: .highlighted)
         button.center = view.center
+        button.isUserInteractionEnabled = false
+        button.alpha = 0
         button.addTarget(self, action: #selector(addButtonAction), for: .touchUpInside)
         return button
     }()
@@ -63,7 +76,14 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
       return pager
     }()
 
-
+//    private init(transitionStyle style: UIPageViewController.TransitionStyle = .scroll, navigationOrientation: UIPageViewController.NavigationOrientation = .horizontal) {
+//        super.init(transitionStyle: style, navigationOrientation: navigationOrientation)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
                 
@@ -72,19 +92,32 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
         
         self.dataSource = self
         
-        setController()
+        setController(0)
         setupLayout()
         
         searchViewController.didChangeCallback = { [weak self] in
             guard let self = self else { return }
-                self.fetchCities()
-            self.setController()
+            self.fetchControllers() // TEST!!!
+            self.setController(0)
+            
+            if self.controllers?.isEmpty == true {
+                self.addButton.isUserInteractionEnabled = true
+                self.addButton.alpha = 1
             }
+        }
         
         searchViewController.didChooseCityCallback = { [weak self] num in
             guard let self = self else { return }
             self.setController(num)
         }
+        
+//        searchViewController.didDisappearCallback = { [weak self] in
+//            self?.view.setNeedsLayout()
+//            self?.view.layoutIfNeeded()
+//            if self?.cities?.isEmpty == true {
+//                self?.setViewControllers([], direction: .forward, animated: true)
+//            }
+//        }
         
         
         toolBar.settingsCallBack = { [weak self] in
@@ -99,12 +132,16 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
 
     }
     
-    func setController(_ number: Int = 0) {
+    func setController(_ number: Int) {
+
         if let controller = self.pageViewController(for: number) {
             setViewControllers([controller], direction: .forward, animated: true)
+        } else {
+            let empty = UIViewController()
+            setViewControllers([empty], direction: .forward, animated: true)
         }
+        
     }
-
     
     func setupLayout() {
         
@@ -131,11 +168,17 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
         pageControl.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
         }
+    
     }
     
     func fetchCities() {
         self.cities?.removeAll()
         self.cities = CoreDataManager.shared.fetchCities()
+    }
+    
+    func fetchControllers() {
+        self.controllers?.removeAll()
+        self.controllers = CoreDataManager.shared.fetchControllers()
     }
     
     // MARK: OBJC METHODS
@@ -154,42 +197,32 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 
         guard let viewController = viewController as? WeatherViewController else { return nil }
-        let index = viewController.index
         
+        let index = viewController.index
+        pageControl.currentPage = index
+
         return index > 0 ? self.pageViewController(for: index - 1) : nil
     }
     
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
 
-        guard
-            let viewController = viewController as? WeatherViewController,
-            let cities = cities 
-        else { return nil }
-        
+        guard let viewController = viewController as? WeatherViewController, let controllers = self.controllers else { return nil }
         
         let index = viewController.index
-        
-        return index < (cities.count) - 1 ? self.pageViewController(for: index + 1) : nil
-    }
-        
-    func pageViewController (for index: Int) -> UIViewController? {
-        
-        guard let cities = cities else { return nil }
-
-        
-        if index < 0 {
-            return nil
-        }
-        
-        if index >= cities.count {
-            return nil
-        }
-        
-        let controller = WeatherViewController(city: cities[index], index: index)
-        self.title = cities[index].name
         pageControl.currentPage = index
         
-        return controller
+        return index < (controllers.count) - 1 ? self.pageViewController(for: index + 1) : nil
+    }
+    
+        
+    func pageViewController (for index: Int?) -> UIViewController? {
+        
+        guard let controllers = controllers, let index = index else { return nil }
+        
+        if index < 0 || index >= controllers.count { return nil }
+                        
+        return controllers[index]
         
     }
 

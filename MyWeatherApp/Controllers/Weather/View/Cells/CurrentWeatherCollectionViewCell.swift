@@ -87,7 +87,8 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     // MARK: METHODS
     
     
-    func configureOfCell(weather: WeatherModel?, for city: CityModel?) {
+//    func configureOfCell(weather: WeatherModel?, for city: CityModel?) {
+    func configureOfCell(weather: WeatherModel?, for city: CityModelEntity?) {
         guard let wthr = weather, let city = city else { return }
         
         self.cityNamelabel.text = city.name

@@ -13,7 +13,8 @@ class DetailsWeatherViewController: UIViewController {
     private let itemsPerRow: CGFloat = 2
     
     private var currentWeather: WeatherModel? { didSet { collectionView.reloadData() } }
-    private var city: CityModel? { didSet { collectionView.reloadData() } }
+//    private var city: CityModel? { didSet { collectionView.reloadData() } }
+    private var city: CityModelEntity? { didSet { collectionView.reloadData() } }
 
 
     private lazy var collectionView: UICollectionView = {
@@ -34,7 +35,8 @@ class DetailsWeatherViewController: UIViewController {
         return layout
     }()
     
-    init (for weather: WeatherModel?, in city: CityModel) {
+//    init (for weather: WeatherModel?, in city: CityModel) {
+    init (for weather: WeatherModel?, in city: CityModelEntity) {
         self.currentWeather = weather
         self.city = city
         super.init(nibName: nil, bundle: nil)

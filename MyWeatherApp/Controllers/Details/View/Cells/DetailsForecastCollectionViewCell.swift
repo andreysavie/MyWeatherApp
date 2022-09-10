@@ -82,8 +82,8 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     
     // MARK: METHODS ===================================================================================
     
-    
-    func configureOfCell(_ weather: WeatherModel?, for city: CityModel?) {
+    func configureOfCell(_ weather: WeatherModel?, for city: CityModelEntity?) {
+//    func configureOfCell(_ weather: WeatherModel?, for city: CityModel?) {
         guard let city = city, let wthr = weather else { return }
         
         self.cityNameLabel.text = city.name

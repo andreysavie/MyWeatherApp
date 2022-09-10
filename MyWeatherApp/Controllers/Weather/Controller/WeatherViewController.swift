@@ -18,7 +18,8 @@ class WeatherViewController: UICollectionViewController, FetchWeatherDelegate {
     
     internal var index: Int
     
-    private var city: CityModel?
+//    private var city: CityModel?
+    private var city: CityModelEntity?
     private var hourly = [HourlyForecast]()
     
     private var weatherManager = NetworkManager()
@@ -27,7 +28,8 @@ class WeatherViewController: UICollectionViewController, FetchWeatherDelegate {
     
     // MARK: INITS
     
-    init (city: CityModel, index: Int) {
+//    init (city: CityModel, index: Int) {
+    init (city: CityModelEntity, index: Int) {
         self.city = city
         self.index = index
         
@@ -91,7 +93,7 @@ class WeatherViewController: UICollectionViewController, FetchWeatherDelegate {
     }
     
     func fetchWeatherData() {
-        guard let city = city else { return }
+        guard let city = self.city else { return }
         weatherManager.fetchWeather(by: city, at: 0)
     }
 }

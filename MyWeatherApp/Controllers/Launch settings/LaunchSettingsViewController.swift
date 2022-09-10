@@ -40,7 +40,7 @@ class LaunchSettingsViewController: UIViewController {
     func buttonPressed() {
         
         let viewController = MainScreenPageViewController(
-            transitionStyle: .pageCurl,
+            transitionStyle: .scroll,
             navigationOrientation: .horizontal
         )
         
