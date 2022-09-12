@@ -45,7 +45,6 @@ class OnboardingViewController: UIViewController {
         setupLayout()
         
         locationManager.delegate = self
-
         
         onboardingView.confimButton.tapAction = { [weak self] in
             self?.buttonPressed()
@@ -63,8 +62,18 @@ class OnboardingViewController: UIViewController {
     
     func buttonPressed() {
         checkAuthorizationStatus()
+
+    }
+    
+    func addCurrentLocationCity() {
+        guard let coordinate = locationManager.location?.coordinate else { return }
+        let name = "Текущее местоположение"
+        let city = CityModel(name: name, longitude: coordinate.longitude, latitude: coordinate.latitude)
+        CoreDataManager.shared.saveCity(city: city)
+        
         let viewController = LaunchSettingsViewController()
         navigationController?.pushViewController(viewController, animated: true)
+
     }
     
     func checkAuthorizationStatus() {
@@ -109,14 +118,16 @@ class OnboardingViewController: UIViewController {
 }
 
 extension OnboardingViewController: CLLocationManagerDelegate {
-    
+        
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         if manager.authorizationStatus == .authorizedAlways {
             manager.startUpdatingLocation()
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) { }
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        addCurrentLocationCity()
+    }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("⛔️ \(error.localizedDescription)")

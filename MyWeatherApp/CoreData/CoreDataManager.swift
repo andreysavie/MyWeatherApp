@@ -12,7 +12,6 @@ import UIKit
 final class CoreDataManager {
         
     // MARK: PROPERTIES
-    
 
     static let shared = CoreDataManager()
         
@@ -79,7 +78,7 @@ final class CoreDataManager {
     }
     
     public func fetchControllers () -> [UIViewController]? {
-//        let cities = self.fetchCities()
+
         guard let cities = fetchedResultsController.fetchedObjects else { return nil }
         
         var controllers = [UIViewController]()
@@ -87,7 +86,7 @@ final class CoreDataManager {
 //        guard let cities = cities else { return nil }
         
         for (index, value) in cities.enumerated() {
-//            let city = CityModel(name: value.name ?? "Unknown", longitude: value.lon, latitude: value.lat)
+
             let viewController = WeatherViewController(city: value, index: index)
             controllers.append(viewController)
         }

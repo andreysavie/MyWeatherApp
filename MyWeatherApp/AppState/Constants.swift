@@ -205,7 +205,7 @@ public struct Fonts {
     static let settingsTitleFont = UIFont.systemFont(ofSize: 37, weight: .regular)
     
     // weather controller: current forecast
-    static let cityFont = UIFont.systemFont(ofSize: 37, weight: .light)
+    static let cityFont = UIFont.systemFont(ofSize: 28, weight: .light)
     static let tempLargeFont = UIFont.systemFont(ofSize: 102, weight: .thin)
     static let weatherConditionFont = UIFont.systemFont(ofSize: 24, weight: .regular)
     static let tempUnderFont = UIFont.systemFont(ofSize: 17, weight: .light)
@@ -221,7 +221,7 @@ public struct Fonts {
     static let tenDayLabelFont = UIFont.systemFont(ofSize: 22, weight: .medium)
     
     // details controller: city block
-    static let detailsCityFont = UIFont.systemFont(ofSize: 37, weight: .regular)
+    static let detailsCityFont = UIFont.systemFont(ofSize: 28, weight: .regular)
     static let detailsWeatherFont = UIFont.systemFont(ofSize: 24, weight: .regular)
     static let detailsSunTimeFont = UIFont.systemFont(ofSize: 17, weight: .regular)
     

@@ -18,12 +18,21 @@ class SearchCityViewController: UIViewController, FetchWeatherDelegate {
     var didChooseCityCallback: ((Int) -> ())?
 
     private var matchingItems: [MKMapItem] = []
-//    private var savedCities = [CityModel]()
     private var savedCities = [CityModelEntity]()
     
     private var fetchedResultsController = CoreDataManager.shared.fetchedResultsController
     private var weatherManager = NetworkManager()
     private var displayWeather: [WeatherModel?] = []
+    
+    private lazy var locationButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(
+            systemName: "location.circle",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))?
+            .withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(locationDidTap), for: .touchUpInside)
+        return button
+    }()
     
     private lazy var citiesTableView: UITableView = {
         let table = UITableView(frame: .zero, style: .plain)
@@ -109,7 +118,6 @@ class SearchCityViewController: UIViewController, FetchWeatherDelegate {
     // MARK: METHODS
     
     func fetchWeatherData() {
-//        guard let savedCities = CoreDataManager.shared.fetchCities() else { return }
         guard let savedCities = fetchedResultsController.fetchedObjects else { return }
         
         savedCities.forEach({ print("💀\(String(describing: $0.name))") })
@@ -128,6 +136,11 @@ class SearchCityViewController: UIViewController, FetchWeatherDelegate {
     }
     
     // MARK: OBJC METHODS
+    
+    @objc
+    private func locationDidTap() {
+        
+    }
     
     @objc func editingDidBegin() {
         
