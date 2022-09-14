@@ -56,9 +56,8 @@ class DetailsChartCollectionViewCell: UICollectionViewCell, ChartViewDelegate {
     
     private func setupLayout() {
         
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = Colors.mainColor
         contentView.layer.cornerRadius = 16
-        getShadow(contentView)
         
         contentView.addSubviews(temperatureChart)
         

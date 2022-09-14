@@ -168,8 +168,8 @@
 		D558873428A27F080003F11C /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				D59DF92F289C582700374D63 /* DetailsForecastCollectionViewCell.swift */,
 				D5E8A4D428A1BE8300A5A38F /* DetailsChartCollectionViewCell.swift */,
+				D59DF92F289C582700374D63 /* DetailsForecastCollectionViewCell.swift */,
 				D59DF931289C609900374D63 /* DetailsBlockCollectionViewCell.swift */,
 			);
 			path = Cells;

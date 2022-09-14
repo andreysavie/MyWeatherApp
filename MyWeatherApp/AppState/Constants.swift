@@ -113,6 +113,7 @@ struct Misc {
 public enum DataStyle {
     case hour // time like "21"
     case time // time like "21:00"
+    case dayDate // time like "пт 16/04"
     case day // just day of week
     case full // day of week, number and month
 }
@@ -180,13 +181,13 @@ public enum DateType: String {
 
 public struct Colors {
     
-    static let mainColor = UIColor(named: "main_color")
+    static let mainColor = UIColor(named: "main_color") ?? UIColor.black
     static let subColor = UIColor(named: "sub_color")
 
     static let darkTextColor = UIColor(red: 83/255, green: 83/255, blue: 83/255, alpha: 1)
     static let mainTextColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     static let mediumTextColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
-    static var lightTextColor = UIColor(red: 180/255, green: 180/255, blue: 180/255, alpha: 1)
+    static var lightTextColor = UIColor(red: 83/255, green: 83/255, blue: 83/255, alpha: 0.75)
     
     static let blueColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
     static let yellowColor = UIColor(red: 248/255, green: 215/255, blue: 74/255, alpha: 1)
@@ -211,7 +212,7 @@ public struct Fonts {
     static let settingsTitleFont = UIFont.systemFont(ofSize: 37, weight: .regular)
     
     // weather controller: current forecast
-    static let cityFont = UIFont.systemFont(ofSize: 28, weight: .light)
+    static let cityFont = UIFont.systemFont(ofSize: 37, weight: .light)
     static let tempLargeFont = UIFont.systemFont(ofSize: 102, weight: .regular)
     static let weatherConditionFont = UIFont.systemFont(ofSize: 24, weight: .regular)
     static let tempUnderFont = UIFont.systemFont(ofSize: 17, weight: .light)
@@ -315,10 +316,10 @@ public extension UIView {
     }
 
     
-    func getAppIcon (_ icon: AppIcons, _ size: CGFloat = 24) -> UIImageView {
+    func getAppIcon (_ icon: AppIcons, _ size: CGFloat = 24, _ customColor: UIColor = .white) -> UIImageView {
         let imageView = UIImageView()
         let name: String = icon.rawValue
-        var color = Colors.mainTextColor
+        var color = customColor
         
         switch icon {
         case .sunrise, .sunset:
@@ -492,6 +493,8 @@ public extension Date {
             dateFormatter.dateFormat = "EE, d"
         case .full:
             dateFormatter.dateFormat = fullDateFormat
+        case .dayDate:
+            dateFormatter.dateFormat = "EE, d/MM"
         }
         
         let str = dateFormatter.string(from: date)

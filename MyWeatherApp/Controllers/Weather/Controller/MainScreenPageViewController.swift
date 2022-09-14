@@ -69,7 +69,7 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
       let pager = UIPageControl(frame: .zero)
         pager.numberOfPages = 1
         pager.currentPageIndicatorTintColor = .white
-        pager.pageIndicatorTintColor = .lightGray
+        pager.pageIndicatorTintColor = .white.withAlphaComponent(0.5)
         pager.numberOfPages = controllers?.count ?? 1
       return pager
     }()
@@ -99,7 +99,14 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
             guard let self = self else { return }
             self.setController(num)
         }
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        pageControl.isHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        pageControl.isHidden = true
     }
     
     func setController(_ number: Int) {

@@ -18,6 +18,9 @@ class DetailsWeatherViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
     
@@ -62,10 +65,6 @@ class DetailsWeatherViewController: UIViewController {
             forCellWithReuseIdentifier: DetailsBlockCollectionViewCell.identifier
         )
         
-        
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        
         setupLayout()
     }
     
@@ -89,16 +88,14 @@ extension DetailsWeatherViewController: UICollectionViewDataSource {
         case 0:
             return 1
         case 1:
-            return 1
-        case 2:
-            return BlockTitle.allCases.count
+            return 5 // изменить на Hourly.count!
         default:
             return 0
         }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -106,20 +103,15 @@ extension DetailsWeatherViewController: UICollectionViewDataSource {
         switch indexPath.section {
             
         case 0:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsForecastCollectionViewCell.identifier, for: indexPath) as? DetailsForecastCollectionViewCell else { return UICollectionViewCell() }
-            cell.configureOfCell(currentWeather, for: city)
-            return cell
-            
-        case 1:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsChartCollectionViewCell.identifier, for: indexPath) as? DetailsChartCollectionViewCell else { return UICollectionViewCell() }
             cell.configureOfCell(currentWeather)
             return cell
             
-        case 2:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsBlockCollectionViewCell.identifier, for: indexPath) as? DetailsBlockCollectionViewCell else { return UICollectionViewCell() }
-            cell.configureOfCell(currentWeather, for: indexPath.item)
+        case 1:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsForecastCollectionViewCell.identifier, for: indexPath) as? DetailsForecastCollectionViewCell else { return UICollectionViewCell() }
+            cell.configureOfCell(currentWeather)
             return cell
-            
+
         default:
             return UICollectionViewCell()
 
@@ -147,14 +139,11 @@ extension DetailsWeatherViewController: UICollectionViewDelegateFlowLayout {
 
         switch indexPath.section {
         case 0:
-            height = 180
-            width = collectionView.frame.width - 32
-        case 1:
             height = 260
-            width = collectionView.frame.width - 32
-        case 2:
-            height = widthPerItem
-            width = widthPerItem
+            width = collectionView.frame.width - 16
+        case 1:
+            height = 150
+            width = collectionView.frame.width - 16
         default:
             break
         }

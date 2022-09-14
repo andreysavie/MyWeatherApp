@@ -14,36 +14,89 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
         
     // MARK: PROPERTIES
     
+    private var currentWeather: WeatherModel? { didSet { self.contentView.layoutIfNeeded() } }
     
-    private lazy var cityNameLabel: CustomLabel = {
-        let label = CustomLabel(
-            text: "Москва",
-            font: Fonts.detailsCityFont,
-            textColor: Colors.darkTextColor
-        )
-        return label
-    }()
+    private lazy var dayStackView = CustomStackView(
+        icon: .calendar,
+        size: 17,
+        text: Date.getCurrentDate(dt: currentWeather?.hourly[0].dt ?? 0, style: .dayDate),
+        stackAxis: .horizontal,
+        color: Colors.darkTextColor
+    )
     
-    private lazy var dayForecastLabel: CustomLabel = {
-        let label = CustomLabel(
-            numberOfLines: 1,
-            text: "Днём 21° | Облачно",
-            font: Fonts.detailsWeatherFont,
-            textColor: Colors.darkTextColor
-        )
-        return label
-    }()
+    private lazy var timeStackView = CustomStackView(
+        icon: .clock,
+        size: 17,
+        text: Date.getCurrentDate(dt: currentWeather?.hourly[0].dt ?? 0, style: .time),
+        stackAxis: .horizontal,
+        color: Colors.darkTextColor
+    )
     
-    private lazy var nightForecastLabel: CustomLabel = {
-        let label = CustomLabel(
-            numberOfLines: 1,
-            text: "Днём 21° | Облачно",
-            font: Fonts.detailsWeatherFont,
-            textColor: Colors.lightTextColor
-        )
-        return label
-    }()
+    private lazy var tempStackView = CustomStackView(
+        icon: .temp,
+        size: 17,
+        text: String(format: "%.0f°", Int(currentWeather?.hourly[0].feelsLike ?? 0)),
+        stackAxis: .horizontal,
+        color: Colors.darkTextColor
+    )
     
+    private lazy var descriptionStackView = CustomStackView(
+        icon: .sun,
+        size: 17,
+        text: currentWeather?.hourly[0].weather.description,
+        stackAxis: .horizontal,
+        color: Colors.mainColor
+    )
+    
+    private lazy var windStackView = CustomStackView(
+        icon: .wind,
+        size: 17,
+        text: "Ветер",
+        stackAxis: .horizontal,
+        color: Colors.mainColor
+    )
+    
+    private lazy var rainStackView = CustomStackView(
+        icon: .drop,
+        size: 17,
+        text: "Осадки",
+        stackAxis: .horizontal,
+        color: Colors.mainColor
+    )
+    
+    private lazy var cloudyStackView = CustomStackView(
+        icon: .cloudy,
+        size: 17,
+        text: "Облачность",
+        stackAxis: .horizontal,
+        color: Colors.mainColor
+    )
+    
+    private lazy var feelslikeValueLabel = CustomLabel(
+        text: "ощущается как \(String(format: "%.0f°", Int(currentWeather?.hourly[0].feelsLike ?? 0)))",
+        font: Fonts.detailsSunTimeFont,
+        textColor: Colors.lightTextColor
+    )
+    
+    private lazy var windValueLabel = CustomLabel(
+        text: String(format: "%.0f м/с", Int(currentWeather?.hourly[0].windSpeed ?? 0)),
+        font: Fonts.detailsSunTimeFont,
+        textColor: Colors.lightTextColor
+    )
+    
+    private lazy var rainValueLabel = CustomLabel(
+        text: String(format: "%.0f мм", Int(((currentWeather?.hourly[0].rain?.the1H ?? 0) * 100) )),
+        font: Fonts.detailsSunTimeFont,
+        textColor: Colors.lightTextColor
+    )
+    
+    private lazy var cloudyValueLabel = CustomLabel(
+        text: String(format: "%.0f%", currentWeather?.hourly[0].clouds ?? 0),
+        font: Fonts.detailsSunTimeFont,
+        textColor: Colors.lightTextColor
+    )
+    
+    private lazy var x = currentWeather?.daily[0]
     private lazy var sunriseTimeLabel: CustomLabel = {
         let label = CustomLabel(
             text: "04:39",
@@ -63,10 +116,46 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var sunriseIcon = getAppIcon(.sunrise, 24)
-    private lazy var sunsetIcon = getAppIcon(.sunset, 24)
+    private lazy var topStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            dayStackView,
+            timeStackView,
+            tempStackView
+        ])
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.alignment = .leading
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
     
+    private lazy var leftStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            descriptionStackView,
+            windStackView,
+            rainStackView,
+            cloudyStackView
+        ])
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        stackView.alignment = .leading
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
     
+    private lazy var rightStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            feelslikeValueLabel,
+            windValueLabel,
+            rainValueLabel,
+            cloudyValueLabel
+        ])
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        stackView.alignment = .trailing
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
     
     // MARK: INITS
     
@@ -81,75 +170,38 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     
     // MARK: METHODS
     
-    func configureOfCell(_ weather: WeatherModel?, for city: CityModelEntity?) {
-         guard let city = city, let wthr = weather else { return }
-        
-        self.cityNameLabel.text = city.name
-        
-        let dayTemp = String(describing: wthr.dayTempString)
-        let nightTemp = String(describing: wthr.nightTempString)
-
-        self.dayForecastLabel.text = "Днём \(dayTemp) | \(wthr.descriptionString)" // изменить на дневное!
-        self.nightForecastLabel.text = "Ночью \(nightTemp) | \(wthr.descriptionString)" // изменить на ночное!
-
-        self.sunriseTimeLabel.text = Date.getCurrentDate(dt: wthr.sunrise, style: .time)
-        self.sunsetTimeLabel.text = Date.getCurrentDate(dt: wthr.sunset, style: .time)
+    func configureOfCell(_ weather: WeatherModel?) {
+         guard let wthr = weather else { return }
+        self.currentWeather = wthr
     }
     
     
     
     private func setupLayout() {
         
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = Colors.subColor
         contentView.layer.cornerRadius = 16
         
-        getShadow(contentView)
-        
         contentView.addSubviews(
-            cityNameLabel,
-            dayForecastLabel,
-            nightForecastLabel,
-            sunriseTimeLabel,
-            sunsetTimeLabel,
-            sunriseIcon,
-            sunsetIcon
+            topStackView,
+            leftStackView,
+            rightStackView
         )
         
-        cityNameLabel.textAlignment = .left
-        
-        cityNameLabel.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(16)
+        topStackView.snp.makeConstraints { make in
+            make.leading.top.equalToSuperview().inset(8)
         }
         
-        dayForecastLabel.snp.makeConstraints { make in
-            make.top.equalTo(cityNameLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
+        leftStackView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(36)
+            make.top.equalTo(topStackView.snp.bottom).offset(8)
         }
         
-        nightForecastLabel.snp.makeConstraints { make in
-            make.top.equalTo(dayForecastLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
+        rightStackView.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(8)
+            make.top.equalTo(topStackView.snp.bottom).offset(8)
         }
-        
-        sunriseIcon.snp.makeConstraints { make in
-            make.leading.bottom.equalToSuperview().inset(16)
-        }
-        
-        sunsetIcon.snp.makeConstraints { make in
-            make.trailing.bottom.equalToSuperview().inset(16)
-        }
-        
-        sunriseTimeLabel.snp.makeConstraints { make in
-            make.leading.equalTo(sunriseIcon.snp.trailing)
-            make.centerY.equalTo(sunriseIcon)
-        }
-        
-        sunsetTimeLabel.snp.makeConstraints { make in
-            make.trailing.equalTo(sunsetIcon.snp.leading)
-            make.centerY.equalTo(sunsetIcon)
-        }
-        
-        
+
     }
     
     
