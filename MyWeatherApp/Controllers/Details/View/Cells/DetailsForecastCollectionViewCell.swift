@@ -11,9 +11,8 @@ import SnapKit
 class DetailsForecastCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "DetailsForecastCollectionViewCell"
-    
-    
-    // MARK: PROPERTIES ============================================================================
+        
+    // MARK: PROPERTIES
     
     
     private lazy var cityNameLabel: CustomLabel = {
@@ -69,7 +68,7 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     
     
     
-    // MARK: INITS ============================================================================
+    // MARK: INITS
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -80,11 +79,10 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: METHODS ===================================================================================
+    // MARK: METHODS
     
     func configureOfCell(_ weather: WeatherModel?, for city: CityModelEntity?) {
-//    func configureOfCell(_ weather: WeatherModel?, for city: CityModel?) {
-        guard let city = city, let wthr = weather else { return }
+         guard let city = city, let wthr = weather else { return }
         
         self.cityNameLabel.text = city.name
         

@@ -45,23 +45,30 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
         return button
     }()
     
-    @objc
-    private func addButtonAction() {
-        let navController = UINavigationController(rootViewController: searchViewController)
-        present(navController, animated: true)
-    }
-
+    private lazy var settingsButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(
+            systemName: "gearshape",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))?
+            .withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(settingsDidTap), for: .touchUpInside)
+        return button
+    }()
     
-    private lazy var toolBar: ToolBar = {
-      let toolBar = ToolBar(frame: .zero)
-      view.addSubview(toolBar)
-      return toolBar
+    private lazy var locationListButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(
+            systemName: "list.bullet",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))?
+            .withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(locationsDidTap), for: .touchUpInside)
+        return button
     }()
     
     private lazy var pageControl: UIPageControl = {
       let pager = UIPageControl(frame: .zero)
         pager.numberOfPages = 1
-        pager.currentPageIndicatorTintColor = .black
+        pager.currentPageIndicatorTintColor = .white
         pager.pageIndicatorTintColor = .lightGray
         pager.numberOfPages = controllers?.count ?? 1
       return pager
@@ -70,9 +77,7 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     override func viewDidLoad() {
         super.viewDidLoad()
                 
-        navigationController?.navigationBar.isHidden = true
         self.view.backgroundColor = .white
-        
         self.dataSource = self
         
         setController(0)
@@ -95,16 +100,6 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
             self.setController(num)
         }
         
-        toolBar.settingsCallBack = { [weak self] in
-            guard let self = self else { return }
-            self.settingsButtonPressed()
-        }
-        
-        toolBar.locationsCallBack = { [weak self] in
-            guard let self = self else { return }
-            self.locationsButtonPressed()
-        }
-
     }
     
     func setController(_ number: Int) {
@@ -120,13 +115,15 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     
     func setupLayout() {
         
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: settingsButton)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: locationListButton)
+        
         view.addSubview(addButton)
-        view.addSubview(toolBar)
-        toolBar.addSubview(pageControl)
+        navigationController?.navigationBar.addSubview(pageControl)
         
         let appearanceNavigationBar = UINavigationBarAppearance()
         appearanceNavigationBar.configureWithOpaqueBackground()
-        appearanceNavigationBar.backgroundColor = .white
+        appearanceNavigationBar.backgroundColor = UIColor(named: "main_color")
         
         self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationController?.navigationBar.isTranslucent = false
@@ -134,11 +131,6 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
         self.navigationController?.navigationBar.barTintColor = .white
         self.navigationController?.navigationBar.standardAppearance = appearanceNavigationBar
         self.navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
-
-        toolBar.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(75)
-        }
         
         pageControl.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
@@ -158,16 +150,26 @@ class MainScreenPageViewController: UIPageViewController, UIPageViewControllerDa
     
     // MARK: OBJC METHODS
     
-    private func settingsButtonPressed() {
+    @objc
+    private func settingsDidTap() {
         let navController = UINavigationController(rootViewController: settingsViewController)
         present(navController, animated: true)
     }
     
-    private func locationsButtonPressed() {
+    @objc
+    private func locationsDidTap() {
+        let navController = UINavigationController(rootViewController: searchViewController)
+        present(navController, animated: true)
+    }
+
+    
+    @objc
+    private func addButtonAction() {
         let navController = UINavigationController(rootViewController: searchViewController)
         present(navController, animated: true)
     }
     
+    // MARK: DELEGATE METHODS
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 

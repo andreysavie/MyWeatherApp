@@ -1,5 +1,5 @@
 //
-//  DailyForecastCollectionViewCell.swift
+//  DailyTableViewCell.swift
 //  MyWeatherApp
 //
 //  Created by Андрей Рыбалкин on 04.08.2022.
@@ -9,40 +9,55 @@ import UIKit
 import SnapKit
 
 class DailyCollectionViewCell: UICollectionViewCell {
+
+    static let identifier = "DailyCollectionViewCell"
     
-    static let identifier = "DailyForecastCollectionViewCell"
+    private var image: UIImage? { didSet { weatherIcon.image = image } }
+
+    // MARK: PROPERTIES
     
-    private var currentWeather: WeatherModel? { didSet { tableView.reloadData() } }
+    private lazy var arrowRight = getAppIcon(.arrow)
     
-    private lazy var icon = getAppIcon(.calendar, 18)
+    private lazy var dayOfWeekLabel = getLabel(
+        text: "--",
+        font: Fonts.tenDayLabelFont,
+        color: Colors.darkTextColor
+    )
     
-    private lazy var titleLabel: CustomLabel = {
-        let label = CustomLabel(
-            numberOfLines: 1,
-            text: "Прогноз на 10 дней",
-            font: Fonts.tenDayTitleFont,
-            textColor: Colors.mediumTextColor)
-        return label
+    private lazy var lowTempLabel = getLabel(
+        text: "--°",
+        font: Fonts.tenDayLabelFont,
+        color: Colors.mainTextColor
+    )
+    
+    private lazy var heightTempLabel = getLabel(
+        text: "--°",
+        font: Fonts.tenDayLabelFont,
+        color: Colors.darkTextColor
+    )
+    
+    private lazy var weatherIcon: UIImageView = {
+        let view = UIImageView(frame: CGRect())
+        return view
     }()
     
-    private lazy var tableView: UITableView = {
-        let table = UITableView(frame: .zero, style: .insetGrouped)
-        table.backgroundColor = .clear
-        table.separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        table.showsVerticalScrollIndicator = false
-        table.automaticallyAdjustsScrollIndicatorInsets = false
-        table.contentInset = UIEdgeInsets.zero
-        return table
+    private lazy var weatherStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [
+            lowTempLabel,
+            heightTempLabel,
+            arrowRight
+        ])
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.alignment = .center
+        stackView.distribution = .equalCentering
+        return stackView
     }()
-    
+
+    // MARK: INITS
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        
-        tableView.register(DailyTableViewCell.self, forCellReuseIdentifier: DailyTableViewCell.identifier)
-        
-        tableView.dataSource = self
-//        tableView.delegate = self
-
         setupLayout()
     }
     
@@ -50,46 +65,54 @@ class DailyCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: METHODS
+
+    func configureOfCell(_ weather: WeatherModel?, at day: Int) {
+        guard let wthr = weather else { return }
+
+        let min = getFormattedTemp(wthr.daily[day].temp.min)
+        let max = getFormattedTemp(wthr.daily[day].temp.max)
+        let iconName = wthr.daily[day].weather[0].icon
+
+        self.dayOfWeekLabel.text = day == 0 ?
+        "Сегодня" :
+        Date.getCurrentDate(dt: wthr.daily[day].dt, style: .day)
+        
+        self.image = getWeatherIcon(iconName)
+        self.lowTempLabel.text = min
+        self.heightTempLabel.text = max
+        
+    }
+
     
     private func setupLayout() {
-        
-        getShadow(contentView)
-        
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = Colors.subColor
         contentView.layer.cornerRadius = 16
-        contentView.addSubviews(icon, titleLabel, tableView)
-
-        icon.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().inset(16)
-            make.width.height.equalTo(18)
+        contentView.addSubviews(
+            dayOfWeekLabel,
+            weatherIcon,
+            weatherStackView
+        )
+        
+        contentView.snp.makeConstraints { make in
+            make.width.height.equalToSuperview()
         }
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(icon.snp.trailing).offset(8)
-            make.top.trailing.equalToSuperview().inset(16  )
-            
+                
+        dayOfWeekLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(16)
+            make.trailing.equalTo(contentView.snp.centerX)
+            make.centerY.equalToSuperview()
         }
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
-            make.leading.trailing.bottom.equalToSuperview()
+        
+        weatherIcon.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
-    }
-    
-    internal func configureOfCell(weather: WeatherModel?) {
-        guard let wthr = weather else { return }
-        currentWeather = wthr
-    }
-
-}
-
-extension DailyCollectionViewCell: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return currentWeather?.daily.count ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: DailyTableViewCell.identifier, for: indexPath) as? DailyTableViewCell else { return UITableViewCell() }
-        cell.configureOfCell(currentWeather, at: indexPath.row)
-        return cell
+        
+        weatherStackView.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(8)
+            make.leading.equalTo(weatherIcon.snp.trailing).offset(32)
+            make.centerY.equalToSuperview()
+        }
     }
 
 }

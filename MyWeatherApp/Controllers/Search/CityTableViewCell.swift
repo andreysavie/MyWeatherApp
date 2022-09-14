@@ -250,7 +250,7 @@ class CityTableViewCell: UITableViewCell {
         
         cityNameLabel.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().inset(16)
-            make.trailing.equalTo(contentView.snp.centerX)
+            make.trailing.equalTo(cityTempLabel.snp.leading).offset(16).priority(999)
         }
         
         cityTimeLabel.snp.makeConstraints { make in

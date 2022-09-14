@@ -18,7 +18,6 @@ class WeatherViewController: UICollectionViewController, FetchWeatherDelegate {
     
     internal var index: Int
     
-//    private var city: CityModel?
     private var city: CityModelEntity?
     private var hourly = [HourlyForecast]()
     
@@ -28,7 +27,6 @@ class WeatherViewController: UICollectionViewController, FetchWeatherDelegate {
     
     // MARK: INITS
     
-//    init (city: CityModel, index: Int) {
     init (city: CityModelEntity, index: Int) {
         self.city = city
         self.index = index
@@ -136,7 +134,10 @@ extension WeatherViewController: NetworkManagerDelegate {
     //}    
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        switch section {
+        case 2: return currentWeather?.daily.count ?? 0
+        default: return 1
+        }
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -165,7 +166,7 @@ extension WeatherViewController: NetworkManagerDelegate {
             
         case 2:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DailyCollectionViewCell.identifier, for: indexPath) as? DailyCollectionViewCell else { return UICollectionViewCell() }
-            cell.configureOfCell(weather: currentWeather)
+            cell.configureOfCell(currentWeather, at: indexPath.item)
             return cell
         default:
             return UICollectionViewCell()
@@ -183,15 +184,15 @@ extension WeatherViewController: UICollectionViewDelegateFlowLayout {
         
         switch indexPath.section {
         case 0:
-            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.4
+            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.5
         case 1:
-            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.25
+            height = 150
         case 2:
-            height = self.view.safeAreaLayoutGuide.layoutFrame.height * 0.8
+            height = 80
         default:
             break
         }
-        return CGSize(width: floor(collectionView.frame.width - 32), height: height)
+        return CGSize(width: floor(collectionView.frame.width - 16), height: height)
     }
 }
 

@@ -13,9 +13,7 @@ class DetailsWeatherViewController: UIViewController {
     private let itemsPerRow: CGFloat = 2
     
     private var currentWeather: WeatherModel? { didSet { collectionView.reloadData() } }
-//    private var city: CityModel? { didSet { collectionView.reloadData() } }
     private var city: CityModelEntity? { didSet { collectionView.reloadData() } }
-
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -69,14 +67,6 @@ class DetailsWeatherViewController: UIViewController {
         collectionView.delegate = self
         
         setupLayout()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.isHidden = false
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        navigationController?.navigationBar.isHidden = true
     }
     
     private func setupLayout() {

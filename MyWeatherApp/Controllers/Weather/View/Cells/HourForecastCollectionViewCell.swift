@@ -20,12 +20,12 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var hourTitleLabel = getLabel(
-        text: "12pm",
+        text: "--",
         font: Fonts.hourlyTimeFont,
         color: Colors.darkTextColor
     )
     private lazy var hourlyTempLabel = getLabel(
-        text: "21°",
+        text: "--°",
         font: Fonts.hourlyTempFont,
         color: Colors.darkTextColor
     )
@@ -53,10 +53,12 @@ class HourForecastCollectionViewCell: UICollectionViewCell {
     
     private func setupLayout() {
                 
-        addSubview(hourlyStackView)
+        contentView.backgroundColor = Colors.subColor
+        contentView.layer.cornerRadius = 32
+        contentView.addSubview(hourlyStackView)
         
         hourlyStackView.snp.makeConstraints { make in
-            make.leading.top.trailing.bottom.equalToSuperview()
+            make.leading.top.trailing.bottom.equalToSuperview().inset(12)
         }
     }
     

@@ -130,7 +130,7 @@ struct WeatherModel {
     var windGustDesc: String {
         switch windGust {
         case 0.5... :
-            return String("Порывы ветра до \(Int(round(windGust)))) м/с")
+            return String("Порывы ветра до \(Int(round(windGust))) м/с")
         default:
             return "Сегодня штиль"
         }
@@ -202,8 +202,8 @@ struct WeatherModel {
     }
     
     var visibilityDesc: String {
-        switch conditionId {
-        case 800:
+        switch visibility {
+        case 10_000...:
             return "Сейчас ясно"
         default:
             return "Видимость ограничена"

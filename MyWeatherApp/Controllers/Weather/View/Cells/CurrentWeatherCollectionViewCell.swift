@@ -12,8 +12,13 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CurrentWeatherCollectionViewCell"
     
-    var detailsButtonAction: (()->())?
+    private var currentWeather: WeatherModel? {
+        didSet {
+            contentView.layoutIfNeeded()
+        }
+    }
     
+    var detailsButtonAction: (()->())?
         
     // MARK: PROPERTIES
     
@@ -22,7 +27,7 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
             numberOfLines: 1,
             text: "--",
             font: Fonts.cityFont,
-            textColor: Colors.darkTextColor
+            textColor: Colors.mainTextColor
         )
         label.textAlignment = .center
         return label
@@ -31,29 +36,65 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     private lazy var tempLabel = getLabel(
         text: "--°",
         font: Fonts.tempLargeFont,
-        color: Colors.darkTextColor
+        color: Colors.mainTextColor
     )
     
     private lazy var weatherConditionLabel = getLabel(
         text: "--",
         font: Fonts.weatherConditionFont,
-        color: Colors.darkTextColor
+        color: Colors.mainTextColor
     )
     
     private lazy var lowAndHeightTempLabel = getLabel(
         text: "Мин. --°, макс: --°",
         font: Fonts.cityLowHeightTempFont,
-        color: Colors.darkTextColor
+        color: Colors.mainTextColor
     )
     
     private lazy var todayLabel: CustomLabel = {
         let label = CustomLabel(
             text: "--, --",
             font: Fonts.cityLowHeightTempFont,
-            textColor: Colors.darkTextColor
+            textColor: Colors.mainTextColor
         )
         label.textAlignment = .center
         return label
+    }()
+    
+    private lazy var sunriseStackView = CustomStackView(
+        icon: .sunrise,
+        text: Date.getCurrentDate(dt: currentWeather?.sunrise ?? 0, style: .time))
+        
+    private lazy var cloudyStackView = CustomStackView(
+        icon: .cloudy,
+        text: currentWeather?.cloudinessString ?? "77%")
+
+    private lazy var windStackView = CustomStackView(
+        icon: .wind,
+        text: currentWeather?.windSpeedString ?? "77 м/с")
+
+    private lazy var humStackView = CustomStackView(
+        icon: .hum,
+        text: currentWeather?.humidityString ?? "77%")
+
+    private lazy var sunsetStackView = CustomStackView(
+        icon: .sunset,
+        text: Date.getCurrentDate(dt: currentWeather?.sunset ?? 0, style: .time))
+
+
+    private lazy var mainStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.addArrangedSubview(sunriseStackView)
+        stack.addArrangedSubview(cloudyStackView)
+        stack.addArrangedSubview(windStackView)
+        stack.addArrangedSubview(humStackView)
+        stack.addArrangedSubview(sunsetStackView)
+        stack.axis = .horizontal
+//        stack.alignment = .leading
+        stack.distribution = .equalCentering
+        stack.backgroundColor = .clear
+
+        return stack
     }()
         
     private lazy var separateView: SeparateLineView = {
@@ -63,9 +104,10 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     
     private lazy var detailsButton: CustomButton = {
         let button = CustomButton(
+            normalColor: Colors.mainTextColor,
             title: "Подробный прогноз  ",
             font: Fonts.detailsButtonFont)
-        button.setImage(UIImage(systemName: "chevron.right", withConfiguration: UIImage.SymbolConfiguration(pointSize: 21))?.withTintColor(Colors.darkTextColor, renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "chevron.right", withConfiguration: UIImage.SymbolConfiguration(pointSize: 21))?.withTintColor(Colors.mainTextColor, renderingMode: .alwaysOriginal), for: .normal)
         button.semanticContentAttribute = .forceRightToLeft
         return button
     }()
@@ -86,9 +128,7 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     
     // MARK: METHODS
     
-    
-//    func configureOfCell(weather: WeatherModel?, for city: CityModel?) {
-    func configureOfCell(weather: WeatherModel?, for city: CityModelEntity?) {
+        func configureOfCell(weather: WeatherModel?, for city: CityModelEntity?) {
         guard let wthr = weather, let city = city else { return }
         
         self.cityNamelabel.text = city.name
@@ -103,11 +143,9 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         
     private func setupLayout() {
         
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = UIColor(named: "main_color")
         contentView.layer.cornerRadius = 16
-        
-        getShadow(contentView)
-                
+                        
         contentView.addSubviews(
             cityNamelabel,
             tempLabel,
@@ -115,7 +153,8 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
             lowAndHeightTempLabel,
             todayLabel,
             detailsButton,
-            separateView
+            separateView,
+            mainStackView
         )
         
         cityNamelabel.snp.makeConstraints { make in
@@ -141,6 +180,11 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         todayLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(lowAndHeightTempLabel.snp.bottom).offset(8)
+        }
+        
+        mainStackView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalTo(todayLabel.snp.bottom).offset(8)
         }
         
         separateView.makeConstraints(atBottom: self.snp.bottom)

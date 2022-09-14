@@ -21,8 +21,10 @@ var window: UIWindow?
 //        OnboardingViewController() :
 //        MainScreenPageViewController(transitionStyle: .scroll , navigationOrientation: .horizontal)
         
-        let viewController = OnboardingViewController()
+//        let viewController = OnboardingViewController()
 
+        let viewController = MainScreenPageViewController(transitionStyle: .scroll , navigationOrientation: .horizontal)
+        
         let navigationController = UINavigationController(rootViewController: viewController)
         
         window?.rootViewController = navigationController

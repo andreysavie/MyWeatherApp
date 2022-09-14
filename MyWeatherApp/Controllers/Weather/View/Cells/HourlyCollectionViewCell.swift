@@ -14,11 +14,9 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     
     private var currentWeather: WeatherModel? { didSet { collectionView.reloadData() } }
     
-    private let itemsPerRow: CGFloat = 6
-    private let sectionInsets = UIEdgeInsets( top: 0, left: 8, bottom: 0, right: 8 )
-    
-    private lazy var icon = getAppIcon(.clock, 18)
-    
+    private let itemsPerRow: CGFloat = 4
+    private let sectionInsets = UIEdgeInsets( top: 0, left: 0, bottom: 0, right: 8 )
+        
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = sectionInsets.left
@@ -27,30 +25,27 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         return layout
     }()
     
-    private lazy var titleLabel: CustomLabel = {
-        let label = CustomLabel(
-            numberOfLines: 1,
-            text: "Прогноз на 24 часа",
-            font: Fonts.tenDayTitleFont,
-            textColor: Colors.mediumTextColor)
-        return label
-    }()
+//    private lazy var titleLabel: CustomLabel = {
+//        let label = CustomLabel(
+//            numberOfLines: 1,
+//            text: "Прогноз на 24 часа",
+//            font: Fonts.tenDayTitleFont,
+//            textColor: Colors.mediumTextColor)
+//        return label
+//    }()
     
     private lazy var collectionView: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.register(HourForecastCollectionViewCell.self, forCellWithReuseIdentifier: HourForecastCollectionViewCell.identifier)
         collection.dataSource = self
         collection.delegate = self
-        collection.backgroundColor = .clear
+        collection.backgroundColor = .white
         collection.showsHorizontalScrollIndicator = false
         return collection
     }()
     
     override init (frame: CGRect) {
         super.init(frame: frame)
-        
-        collectionView.register(HourForecastCollectionViewCell.self, forCellWithReuseIdentifier: HourForecastCollectionViewCell.identifier)
-        
         setupLayout()
     }
     
@@ -60,24 +55,11 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     
     private func setupLayout() {
         
-        contentView.backgroundColor = .white
-        contentView.layer.cornerRadius = 16
-        
-        contentView.getShadow(contentView)
-        contentView.addSubviews(icon, titleLabel, collectionView)
-        
-        icon.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().inset(16)
-            make.width.height.equalTo(18)
-        }
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(icon.snp.trailing).offset(8)
-            make.top.trailing.equalToSuperview().inset(16)
-        }
-        
+        contentView.backgroundColor = .clear
+        contentView.addSubview(collectionView)
+                
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.top.trailing.bottom.equalToSuperview()
         }
     }
     
@@ -107,9 +89,9 @@ extension HourlyCollectionViewCell: UICollectionViewDataSource {
 extension HourlyCollectionViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let paddingWidth = sectionInsets.left * (itemsPerRow + 1)
+        let paddingWidth = sectionInsets.right * (itemsPerRow + 1)
         let availableWidth = UIScreen.main.bounds.width - paddingWidth
-        let widthPerItem = (availableWidth / itemsPerRow) - sectionInsets.left / itemsPerRow
-        return CGSize(width: widthPerItem, height: 130)
+        let widthPerItem = (availableWidth / itemsPerRow) - sectionInsets.right / itemsPerRow
+        return CGSize(width: widthPerItem, height: 150)
     }
 }

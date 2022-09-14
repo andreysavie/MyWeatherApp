@@ -13,32 +13,31 @@ class DetailsChartCollectionViewCell: UICollectionViewCell, ChartViewDelegate {
     
     static let identifier = "DetailsChartCollectionViewCell"
     
-    // MARK: PROPERTIES ============================================================================
+    // MARK: PROPERTIES
     
-    private var hourlyTempArray = [Int]()
-    private var hours = [String]()
+    private var hourlyTempArray = [Double]()
+    private var entries = [ChartDataEntry]()
+
+    private var hours = [Double]() {
+        didSet {
+            if hours.count == 12 {
+                for x in 0..<hours.count { entries.append(ChartDataEntry(x: Double(x), y: hourlyTempArray[x] )) }
+                let set = LineChartDataSet(entries: entries)
+                let data = LineChartData(dataSet: set)
+                temperatureChart.data = data
+            }
+        }
+    }
     
     private lazy var temperatureChart: LineChartView = {
         let chart = LineChartView()
-        
-        var entries = [ChartDataEntry]()
-        if hourlyTempArray.count >= 12 {
-            for x in 0..<12 { entries.append(ChartDataEntry(x: Double(hours[x]) ?? 0, y: Double(hourlyTempArray[x]))) }
-        }
-        
-        let set = LineChartDataSet(entries: entries)
-        let data = LineChartData(dataSet: set)
-        
-//        set.colors = ChartColorTemplates.material()
-        chart.data = data
-        
         chart.isUserInteractionEnabled = false
         return chart
     }()
 
     
     
-    // MARK: INITS ============================================================================
+    // MARK: INITS
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -52,7 +51,7 @@ class DetailsChartCollectionViewCell: UICollectionViewCell, ChartViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: METHODS ===================================================================================
+    // MARK: METHODS
     
     
     private func setupLayout() {
@@ -69,12 +68,12 @@ class DetailsChartCollectionViewCell: UICollectionViewCell, ChartViewDelegate {
     }
     
     func configureOfCell(_ weather: WeatherModel?) {
-        guard let weather = weather else { return }
+        guard let wthr = weather else { return }
         
-        let hourly = weather.hourly
+        let hourly = wthr.hourly
         for hour in hourly {
-            hourlyTempArray.append(Int(hour.temp))
-            hours.append(Date.getCurrentDate(dt: hour.dt, style: .hour))
+            hourlyTempArray.append(hour.temp)
+            hours.append(Double(Date.getCurrentDate(dt: hour.dt, style: .hour)) ?? 0)
         }
     }
         

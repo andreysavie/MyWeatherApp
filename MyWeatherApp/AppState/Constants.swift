@@ -131,6 +131,7 @@ public enum AppIcons: String, CaseIterable {
     case sunset = "sunset.fill"
     case calendar = "calendar"
     case clock = "clock"
+    case arrow = "chevron.right"
 }
 
 public enum ForecastIcons {
@@ -178,7 +179,12 @@ public enum DateType: String {
 }
 
 public struct Colors {
-    static let darkTextColor = UIColor(red: 70/255, green: 70/255, blue: 70/255, alpha: 1)
+    
+    static let mainColor = UIColor(named: "main_color")
+    static let subColor = UIColor(named: "sub_color")
+
+    static let darkTextColor = UIColor(red: 83/255, green: 83/255, blue: 83/255, alpha: 1)
+    static let mainTextColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     static let mediumTextColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
     static var lightTextColor = UIColor(red: 180/255, green: 180/255, blue: 180/255, alpha: 1)
     
@@ -187,7 +193,7 @@ public struct Colors {
     
     static let segmentedControlBackColor = UIColor(red: 90/255, green: 196/255, blue: 255/255, alpha: 1)
     static let settingsBackgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
-    static let separateLineColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
+    static let separateLineColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
     static let navigationBarColor = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
     
 }
@@ -206,19 +212,20 @@ public struct Fonts {
     
     // weather controller: current forecast
     static let cityFont = UIFont.systemFont(ofSize: 28, weight: .light)
-    static let tempLargeFont = UIFont.systemFont(ofSize: 102, weight: .thin)
+    static let tempLargeFont = UIFont.systemFont(ofSize: 102, weight: .regular)
     static let weatherConditionFont = UIFont.systemFont(ofSize: 24, weight: .regular)
     static let tempUnderFont = UIFont.systemFont(ofSize: 17, weight: .light)
     static let detailsButtonFont = UIFont.systemFont(ofSize: 21, weight: .regular)
     
     // weather controller: hourly forecast
     static let hourlyForecastTitleFont = UIFont.systemFont(ofSize: 18, weight: .regular)
-    static let hourlyTimeFont = UIFont.systemFont(ofSize: 17, weight: .medium)
+    static let hourlyTimeFont = UIFont.systemFont(ofSize: 22, weight: .medium)
     static let hourlyTempFont = UIFont.systemFont(ofSize: 22, weight: .medium)
     
     // weather controller: 10-day forecast
     static let tenDayTitleFont = UIFont.systemFont(ofSize: 15, weight: .medium)
-    static let tenDayLabelFont = UIFont.systemFont(ofSize: 22, weight: .medium)
+    static let rainLabelFont = UIFont.systemFont(ofSize: 17, weight: .medium)
+    static let tenDayLabelFont = UIFont.systemFont(ofSize: 28, weight: .medium)
     
     // details controller: city block
     static let detailsCityFont = UIFont.systemFont(ofSize: 28, weight: .regular)
@@ -295,49 +302,60 @@ public extension UIView {
             imageName = "xmark.octagon.fill"
         }
         
-        let color = imageName == SystemImageName.sunMaxFill ?
-                            Colors.yellowColor :
-                            Colors.blueColor
+//        let color = imageName == SystemImageName.sunMaxFill ?
+//                            Colors.yellowColor :
+//                            Colors.blueColor
         
-        image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(color, renderingMode: .alwaysOriginal) ?? UIImage()
+//        image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?.withTintColor(color, renderingMode: .alwaysOriginal) ?? UIImage()
+        
+        image = UIImage(named: imageName) ?? UIImage()
+        
         return image
 
     }
 
     
-    func getAppIcon (_ icon: AppIcons, _ size: CGFloat) -> UIImageView {
+    func getAppIcon (_ icon: AppIcons, _ size: CGFloat = 24) -> UIImageView {
         let imageView = UIImageView()
-        let name: String
-        var color = Colors.mediumTextColor
+        let name: String = icon.rawValue
+        var color = Colors.mainTextColor
         
         switch icon {
-        case .sunrise:
-            name = "sunrise"
+        case .sunrise, .sunset:
             color = Colors.yellowColor
-        case .sunset:
-            name = "sunset"
-            color = Colors.yellowColor
-        case .sun:
-            name = "sun.max"
-        case .wind:
-            name = "wind"
-        case .temp:
-            name = "thermometer"
-        case .drop:
-            name = "drop.fill"
-        case .calendar:
-            name = "calendar"
-        case .pressure:
-            name = "barometer"
-        case .visibility:
-            name = "binoculars.fill"
-        case .cloudy:
-            name = "cloud.fill"
-        case .hum:
-            name = "humidity"
-        case .clock:
-            name = "clock"
+        default:
+            ()
         }
+//        switch icon {
+//        case .sunrise:
+//            name = "sunrise"
+//            color = Colors.yellowColor
+//        case .sunset:
+//            name = "sunset"
+//            color = Colors.yellowColor
+//        case .sun:
+//            name = "sun.max"
+//        case .wind:
+//            name = "wind"
+//        case .temp:
+//            name = "thermometer"
+//        case .drop:
+//            name = "drop.fill"
+//        case .calendar:
+//            name = "calendar"
+//        case .pressure:
+//            name = "barometer"
+//        case .visibility:
+//            name = "binoculars.fill"
+//        case .cloudy:
+//            name = "cloud.fill"
+//        case .hum:
+//            name = "humidity"
+//        case .clock:
+//            name = icon.rawValue
+//        case .arrow:
+//            name = icon.rawValue
+//        }
         
         imageView.image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size))?.withTintColor(color, renderingMode: .alwaysOriginal)
         return imageView
@@ -415,6 +433,7 @@ public extension UIView {
         case .none:
             return nil
         }
+        
         
         
         let control = UISegmentedControl(items: items)
