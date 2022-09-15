@@ -14,42 +14,36 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
         
     // MARK: PROPERTIES
     
-    private var currentWeather: WeatherModel? { didSet { self.contentView.layoutIfNeeded() } }
-    
     private lazy var dayStackView = CustomStackView(
-        icon: .calendar,
+        appIcon: .calendar,
         size: 17,
-        text: Date.getCurrentDate(dt: currentWeather?.hourly[0].dt ?? 0, style: .dayDate),
         stackAxis: .horizontal,
         color: Colors.darkTextColor
     )
     
     private lazy var timeStackView = CustomStackView(
-        icon: .clock,
+        appIcon: .clock,
         size: 17,
-        text: Date.getCurrentDate(dt: currentWeather?.hourly[0].dt ?? 0, style: .time),
         stackAxis: .horizontal,
         color: Colors.darkTextColor
     )
     
     private lazy var tempStackView = CustomStackView(
-        icon: .temp,
+        appIcon: .temp,
         size: 17,
-        text: String(format: "%.0f°", Int(currentWeather?.hourly[0].feelsLike ?? 0)),
         stackAxis: .horizontal,
         color: Colors.darkTextColor
     )
     
     private lazy var descriptionStackView = CustomStackView(
-        icon: .sun,
+        appIcon: .sun,
         size: 17,
-        text: currentWeather?.hourly[0].weather.description,
         stackAxis: .horizontal,
         color: Colors.mainColor
     )
     
     private lazy var windStackView = CustomStackView(
-        icon: .wind,
+        appIcon: .wind,
         size: 17,
         text: "Ветер",
         stackAxis: .horizontal,
@@ -57,7 +51,7 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     )
     
     private lazy var rainStackView = CustomStackView(
-        icon: .drop,
+        appIcon: .drop,
         size: 17,
         text: "Осадки",
         stackAxis: .horizontal,
@@ -65,7 +59,7 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     )
     
     private lazy var cloudyStackView = CustomStackView(
-        icon: .cloudy,
+        appIcon: .cloudy,
         size: 17,
         text: "Облачность",
         stackAxis: .horizontal,
@@ -73,48 +67,24 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     )
     
     private lazy var feelslikeValueLabel = CustomLabel(
-        text: "ощущается как \(String(format: "%.0f°", Int(currentWeather?.hourly[0].feelsLike ?? 0)))",
         font: Fonts.detailsSunTimeFont,
         textColor: Colors.lightTextColor
     )
     
     private lazy var windValueLabel = CustomLabel(
-        text: String(format: "%.0f м/с", Int(currentWeather?.hourly[0].windSpeed ?? 0)),
         font: Fonts.detailsSunTimeFont,
         textColor: Colors.lightTextColor
     )
     
     private lazy var rainValueLabel = CustomLabel(
-        text: String(format: "%.0f мм", Int(((currentWeather?.hourly[0].rain?.the1H ?? 0) * 100) )),
         font: Fonts.detailsSunTimeFont,
         textColor: Colors.lightTextColor
     )
     
     private lazy var cloudyValueLabel = CustomLabel(
-        text: String(format: "%.0f%", currentWeather?.hourly[0].clouds ?? 0),
         font: Fonts.detailsSunTimeFont,
         textColor: Colors.lightTextColor
     )
-    
-    private lazy var x = currentWeather?.daily[0]
-    private lazy var sunriseTimeLabel: CustomLabel = {
-        let label = CustomLabel(
-            text: "04:39",
-            font: Fonts.detailsSunTimeFont,
-            textColor: Colors.darkTextColor
-        )
-        return label
-    }()
-    
-    
-    private lazy var sunsetTimeLabel: CustomLabel = {
-        let label = CustomLabel(
-            text: "04:39",
-            font: Fonts.detailsSunTimeFont,
-            textColor: Colors.darkTextColor
-        )
-        return label
-    }()
     
     private lazy var topStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
@@ -170,9 +140,19 @@ class DetailsForecastCollectionViewCell: UICollectionViewCell {
     
     // MARK: METHODS
     
-    func configureOfCell(_ weather: WeatherModel?) {
+    func configureOfCell(_ weather: WeatherModel?, for hour: Int) {
          guard let wthr = weather else { return }
-        self.currentWeather = wthr
+        let desc = wthr.hourly[hour].weather[0].weatherDescription
+        dayStackView.text = Date.getCurrentDate(dt: wthr.hourly[hour].dt, style: .dayDate)
+        timeStackView.text = Date.getCurrentDate(dt: wthr.hourly[hour].dt, style: .time)
+        tempStackView.text = String(format: "%.0f°", wthr.hourly[hour].feelsLike)
+        
+        descriptionStackView.text = desc.prefix(1).uppercased() + desc.lowercased().dropFirst()
+        feelslikeValueLabel.text = "ощущается как \(Int(wthr.hourly[hour].feelsLike))°"
+        windValueLabel.text = "\(Int(wthr.hourly[hour].windSpeed)) м/с"
+        rainValueLabel.text = "\(Int(((wthr.hourly[hour].rain?.the1H ?? 0) * 100))) мм"
+        cloudyValueLabel.text = "\(wthr.hourly[hour].clouds)%"
+
     }
     
     

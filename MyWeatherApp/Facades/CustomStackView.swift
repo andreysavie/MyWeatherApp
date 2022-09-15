@@ -11,33 +11,38 @@ import SnapKit
 
 class CustomStackView: UIStackView {
     
-    let icon: AppIcons
-    let size: CGFloat
-    let text: String?
-    let stackAxis: NSLayoutConstraint.Axis
-    let color: UIColor
+    var appIcon: AppIcons
+    var size: CGFloat
+    var text: String? { willSet { self.label.text = newValue } }
+    var stackAxis: NSLayoutConstraint.Axis
+    var color: UIColor
+    
+    private lazy var label: UILabel = {
+        let label = UILabel()
+        label.text = self.text
+        label.font = Fonts.detailsSunTimeFont
+        label.textColor = self.color
+        return label
+    }()
+    
+    private lazy var icon = getAppIcon(self.appIcon, size, color)
+
     
     init (
-        icon: AppIcons,
+        appIcon: AppIcons,
         size: CGFloat = 24,
         text: String? = "--",
         stackAxis: NSLayoutConstraint.Axis = .vertical,
         color: UIColor = Colors.mainTextColor
     ) {
-        self.icon = icon
+        self.appIcon = appIcon
         self.size = size
         self.text = text
         self.stackAxis = stackAxis
         self.color = color
         
         super.init(frame: .zero)
-        
-        let icon = getAppIcon(self.icon, size, color)
-        let label = UILabel()
-        label.text = self.text
-        label.font = Fonts.detailsSunTimeFont
-        label.textColor = self.color
-        
+                
         addArrangedSubview(icon)
         addArrangedSubview(label)
 

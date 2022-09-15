@@ -130,3 +130,35 @@ struct Temp: Codable {
     var eve, morn: Double
 }
 
+extension Current {
+    
+    var windDirectionString: String {
+        let winddirections = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"]
+        let degrees = windDeg
+        let direction = Int((degrees + Int(22.5)) / 45 % 8)
+        return winddirections[direction]
+    }
+}
+
+extension Daily {
+    
+    var windDirectionString: String {
+        let winddirections = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"]
+        let degrees = windDeg
+        let direction = Int((degrees + Int(22.5)) / 45 % 8)
+        return winddirections[direction]
+    }
+    
+    var uviLevel: String {
+        switch Int(uvi) {
+        case 0...2:
+            return "\(Int(uvi)), низкий"
+        case 3...5:
+            return "\(Int(uvi)), средний"
+        case 6...7:
+            return "\(Int(uvi)), высокий"
+        default:
+            return "\(Int(uvi)), экстримальный"
+        }
+    }
+}

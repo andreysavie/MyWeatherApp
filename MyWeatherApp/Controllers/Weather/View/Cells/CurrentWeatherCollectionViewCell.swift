@@ -19,7 +19,7 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     }
     
     var detailsButtonAction: (()->())?
-        
+    
     // MARK: PROPERTIES
     
     private lazy var cityNamelabel: CustomLabel = {
@@ -62,26 +62,26 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var sunriseStackView = CustomStackView(
-        icon: .sunrise,
-        text: Date.getCurrentDate(dt: currentWeather?.sunrise ?? 0, style: .time))
-        
+        appIcon: .sunrise)
+    //        text: Date.getCurrentDate(dt: currentWeather?.sunrise ?? 0, style: .time))
+    
     private lazy var cloudyStackView = CustomStackView(
-        icon: .cloudy,
-        text: currentWeather?.cloudinessString ?? "77%")
-
+        appIcon: .cloudy)
+    //        text: currentWeather?.cloudinessString ?? "77%")
+    
     private lazy var windStackView = CustomStackView(
-        icon: .wind,
-        text: currentWeather?.windSpeedString ?? "77 м/с")
-
+        appIcon: .wind)
+    //        text: currentWeather?.windSpeedString ?? "77 м/с")
+    
     private lazy var humStackView = CustomStackView(
-        icon: .hum,
-        text: currentWeather?.humidityString ?? "77%")
-
+        appIcon: .hum)
+    //        text: currentWeather?.humidityString ?? "77%")
+    
     private lazy var sunsetStackView = CustomStackView(
-        icon: .sunset,
-        text: Date.getCurrentDate(dt: currentWeather?.sunset ?? 0, style: .time))
-
-
+        appIcon: .sunset)
+    //        text: Date.getCurrentDate(dt: currentWeather?.sunset ?? 0, style: .time))
+    
+    
     private lazy var mainStackView: UIStackView = {
         let stack = UIStackView()
         stack.addArrangedSubview(sunriseStackView)
@@ -90,13 +90,13 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         stack.addArrangedSubview(humStackView)
         stack.addArrangedSubview(sunsetStackView)
         stack.axis = .horizontal
-//        stack.alignment = .leading
+        //        stack.alignment = .leading
         stack.distribution = .equalCentering
         stack.backgroundColor = .clear
-
+        
         return stack
     }()
-        
+    
     private lazy var separateView: SeparateLineView = {
         let line = SeparateLineView(frame: .zero)
         return line
@@ -111,14 +111,14 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         button.semanticContentAttribute = .forceRightToLeft
         return button
     }()
-        
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
-
+        
         detailsButton.tapAction = { [weak self] in
             self?.detailsButtonPressed()
         }
-
+        
         setupLayout()
     }
     
@@ -128,7 +128,7 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     
     // MARK: METHODS
     
-        func configureOfCell(weather: WeatherModel?, for city: CityModelEntity?) {
+    func configureOfCell(weather: WeatherModel?, for city: CityModelEntity?) {
         guard let wthr = weather, let city = city else { return }
         
         self.cityNamelabel.text = city.name
@@ -139,13 +139,20 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
         self.lowAndHeightTempLabel.text = "Мин. \(min), макс: \(max)" // add farehngate
         let currentDate = wthr.dt
         self.todayLabel.text = Date.getCurrentDate(dt: currentDate, style: .full)
-    }
         
+        self.sunriseStackView.text = Date.getCurrentDate(dt: wthr.sunrise, style: .time)
+        self.cloudyStackView.text = wthr.cloudinessString
+        self.windStackView.text = wthr.windSpeedString
+        self.humStackView.text = wthr.humidityString
+        self.sunsetStackView.text = Date.getCurrentDate(dt: wthr.sunset, style: .time)
+        
+    }
+    
     private func setupLayout() {
         
         contentView.backgroundColor = UIColor(named: "main_color")
         contentView.layer.cornerRadius = 16
-                        
+        
         contentView.addSubviews(
             cityNamelabel,
             tempLabel,
@@ -205,6 +212,6 @@ class CurrentWeatherCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
     }
-
+    
     
 }

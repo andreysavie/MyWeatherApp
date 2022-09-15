@@ -174,6 +174,11 @@ public enum BlockType {
     case label
 }
 
+public enum TimeOfDay {
+    case day
+    case night
+}
+
 public enum DateType: String {
     case us = "мм/дд/гггг"
     case eu = "дд/мм/гггг"

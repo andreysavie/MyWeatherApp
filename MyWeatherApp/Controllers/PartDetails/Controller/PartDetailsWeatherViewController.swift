@@ -1,14 +1,15 @@
 //
-//  DetailsWeatherViewController.swift
+//  PartDetailsWeatherViewController.swift
 //  MyWeatherApp
 //
-//  Created by Андрей Рыбалкин on 04.08.2022.
+//  Created by Андрей Рыбалкин on 15.09.2022.
 //
 
+import Foundation
 import UIKit
 import SnapKit
 
-class DetailsWeatherViewController: UIViewController {
+class PartDetailsWeatherViewController: UIViewController {
         
     private var currentWeather: WeatherModel? { didSet { collectionView.reloadData() } }
     private var city: CityModelEntity? { didSet { collectionView.reloadData() } }
@@ -49,19 +50,10 @@ class DetailsWeatherViewController: UIViewController {
         super.viewDidLoad()
         
         collectionView.register(
-            DetailsForecastCollectionViewCell.self,
-            forCellWithReuseIdentifier: DetailsForecastCollectionViewCell.identifier
+            PartCollectionViewCell.self,
+            forCellWithReuseIdentifier: PartCollectionViewCell.identifier
         )
         
-        collectionView.register(
-            DetailsChartCollectionViewCell.self,
-            forCellWithReuseIdentifier: DetailsChartCollectionViewCell.identifier
-        )
-
-//        collectionView.register(
-//            DetailsBlockCollectionViewCell.self,
-//            forCellWithReuseIdentifier: DetailsBlockCollectionViewCell.identifier
-//        )
         
         setupLayout()
     }
@@ -75,73 +67,45 @@ class DetailsWeatherViewController: UIViewController {
         }
     }
     
-    
 }
 
 
-extension DetailsWeatherViewController: UICollectionViewDataSource {
+extension PartDetailsWeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return 5 // изменить на Hourly.count!
-        default:
-            return 0
-        }
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        switch indexPath.section {
-            
-        case 0:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsChartCollectionViewCell.identifier, for: indexPath) as? DetailsChartCollectionViewCell else { return UICollectionViewCell() }
-            cell.configureOfCell(currentWeather)
-            return cell
-            
-        case 1:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailsForecastCollectionViewCell.identifier, for: indexPath) as? DetailsForecastCollectionViewCell else { return UICollectionViewCell() }
-            cell.configureOfCell(currentWeather, for: indexPath.item)
-            return cell
-
-        default:
-            return UICollectionViewCell()
-
-        }
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
     }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PartCollectionViewCell.identifier, for: indexPath) as? PartCollectionViewCell else { return UICollectionViewCell() }
+            switch indexPath.item {
+            case 0: cell.configureOfCell(currentWeather, of: indexPath.item, for: .day)
+            case 1: cell.configureOfCell(currentWeather, of: indexPath.item, for: .night)
+            default: break
+            }
+            
+            return cell
+    }
     
 }
 
-extension DetailsWeatherViewController: UICollectionViewDelegate {
+extension PartDetailsWeatherViewController: UICollectionViewDelegate {
     
 }
 
-extension DetailsWeatherViewController: UICollectionViewDelegateFlowLayout {
+extension PartDetailsWeatherViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        var height: CGFloat = 0
-        var width: CGFloat = 0
+        var height: CGFloat = 300
+        var width: CGFloat = collectionView.frame.width - 16
 
-        switch indexPath.section {
-        case 0:
-            height = 260
-            width = collectionView.frame.width - 16
-        case 1:
-            height = 150
-            width = collectionView.frame.width - 16
-        default:
-            break
-        }
         return CGSize(width: floor(width), height: height)
     }
-
 
 }

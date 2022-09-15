@@ -173,8 +173,12 @@ extension WeatherViewController: NetworkManagerDelegate {
         }
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let viewController = PartDetailsWeatherViewController(for: currentWeather, in: city!)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
 }
-
 
 extension WeatherViewController: UICollectionViewDelegateFlowLayout {
     

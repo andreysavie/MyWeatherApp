@@ -115,13 +115,12 @@ struct WeatherModel {
         }
     }
     
-    var windDirectionString: String {
-//        let winddirections = ["С 􀄨", "СВ 􀰾", "В 􀄫", "ЮВ 􀱈", "Ю 􀄩", "ЮЗ 􀱃", "З 􀄪", "СЗ 􀰹"]
-        let winddirections = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"]
-        let degrees = daily[0].windDeg
-        let direction = Int((degrees + Int(22.5)) / 45 % 8)
-        return winddirections[direction]
-    }
+//    var windDirectionString: String {
+//        let winddirections = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"]
+//        let degrees = daily[0].windDeg
+//        let direction = Int((degrees + Int(22.5)) / 45 % 8)
+//        return winddirections[direction]
+//    }
     
     var windSpeedString: String {
         String("\(Int(round(windSpeed))) м/с") // добавить империческую
